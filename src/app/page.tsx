@@ -4,14 +4,14 @@ import Link from 'next/link';
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen w-full flex-row">
+    <main className="flex min-h-screen w-full flex-col bg-panel-right md:flex-row">
       {/* Left Panel */}
-      <div className="flex w-1/2 flex-col items-center justify-center gap-4 bg-background p-8 text-center">
+      <div className="flex w-full flex-col items-center justify-center gap-4 bg-background p-8 text-center md:w-1/2">
         <Logo className="relative h-48 w-48 md:h-64 md:w-64 lg:h-96 lg:w-96" />
       </div>
 
       {/* Right Panel */}
-      <div className="flex w-1/2 items-center justify-center bg-panel-right p-8">
+      <div className="flex w-full flex-1 items-center justify-center p-8 md:w-1/2">
         <div className="flex flex-col items-center gap-6">
           <Button
             asChild
