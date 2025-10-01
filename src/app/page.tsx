@@ -10,7 +10,7 @@ export default function Home() {
       <main className="flex h-[100svh] w-full flex-row overscroll-none">
         {/* Left Panel */}
         <div className="flex w-1/2 flex-col items-center justify-center bg-card p-4 md:p-8">
-          <Logo className="relative h-32 w-32 md:h-64 md:w-64 lg:h-96 lg:w-96" />
+          <Logo className="relative h-64 w-64 md:h-64 md:w-64 lg:h-96 lg:w-96" />
         </div>
 
         {/* Right Panel */}
