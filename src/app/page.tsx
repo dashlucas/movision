@@ -16,7 +16,7 @@ export default function Home() {
           <Button
             asChild
             size="lg"
-            className="h-14 w-64 rounded-full bg-primary text-lg font-extrabold text-primary-foreground shadow-lg transition-transform hover:scale-105 hover:bg-primary/90 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-panel-right"
+            className="h-36 w-[356px] rounded-2xl bg-primary text-4xl font-extrabold text-primary-foreground shadow-lg transition-transform hover:scale-105 hover:bg-primary/90 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-panel-right"
           >
             <Link href="#">Iniciar</Link>
           </Button>
