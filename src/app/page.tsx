@@ -27,7 +27,7 @@ export default function Home() {
               asChild
               size="lg"
               variant="outline"
-              className="h-12 w-48 rounded-2xl border-4 border-primary bg-card text-lg font-bold text-primary shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background md:h-[60px] md:w-[356px] md:text-2xl"
+              className="h-12 w-48 rounded-2xl border-4 border-primary bg-card text-lg font-bold text-[#49416D] shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background md:h-[60px] md:w-[356px] md:text-2xl"
             >
               <Link href="#">Tutorial</Link>
             </Button>
@@ -35,7 +35,7 @@ export default function Home() {
               asChild
               size="lg"
               variant="outline"
-              className="h-12 w-48 rounded-2xl border-4 border-primary bg-card text-lg font-bold text-primary shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background md:h-[60px] md:w-[356px] md:text-2xl"
+              className="h-12 w-48 rounded-2xl border-4 border-primary bg-card text-lg font-bold text-[#49416D] shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background md:h-[60px] md:w-[356px] md:text-2xl"
             >
               <Link href="#">Recomendações</Link>
             </Button>
