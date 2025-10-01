@@ -10,7 +10,7 @@ export default function Home() {
       <main className="flex h-[100svh] w-full flex-row overscroll-none">
         {/* Left Panel */}
         <div className="flex w-1/2 flex-col items-center justify-center bg-card p-4 md:p-8">
-          <Logo className="h-48 w-48 md:h-64 md:w-64 lg:h-96 lg:w-96" />
+          <Logo className="h-64 w-64 md:h-64 md:w-64 lg:h-96 lg:w-96" />
         </div>
 
         {/* Right Panel */}
@@ -19,9 +19,9 @@ export default function Home() {
             <Button
               asChild
               size="lg"
-              className="h-20 w-64 rounded-2xl bg-primary text-xl font-extrabold text-primary-foreground shadow-lg transition-transform hover:scale-105 hover:bg-primary/90 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-panel-right md:h-36 md:w-[400px] md:text-4xl"
+              className="h-24 w-64 rounded-2xl bg-primary text-xl font-extrabold text-primary-foreground shadow-lg transition-transform hover:scale-105 hover:bg-primary/90 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-panel-right md:h-36 md:w-[400px] md:text-4xl"
             >
-              <Link href="#">Iniciar</Link>
+              <Link href="/iniciar">Iniciar</Link>
             </Button>
             <Button
               asChild
