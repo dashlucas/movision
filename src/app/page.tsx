@@ -6,7 +6,7 @@ export default function Home() {
     <main className="flex min-h-screen flex-col md:flex-row">
       {/* Left Panel */}
       <div className="flex w-full flex-col items-center justify-center gap-4 bg-background p-8 text-center md:w-1/2">
-        <Logo className="h-24 w-24" />
+        <Logo className="h-48 w-48" />
       </div>
 
       {/* Right Panel */}

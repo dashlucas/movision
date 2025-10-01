@@ -8,8 +8,8 @@ export function Logo({ className, ...props }: React.SVGProps<SVGSVGElement>) {
       <Image
         src="/img/logo.png"
         alt="Movision Logo"
-        width={96}
-        height={96}
+        fill
+        className="object-contain"
         {...props}
       />
     </div>
