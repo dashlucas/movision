@@ -16,6 +16,10 @@ export default {
       },
       colors: {
         'panel-right': '#49416D',
+        tutorial: {
+          DEFAULT: '#49416D',
+          hover: '#90EE90'
+        },
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
