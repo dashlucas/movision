@@ -3,18 +3,14 @@ import { Logo } from '@/components/logo';
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-row">
+    <main className="flex min-h-screen flex-col md:flex-row">
       {/* Left Panel */}
-      <div className="flex w-1/2 flex-col items-center justify-center gap-4 bg-background p-8 text-center">
+      <div className="flex w-full flex-col items-center justify-center gap-4 bg-background p-8 text-center md:w-1/2">
         <Logo className="h-24 w-24" />
-        <p className="max-w-md font-body text-[clamp(1rem,2.5vw,1.25rem)] text-slate-600">
-          Análise de movimento inteligente para uma fisioterapia eficaz e
-          personalizada.
-        </p>
       </div>
 
       {/* Right Panel */}
-      <div className="flex w-1/2 items-center justify-center bg-panel-right p-8">
+      <div className="flex w-full items-center justify-center bg-panel-right p-8 md:w-1/2">
         <div className="flex flex-col items-center gap-6">
           <Button
             size="lg"
