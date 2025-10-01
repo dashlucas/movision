@@ -10,7 +10,7 @@ export default function Home() {
       <main className="flex h-[100svh] w-full flex-row overscroll-none">
         {/* Left Panel */}
         <div className="flex w-1/2 flex-col items-center justify-center bg-card p-4 md:p-8">
-          <Logo className="h-48 w-48 md:h-64 md:w-64 lg:h-96 lg:w-96" />
+          <Logo className="h-64 w-64 md:h-64 md:w-64 lg:h-96 lg:w-96" />
         </div>
 
         {/* Right Panel */}
@@ -19,7 +19,7 @@ export default function Home() {
             <Button
               asChild
               size="lg"
-              className="h-24 w-72 rounded-2xl bg-primary text-2xl font-extrabold text-primary-foreground shadow-lg transition-transform hover:scale-105 hover:bg-primary/90 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-panel-right md:h-24 md:w-[400px] md:text-5xl"
+              className="h-20 w-56 rounded-2xl bg-primary text-xl font-extrabold text-primary-foreground shadow-lg transition-transform hover:scale-105 hover:bg-primary/90 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-panel-right md:h-36 md:w-[400px] md:text-4xl"
             >
               <Link href="#">Iniciar</Link>
             </Button>
@@ -27,7 +27,7 @@ export default function Home() {
               asChild
               size="lg"
               variant="outline"
-              className="h-20 w-72 rounded-2xl border-4 border-primary bg-card text-xl font-bold text-[#49416D] shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background md:h-20 md:w-[400px] md:text-3xl"
+              className="h-16 w-56 rounded-2xl border-4 border-primary bg-card text-lg font-bold text-[#49416D] shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background md:h-20 md:w-[400px] md:text-3xl"
             >
               <Link href="#">Tutorial</Link>
             </Button>
@@ -35,7 +35,7 @@ export default function Home() {
               asChild
               size="lg"
               variant="outline"
-              className="h-20 w-72 rounded-2xl border-4 border-primary bg-card text-xl font-bold text-[#49416D] shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background md:h-20 md:w-[400px] md:text-3xl"
+              className="h-16 w-56 rounded-2xl border-4 border-primary bg-card text-lg font-bold text-[#49416D] shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background md:h-20 md:w-[400px] md:text-3xl"
             >
               <Link href="#">Recomendações</Link>
             </Button>
