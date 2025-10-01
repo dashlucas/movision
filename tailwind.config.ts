@@ -10,11 +10,12 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        body: ['Inter', 'sans-serif'],
-        headline: ['Inter', 'sans-serif'],
+        body: ['Raleway', 'sans-serif'],
+        headline: ['Raleway', 'sans-serif'],
         code: ['monospace'],
       },
       colors: {
+        'panel-right': '#49416D',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
