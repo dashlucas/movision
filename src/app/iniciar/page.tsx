@@ -63,7 +63,7 @@ export default function IniciarPage() {
         <h1 className="mb-12 text-5xl font-bold text-white">
           Configurações
         </h1>
-        <div className="grid w-full max-w-6xl grid-cols-1 gap-10 md:grid-cols-3 md:gap-20">
+        <div className="grid w-full max-w-6xl grid-cols-1 gap-10 sm:grid-cols-3 sm:gap-12 md:gap-20">
           {/* Posição */}
           <div className="flex flex-col items-center gap-4">
             <h2 className="mb-4 text-4xl font-bold text-white">Posição</h2>
