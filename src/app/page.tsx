@@ -6,7 +6,7 @@ export default function Home() {
     <main className="flex min-h-screen flex-row">
       {/* Left Panel */}
       <div className="flex w-1/2 flex-col items-center justify-center gap-4 bg-background p-8 text-center">
-        <Logo className="h-24 w-24 text-primary" />
+        <Logo className="h-24 w-24" />
         <h1 className="font-headline text-[clamp(2.5rem,6vw,4.5rem)] font-extrabold leading-tight tracking-tighter text-slate-900">
           Movision
         </h1>
