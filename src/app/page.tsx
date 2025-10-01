@@ -24,7 +24,7 @@ export default function Home() {
             asChild
             size="lg"
             variant="outline"
-            className="h-14 w-64 rounded-full border-2 border-primary bg-background text-lg font-bold text-primary shadow-lg transition-transform hover:scale-105 hover:bg-primary/10 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
+            className="h-14 w-[356px] rounded-2xl border-2 border-primary bg-background text-lg font-bold text-primary shadow-lg transition-transform hover:scale-105 hover:bg-primary/10 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
           >
             <Link href="#">Tutorial</Link>
           </Button>
