@@ -11,7 +11,7 @@ export default function Home() {
       </div>
 
       {/* Right Panel */}
-      <div className="flex w-3/5 flex-1 items-center justify-center bg-panel-right p-4 md:p-8">
+      <div className="flex w-3/5 flex-1 flex-col items-center justify-center bg-panel-right p-4 md:p-8">
         <div className="flex flex-col items-center gap-4 md:gap-6">
           <Button
             asChild
