@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ArrowLeft, Check } from 'lucide-react';
@@ -15,6 +15,10 @@ export default function ConfiguracoesPage() {
     membros: '',
     distancia: '',
   });
+
+  useEffect(() => {
+    window.scrollTo(0, 1);
+  }, []);
 
   const handleSelection = (option: Option, value: string) => {
     setSelections((prev) => ({ ...prev, [option]: value }));
@@ -62,7 +66,7 @@ export default function ConfiguracoesPage() {
   return (
     <>
       <OrientationLock />
-      <main className="flex min-h-screen flex-col bg-[#49416D] p-4 md:p-8">
+      <main className="flex min-h-[calc(100vh+1px)] flex-col bg-[#49416D] p-4 md:p-8">
         <div className="mb-8">
           <Button
             asChild
