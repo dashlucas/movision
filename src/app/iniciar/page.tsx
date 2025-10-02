@@ -67,54 +67,56 @@ export default function IniciarPage() {
         <h1 className="mb-8 text-left text-3xl font-bold text-white md:mb-12 md:text-4xl">
           Configurações
         </h1>
-        <div className="grid w-full max-w-6xl grid-cols-1 gap-6 sm:grid-cols-3 md:gap-8">
-          {/* Posição */}
-          <div className="flex flex-col items-center gap-4">
-            <h2 className="mb-2 text-2xl font-bold text-white sm:text-3xl">Posição</h2>
-            <div className="flex w-full flex-1 flex-col gap-4">
-              <SelectionButton option="posicao" value="em_pe">
-                Em pé
-              </SelectionButton>
-              <SelectionButton option="posicao" value="sentado">
-                Sentado
-              </SelectionButton>
+        <div className="flex flex-1 items-start justify-center">
+          <div className="grid w-full max-w-6xl grid-cols-1 gap-6 sm:grid-cols-3 md:gap-8">
+            {/* Posição */}
+            <div className="flex flex-col items-center gap-4">
+              <h2 className="mb-2 text-2xl font-bold text-white sm:text-3xl">Posição</h2>
+              <div className="flex w-full flex-1 flex-col gap-4">
+                <SelectionButton option="posicao" value="em_pe">
+                  Em pé
+                </SelectionButton>
+                <SelectionButton option="posicao" value="sentado">
+                  Sentado
+                </SelectionButton>
+              </div>
             </div>
-          </div>
 
-          {/* Membros */}
-          <div className="flex flex-col items-center gap-4">
-            <h2 className="mb-2 text-2xl font-bold text-white sm:text-3xl">Membros</h2>
-            <div className="flex w-full flex-1 flex-col gap-4">
-              <SelectionButton
-                option="membros"
-                value="superiores"
-                className="text-base sm:text-lg"
-              >
-                Superiores (Braços)
-              </SelectionButton>
-              <SelectionButton
-                option="membros"
-                value="inferiores"
-                className="text-base sm:text-lg"
-              >
-                Inferiores (Pernas)
-              </SelectionButton>
+            {/* Membros */}
+            <div className="flex flex-col items-center gap-4">
+              <h2 className="mb-2 text-2xl font-bold text-white sm:text-3xl">Membros</h2>
+              <div className="flex w-full flex-1 flex-col gap-4">
+                <SelectionButton
+                  option="membros"
+                  value="superiores"
+                  className="text-base sm:text-lg"
+                >
+                  Superiores (Braços)
+                </SelectionButton>
+                <SelectionButton
+                  option="membros"
+                  value="inferiores"
+                  className="text-base sm:text-lg"
+                >
+                  Inferiores (Pernas)
+                </SelectionButton>
+              </div>
             </div>
-          </div>
 
-          {/* Distância */}
-          <div className="flex flex-col items-center gap-4">
-            <h2 className="mb-2 text-2xl font-bold text-white sm:text-3xl">Distância</h2>
-            <div className="flex w-full flex-1 flex-col gap-4">
-              <SelectionButton option="distancia" value="nivel_1">
-                Nível 1
-              </SelectionButton>
-              <SelectionButton option="distancia" value="nivel_2">
-                Nível 2
-              </SelectionButton>
-              <SelectionButton option="distancia" value="nivel_3">
-                Nível 3
-              </SelectionButton>
+            {/* Distância */}
+            <div className="flex flex-col items-center gap-4">
+              <h2 className="mb-2 text-2xl font-bold text-white sm:text-3xl">Distância</h2>
+              <div className="flex w-full flex-1 flex-col gap-4">
+                <SelectionButton option="distancia" value="nivel_1">
+                  Nível 1
+                </SelectionButton>
+                <SelectionButton option="distancia" value="nivel_2">
+                  Nível 2
+                </SelectionButton>
+                <SelectionButton option="distancia" value="nivel_3">
+                  Nível 3
+                </SelectionButton>
+              </div>
             </div>
           </div>
         </div>
