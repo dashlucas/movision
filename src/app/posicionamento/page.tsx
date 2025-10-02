@@ -172,7 +172,7 @@ export default function PosicionamentoPage() {
       {hasCameraPermission && countdown > 0 && (
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-black">
           <p className="text-2xl font-bold md:text-4xl">Começa em</p>
-          <p className="font-raleway text-[100px] font-extrabold leading-none md:text-[250px]">
+          <p className="font-raleway text-[70px] font-extrabold leading-none md:text-[250px]">
             {countdown}
           </p>
         </div>
