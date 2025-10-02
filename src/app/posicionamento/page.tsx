@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { CameraOff } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 export default function PosicionamentoPage() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -134,8 +135,8 @@ export default function PosicionamentoPage() {
       />
       {/* Overlay */}
       {hasCameraPermission && (
-        <div className="absolute inset-x-0 top-0 z-10 flex h-1/3 items-center justify-center bg-gradient-to-b from-black/70 to-transparent p-4 text-center">
-          <div className="text-white">
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/30 p-4">
+          <div className="text-center">
             <h1 className="text-2xl font-bold text-white md:text-4xl">
               Posicione-se corretamente
             </h1>
@@ -143,6 +144,14 @@ export default function PosicionamentoPage() {
               Mantenha o dispositivo na horizontal e posicione-se a uma
               distância adequada
             </p>
+          </div>
+          <div className="relative mt-4 h-48 w-48 md:h-64 md:w-64">
+            <Image
+              src="/img/position.png"
+              alt="Posicionamento de exemplo"
+              fill
+              className="object-contain"
+            />
           </div>
         </div>
       )}
