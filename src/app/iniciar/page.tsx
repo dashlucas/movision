@@ -35,8 +35,9 @@ export default function IniciarPage() {
       <Button
         variant="outline"
         className={cn(
-          'relative h-14 w-full justify-center rounded-2xl border-4 border-transparent bg-card text-lg font-bold text-[#49416D] shadow-lg hover:bg-card/80 sm:h-16 sm:text-xl',
-          'whitespace-normal break-words',
+          'relative w-full flex-1 justify-center rounded-2xl border-4 border-transparent bg-card text-lg font-bold text-[#49416D] shadow-lg hover:bg-card/80 sm:text-xl',
+          'whitespace-normal break-words py-2',
+          'h-14 sm:h-auto',
           isSelected && 'border-primary ring-4 ring-primary/50',
           className
         )}
@@ -70,7 +71,7 @@ export default function IniciarPage() {
           {/* Posição */}
           <div className="flex flex-col items-center gap-4">
             <h2 className="mb-2 text-2xl font-bold text-white sm:text-3xl">Posição</h2>
-            <div className="flex w-full flex-col gap-4">
+            <div className="flex w-full flex-1 flex-col gap-4">
               <SelectionButton option="posicao" value="em_pe">
                 Em pé
               </SelectionButton>
@@ -83,7 +84,7 @@ export default function IniciarPage() {
           {/* Membros */}
           <div className="flex flex-col items-center gap-4">
             <h2 className="mb-2 text-2xl font-bold text-white sm:text-3xl">Membros</h2>
-            <div className="flex w-full flex-col gap-4">
+            <div className="flex w-full flex-1 flex-col gap-4">
               <SelectionButton
                 option="membros"
                 value="superiores"
@@ -104,7 +105,7 @@ export default function IniciarPage() {
           {/* Distância */}
           <div className="flex flex-col items-center gap-4">
             <h2 className="mb-2 text-2xl font-bold text-white sm:text-3xl">Distância</h2>
-            <div className="flex w-full flex-col gap-4">
+            <div className="flex w-full flex-1 flex-col gap-4">
               <SelectionButton option="distancia" value="nivel_1">
                 Nível 1
               </SelectionButton>
