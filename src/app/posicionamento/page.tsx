@@ -1,12 +1,9 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import { ArrowLeft, CameraOff } from 'lucide-react';
+import { CameraOff } from 'lucide-react';
 import { OrientationLock } from '@/components/orientation-lock';
 import { useToast } from '@/hooks/use-toast';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 export default function PosicionamentoPage() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -65,49 +62,30 @@ export default function PosicionamentoPage() {
   return (
     <>
       <OrientationLock />
-      <main className="flex min-h-screen flex-col bg-[#49416D] p-4 md:p-8">
-        <div className="mb-8">
-          <Button
-            asChild
-            variant="ghost"
-            className="text-white hover:bg-primary/90 hover:text-white"
-          >
-            <Link href="/configuracoes">
-              <ArrowLeft className="mr-2 h-6 w-6" />
-              <span className="text-xl">Voltar</span>
-            </Link>
-          </Button>
-          <h1 className="mt-4 text-3xl font-bold text-white md:text-4xl">
-            Posicionamento
-          </h1>
-        </div>
-
-        <div className="relative flex flex-1 items-center justify-center">
-          <div className="aspect-video w-full max-w-4xl overflow-hidden rounded-xl bg-black shadow-lg">
-            <video
-              ref={videoRef}
-              className="h-full w-full object-cover"
-              autoPlay
-              playsInline
-              muted
-              style={{ transform: 'scaleX(-1)' }} // Espelha o vídeo
-            />
-            {hasCameraPermission === false && (
-              <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/50 text-white">
-                <CameraOff className="h-16 w-16 text-red-500" />
-                <p className="mt-4 text-xl font-semibold">Câmera indisponível</p>
-                <p className="max-w-xs text-center text-sm text-zinc-300">
-                  Verifique as permissões da câmera no seu navegador.
-                </p>
-              </div>
-            )}
-             {hasCameraPermission === undefined && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/50 text-white">
-                <p>Acessando a câmera...</p>
-              </div>
-            )}
+      <main className="relative h-screen w-screen overflow-hidden bg-black">
+        <video
+          ref={videoRef}
+          className="h-full w-full object-cover"
+          autoPlay
+          playsInline
+          muted
+          style={{ transform: 'scaleX(-1)' }} // Espelha o vídeo
+        />
+        {hasCameraPermission === false && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 text-white">
+            <CameraOff className="h-24 w-24 text-red-500" />
+            <p className="mt-4 text-2xl font-semibold">Câmera indisponível</p>
+            <p className="mt-2 max-w-sm text-center text-base text-zinc-300">
+              Não foi possível acessar a câmera. Verifique as permissões no seu
+              navegador e tente novamente.
+            </p>
           </div>
-        </div>
+        )}
+        {hasCameraPermission === undefined && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/70 text-white">
+            <p className="text-xl">Acessando a câmera...</p>
+          </div>
+        )}
       </main>
     </>
   );
