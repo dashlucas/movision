@@ -135,12 +135,12 @@ export default function ConfiguracoesPage() {
         </div>
         <div className="mt-8 flex justify-center pb-4">
           <Button
-            asChild
+            asChild={isComplete}
             size="lg"
             className="h-20 w-full max-w-md rounded-2xl bg-primary text-2xl font-extrabold text-primary-foreground shadow-lg transition-all hover:bg-primary/90 disabled:bg-gray-400 disabled:opacity-50"
             disabled={!isComplete}
           >
-            <Link href="/posicionamento">Iniciar</Link>
+            {isComplete ? <Link href="/posicionamento">Iniciar</Link> : <span>Iniciar</span>}
           </Button>
         </div>
       </main>
