@@ -60,14 +60,14 @@ export default function IniciarPage() {
 
   return (
     <main className="flex min-h-screen flex-col bg-[#49416D] p-4 md:p-8">
-      <div className="mb-8 flex items-center">
+      <div className="mb-8">
         <Button asChild variant="ghost" className="text-white hover:text-white/80">
           <Link href="/">
             <ArrowLeft className="mr-2 h-6 w-6" />
             <span className="text-xl">Voltar</span>
           </Link>
         </Button>
-        <h1 className="ml-4 text-3xl font-bold text-white md:text-4xl">
+        <h1 className="mt-4 text-3xl font-bold text-white md:text-4xl">
           Configurações
         </h1>
       </div>
