@@ -33,7 +33,7 @@ export default function IniciarPage() {
       <Button
         variant="outline"
         className={cn(
-          'relative h-20 w-full justify-center rounded-2xl border-4 border-transparent bg-card text-2xl font-bold text-[#49416D] shadow-lg hover:bg-card/80',
+          'relative h-16 w-full justify-center rounded-2xl border-4 border-transparent bg-card text-xl font-bold text-[#49416D] shadow-lg hover:bg-card/80 sm:h-20 sm:text-2xl',
           isSelected && 'border-primary ring-4 ring-primary/50'
         )}
         onClick={() => handleSelection(option, value)}
@@ -58,14 +58,14 @@ export default function IniciarPage() {
           </Link>
         </Button>
       </div>
-      <div className="flex w-full flex-1 flex-col px-4 sm:px-8 md:px-16">
-        <h1 className="mb-12 text-left text-5xl font-bold text-white">
+      <div className="flex w-full flex-1 flex-col px-4 sm:px-8">
+        <h1 className="mb-8 text-left text-4xl font-bold text-white md:mb-12 md:text-5xl">
           Configurações
         </h1>
-        <div className="grid w-full max-w-6xl grid-cols-1 gap-10 sm:grid-cols-3 sm:gap-12 md:gap-20">
+        <div className="grid w-full max-w-6xl grid-cols-1 gap-8 sm:grid-cols-3 md:gap-12">
           {/* Posição */}
           <div className="flex flex-col items-center gap-4">
-            <h2 className="mb-4 text-4xl font-bold text-white">Posição</h2>
+            <h2 className="mb-2 text-3xl font-bold text-white sm:mb-4 sm:text-4xl">Posição</h2>
             <div className="flex w-full flex-col gap-4">
               <SelectionButton option="posicao" value="em_pe">
                 Em pé
@@ -78,7 +78,7 @@ export default function IniciarPage() {
 
           {/* Membros */}
           <div className="flex flex-col items-center gap-4">
-            <h2 className="mb-4 text-4xl font-bold text-white">Membros</h2>
+            <h2 className="mb-2 text-3xl font-bold text-white sm:mb-4 sm:text-4xl">Membros</h2>
             <div className="flex w-full flex-col gap-4">
               <SelectionButton option="membros" value="superiores">
                 Superiores (Braços)
@@ -91,7 +91,7 @@ export default function IniciarPage() {
 
           {/* Distância */}
           <div className="flex flex-col items-center gap-4">
-            <h2 className="mb-4 text-4xl font-bold text-white">Distância</h2>
+            <h2 className="mb-2 text-3xl font-bold text-white sm:mb-4 sm:text-4xl">Distância</h2>
             <div className="flex w-full flex-col gap-4">
               <SelectionButton option="distancia" value="nivel_1">
                 Nível 1
