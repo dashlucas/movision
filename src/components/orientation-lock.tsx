@@ -8,31 +8,21 @@ export function OrientationLock() {
 
   useEffect(() => {
     const checkOrientation = () => {
-      // Using screen.orientation.type is more direct than matchMedia for some cases
-      if (window.screen.orientation) {
-        setIsPortrait(window.screen.orientation.type.startsWith('portrait'));
-      } else {
-        // Fallback for older browsers
-        const isPortraitQuery = window.matchMedia('(orientation: portrait)');
-        setIsPortrait(isPortraitQuery.matches);
-      }
+      // Use a direct comparison of viewport dimensions for a more reliable check
+      const isCurrentlyPortrait = window.innerHeight > window.innerWidth;
+      setIsPortrait(isCurrentlyPortrait);
     };
 
     // Initial check
     checkOrientation();
 
     // Listen for changes
+    window.addEventListener('resize', checkOrientation);
     window.addEventListener('orientationchange', checkOrientation);
-    if (window.screen.orientation) {
-      window.screen.orientation.addEventListener('change', checkOrientation);
-    }
-
 
     return () => {
+      window.removeEventListener('resize', checkOrientation);
       window.removeEventListener('orientationchange', checkOrientation);
-       if (window.screen.orientation) {
-        window.screen.orientation.removeEventListener('change', checkOrientation);
-      }
     };
   }, []);
 
