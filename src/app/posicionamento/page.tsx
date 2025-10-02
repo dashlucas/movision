@@ -124,7 +124,7 @@ export default function PosicionamentoPage() {
       <video
         ref={videoRef}
         className={cn(
-          'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 object-cover',
+          'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 scale-x-[-1] object-cover',
           shouldRotate
             ? 'h-[100dvw] w-[100dvh] rotate-90'
             : 'h-[100dvh] w-[100dvw]'
