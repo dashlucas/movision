@@ -11,7 +11,6 @@ export default function PosicionamentoPage() {
   const [hasCameraPermission, setHasCameraPermission] = useState<
     boolean | undefined
   >(undefined);
-  const [isLandscape, setIsLandscape] = useState(false);
   const [shouldRotate, setShouldRotate] = useState(false);
   const { toast } = useToast();
 
@@ -20,9 +19,11 @@ export default function PosicionamentoPage() {
     document.documentElement.classList.add('bg-black');
 
     const isIOS =
-      /iPhone|iPad|iPod/.test(navigator.userAgent) &&
-      /WebKit/.test(navigator.userAgent) &&
-      !(window as any).MSStream;
+      (/iPhone|iPad|iPod/.test(navigator.userAgent) &&
+        /WebKit/.test(navigator.userAgent) &&
+        !(window as any).MSStream) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); // iPad on iOS 13+
+
     const isStandalone =
       'standalone' in window.navigator &&
       (window.navigator as any).standalone;
@@ -67,7 +68,6 @@ export default function PosicionamentoPage() {
 
     const applyOrientation = () => {
       const landscape = mql.matches;
-      setIsLandscape(landscape);
       setShouldRotate(landscape && isBugged);
     };
 
@@ -135,8 +135,8 @@ export default function PosicionamentoPage() {
       />
       {/* Overlay */}
       {hasCameraPermission && (
-        <div className="absolute inset-0 z-10 flex flex-col items-center justify-start bg-black/30 p-4 pt-8">
-          <div className="text-center">
+        <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-start bg-black/30">
+          <div className="relative z-10 w-full p-4 pt-8 text-center">
             <h1 className="text-2xl font-bold text-white md:text-4xl">
               Posicione-se corretamente
             </h1>
@@ -145,7 +145,7 @@ export default function PosicionamentoPage() {
               distância adequada
             </p>
           </div>
-          <div className="relative flex-1 w-full mt-4">
+          <div className="absolute inset-0 z-0">
             <Image
               src="/img/position.png"
               alt="Posicionamento de exemplo"
