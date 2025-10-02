@@ -23,18 +23,22 @@ export default function IniciarPage() {
     option,
     value,
     children,
+    className,
   }: {
     option: Option;
     value: string;
     children: React.ReactNode;
+    className?: string;
   }) => {
     const isSelected = selections[option] === value;
     return (
       <Button
         variant="outline"
         className={cn(
-          'relative h-16 w-full justify-center rounded-2xl border-4 border-transparent bg-card text-xl font-bold text-[#49416D] shadow-lg hover:bg-card/80 sm:h-20 sm:text-2xl',
-          isSelected && 'border-primary ring-4 ring-primary/50'
+          'relative h-14 w-full justify-center rounded-2xl border-4 border-transparent bg-card text-lg font-bold text-[#49416D] shadow-lg hover:bg-card/80 sm:h-16 sm:text-xl',
+          'whitespace-normal break-words',
+          isSelected && 'border-primary ring-4 ring-primary/50',
+          className
         )}
         onClick={() => handleSelection(option, value)}
       >
@@ -59,13 +63,13 @@ export default function IniciarPage() {
         </Button>
       </div>
       <div className="flex w-full flex-1 flex-col px-4 sm:px-8">
-        <h1 className="mb-8 text-left text-4xl font-bold text-white md:mb-12 md:text-5xl">
+        <h1 className="mb-8 text-left text-3xl font-bold text-white md:mb-12 md:text-4xl">
           Configurações
         </h1>
-        <div className="grid w-full max-w-6xl grid-cols-1 gap-8 sm:grid-cols-3 md:gap-12">
+        <div className="grid w-full max-w-6xl grid-cols-1 gap-6 sm:grid-cols-3 md:gap-8">
           {/* Posição */}
           <div className="flex flex-col items-center gap-4">
-            <h2 className="mb-2 text-3xl font-bold text-white sm:mb-4 sm:text-4xl">Posição</h2>
+            <h2 className="mb-2 text-2xl font-bold text-white sm:text-3xl">Posição</h2>
             <div className="flex w-full flex-col gap-4">
               <SelectionButton option="posicao" value="em_pe">
                 Em pé
@@ -78,12 +82,20 @@ export default function IniciarPage() {
 
           {/* Membros */}
           <div className="flex flex-col items-center gap-4">
-            <h2 className="mb-2 text-3xl font-bold text-white sm:mb-4 sm:text-4xl">Membros</h2>
+            <h2 className="mb-2 text-2xl font-bold text-white sm:text-3xl">Membros</h2>
             <div className="flex w-full flex-col gap-4">
-              <SelectionButton option="membros" value="superiores">
+              <SelectionButton
+                option="membros"
+                value="superiores"
+                className="text-base sm:text-lg"
+              >
                 Superiores (Braços)
               </SelectionButton>
-              <SelectionButton option="membros" value="inferiores">
+              <SelectionButton
+                option="membros"
+                value="inferiores"
+                className="text-base sm:text-lg"
+              >
                 Inferiores (Pernas)
               </SelectionButton>
             </div>
@@ -91,7 +103,7 @@ export default function IniciarPage() {
 
           {/* Distância */}
           <div className="flex flex-col items-center gap-4">
-            <h2 className="mb-2 text-3xl font-bold text-white sm:mb-4 sm:text-4xl">Distância</h2>
+            <h2 className="mb-2 text-2xl font-bold text-white sm:text-3xl">Distância</h2>
             <div className="flex w-full flex-col gap-4">
               <SelectionButton option="distancia" value="nivel_1">
                 Nível 1
