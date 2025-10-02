@@ -20,6 +20,7 @@ export default function PosicionamentoPage() {
   useEffect(() => {
     document.body.classList.add('bg-black');
     document.documentElement.classList.add('bg-black');
+    window.scrollTo(0, 1);
 
     const isIOS =
       (/iPhone|iPad|iPod/.test(navigator.userAgent) &&
@@ -119,7 +120,7 @@ export default function PosicionamentoPage() {
   }, [countdown, hasCameraPermission, router]);
 
   return (
-    <main className="relative min-h-[calc(100dvh_+_50px)] w-screen overflow-y-auto bg-black">
+    <main className="relative min-h-[calc(100dvh_+_150px)] w-screen overflow-y-auto bg-black">
       <div className="fixed inset-0 h-[100dvh] w-[100dvw]">
         {hasCameraPermission === undefined && (
           <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/70 text-white">
