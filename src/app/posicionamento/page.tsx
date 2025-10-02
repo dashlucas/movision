@@ -20,7 +20,6 @@ export default function PosicionamentoPage() {
   useEffect(() => {
     document.body.classList.add('bg-black');
     document.documentElement.classList.add('bg-black');
-    window.scrollTo(0, 150);
 
     const isIOS =
       (/iPhone|iPad|iPod/.test(navigator.userAgent) &&
