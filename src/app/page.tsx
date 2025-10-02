@@ -21,7 +21,7 @@ export default function Home() {
               size="lg"
               className="h-24 w-64 rounded-2xl bg-primary text-xl font-extrabold text-primary-foreground shadow-lg transition-transform hover:scale-105 hover:bg-primary/90 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-panel-right md:h-36 md:w-[400px] md:text-4xl"
             >
-              <Link href="/iniciar">Iniciar</Link>
+              <Link href="/configuracoes">Iniciar</Link>
             </Button>
             <Button
               asChild
