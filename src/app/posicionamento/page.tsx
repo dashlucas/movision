@@ -11,12 +11,21 @@ export default function PosicionamentoPage() {
     boolean | undefined
   >(undefined);
   const [isLandscape, setIsLandscape] = useState(false);
+  const [shouldRotate, setShouldRotate] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
-    // Adiciona a classe de fundo preto ao body
     document.body.classList.add('bg-black');
     document.documentElement.classList.add('bg-black');
+
+    const isIOS =
+      /iPhone|iPad|iPod/.test(navigator.userAgent) &&
+      /WebKit/.test(navigator.userAgent) &&
+      !(window as any).MSStream;
+    const isStandalone =
+      'standalone' in window.navigator &&
+      (window.navigator as any).standalone;
+    const isBugged = isIOS && isStandalone;
 
     const getCameraPermission = async () => {
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -56,19 +65,19 @@ export default function PosicionamentoPage() {
     const mql = window.matchMedia('(orientation: landscape)');
 
     const applyOrientation = () => {
-      setIsLandscape(mql.matches);
+      const landscape = mql.matches;
+      setIsLandscape(landscape);
+      setShouldRotate(landscape && isBugged);
     };
 
     mql.addEventListener('change', applyOrientation);
     window.addEventListener('orientationchange', applyOrientation);
     window.addEventListener('resize', applyOrientation);
-    applyOrientation(); // Initial check
+    applyOrientation();
 
-    // Nudge para o WebKit para forçar o re-layout
     const nudgeWebKit = () => {
-      if (videoRef.current) {
+      if (videoRef.current && isBugged) {
         videoRef.current.style.display = 'none';
-        // força reflow
         void videoRef.current.offsetHeight;
         videoRef.current.style.display = '';
       }
@@ -79,53 +88,50 @@ export default function PosicionamentoPage() {
     };
     window.addEventListener('orientationchange', handleOrientationChange);
 
-
-    // Função de limpeza
     return () => {
       if (videoRef.current && videoRef.current.srcObject) {
         const stream = videoRef.current.srcObject as MediaStream;
         const tracks = stream.getTracks();
         tracks.forEach((track) => track.stop());
       }
-      // Remove os listeners
       mql.removeEventListener('change', applyOrientation);
       window.removeEventListener('orientationchange', applyOrientation);
       window.removeEventListener('resize', applyOrientation);
       window.removeEventListener('orientationchange', handleOrientationChange);
-
-      // Remove a classe de fundo preto
       document.body.classList.remove('bg-black');
       document.documentElement.classList.remove('bg-black');
     };
   }, [toast]);
 
   return (
-      <main className="fixed inset-0 h-[100dvh] w-[100dvw] overflow-hidden bg-black">
-        {hasCameraPermission === undefined && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/70 text-white">
-            <p className="text-xl">Acessando a câmera...</p>
-          </div>
+    <main className="fixed inset-0 h-[100dvh] w-[100dvw] overflow-hidden bg-black">
+      {hasCameraPermission === undefined && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/70 text-white">
+          <p className="text-xl">Acessando a câmera...</p>
+        </div>
+      )}
+      {hasCameraPermission === false && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 text-white">
+          <CameraOff className="h-24 w-24 text-red-500" />
+          <p className="mt-4 text-2xl font-semibold">Câmera indisponível</p>
+          <p className="mt-2 max-w-sm text-center text-base text-zinc-300">
+            Não foi possível acessar a câmera. Verifique as permissões no seu
+            navegador e tente novamente.
+          </p>
+        </div>
+      )}
+      <video
+        ref={videoRef}
+        className={cn(
+          'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 object-cover',
+          shouldRotate
+            ? 'h-[100dvw] w-[100dvh] rotate-90'
+            : 'h-[100dvh] w-[100dvw]'
         )}
-        {hasCameraPermission === false && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 text-white">
-            <CameraOff className="h-24 w-24 text-red-500" />
-            <p className="mt-4 text-2xl font-semibold">Câmera indisponível</p>
-            <p className="mt-2 max-w-sm text-center text-base text-zinc-300">
-              Não foi possível acessar a câmera. Verifique as permissões no seu
-              navegador e tente novamente.
-            </p>
-          </div>
-        )}
-         <video
-            ref={videoRef}
-            className={cn(
-              'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 object-cover',
-              isLandscape ? 'h-[100dvw] w-[100dvh] rotate-90' : 'h-[100dvh] w-[100dvw]'
-            )}
-            autoPlay
-            playsInline
-            muted
-          />
-      </main>
+        autoPlay
+        playsInline
+        muted
+      />
+    </main>
   );
 }
