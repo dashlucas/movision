@@ -5,6 +5,7 @@ import { CameraOff } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export default function PosicionamentoPage() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -14,6 +15,7 @@ export default function PosicionamentoPage() {
   const [shouldRotate, setShouldRotate] = useState(false);
   const [countdown, setCountdown] = useState(10);
   const { toast } = useToast();
+  const router = useRouter();
 
   useEffect(() => {
     document.body.classList.add('bg-black');
@@ -110,9 +112,11 @@ export default function PosicionamentoPage() {
       if (countdown > 0) {
         const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
         return () => clearTimeout(timer);
+      } else {
+        router.push('/jogo');
       }
     }
-  }, [countdown, hasCameraPermission]);
+  }, [countdown, hasCameraPermission, router]);
 
   return (
     <main className="fixed inset-0 h-[100dvh] w-[100dvw] overflow-hidden bg-black">
@@ -144,7 +148,7 @@ export default function PosicionamentoPage() {
         muted
       />
       {/* Overlay */}
-      {hasCameraPermission && (
+      {hasCameraPermission && countdown > 0 && (
         <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-start">
           <div className="relative z-10 w-full p-4 pt-8 text-center">
             <h1 className="text-2xl font-bold text-black md:text-4xl">
