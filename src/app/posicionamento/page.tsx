@@ -119,64 +119,66 @@ export default function PosicionamentoPage() {
   }, [countdown, hasCameraPermission, router]);
 
   return (
-    <main className="fixed inset-0 h-[100dvh] w-[100dvw] overflow-hidden bg-black">
-      {hasCameraPermission === undefined && (
-        <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/70 text-white">
-          <p className="text-xl">Acessando a câmera...</p>
-        </div>
-      )}
-      {hasCameraPermission === false && (
-        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/70 text-white">
-          <CameraOff className="h-24 w-24 text-red-500" />
-          <p className="mt-4 text-2xl font-semibold">Câmera indisponível</p>
-          <p className="mt-2 max-w-sm text-center text-base text-zinc-300">
-            Não foi possível acessar a câmera. Verifique as permissões no seu
-            navegador e tente novamente.
-          </p>
-        </div>
-      )}
-      <video
-        ref={videoRef}
-        className={cn(
-          'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 scale-x-[-1] object-cover',
-          shouldRotate
-            ? 'h-[100dvw] w-[100dvh] rotate-90'
-            : 'h-[100dvh] w-[100dvw]'
+    <main className="relative min-h-[calc(100dvh_+_50px)] w-screen overflow-y-auto bg-black">
+      <div className="fixed inset-0 h-[100dvh] w-[100dvw]">
+        {hasCameraPermission === undefined && (
+          <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/70 text-white">
+            <p className="text-xl">Acessando a câmera...</p>
+          </div>
         )}
-        autoPlay
-        playsInline
-        muted
-      />
-      {/* Overlay */}
-      {hasCameraPermission && countdown > 0 && (
-        <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-start">
-          <div className="relative z-10 w-full p-4 pt-8 text-center">
-            <h1 className="text-2xl font-bold text-black md:text-4xl">
-              Posicione-se corretamente
-            </h1>
-            <p className="mt-2 text-sm text-zinc-800 md:text-base">
-              Mantenha o dispositivo na horizontal e posicione-se a uma
-              distância adequada
+        {hasCameraPermission === false && (
+          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/70 text-white">
+            <CameraOff className="h-24 w-24 text-red-500" />
+            <p className="mt-4 text-2xl font-semibold">Câmera indisponível</p>
+            <p className="mt-2 max-w-sm text-center text-base text-zinc-300">
+              Não foi possível acessar a câmera. Verifique as permissões no seu
+              navegador e tente novamente.
             </p>
           </div>
-          <div className="absolute inset-0 z-0">
-            <Image
-              src="/img/position.png"
-              alt="Posicionamento de exemplo"
-              fill
-              className="object-contain"
-            />
+        )}
+        <video
+          ref={videoRef}
+          className={cn(
+            'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 scale-x-[-1] object-cover',
+            shouldRotate
+              ? 'h-[100dvw] w-[100dvh] rotate-90'
+              : 'h-[100dvh] w-[100dvw]'
+          )}
+          autoPlay
+          playsInline
+          muted
+        />
+        {/* Overlay */}
+        {hasCameraPermission && countdown > 0 && (
+          <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-start">
+            <div className="relative z-10 w-full p-4 pt-8 text-center">
+              <h1 className="text-2xl font-bold text-black md:text-4xl">
+                Posicione-se corretamente
+              </h1>
+              <p className="mt-2 text-sm text-zinc-800 md:text-base">
+                Mantenha o dispositivo na horizontal e posicione-se a uma
+                distância adequada
+              </p>
+            </div>
+            <div className="absolute inset-0 z-0">
+              <Image
+                src="/img/position.png"
+                alt="Posicionamento de exemplo"
+                fill
+                className="object-contain"
+              />
+            </div>
           </div>
-        </div>
-      )}
-      {hasCameraPermission && countdown > 0 && (
-        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-black">
-          <p className="text-2xl font-bold md:text-4xl">Começa em</p>
-          <p className="font-raleway text-[70px] font-extrabold leading-none md:text-[250px]">
-            {countdown}
-          </p>
-        </div>
-      )}
+        )}
+        {hasCameraPermission && countdown > 0 && (
+          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-black">
+            <p className="text-2xl font-bold md:text-4xl">Começa em</p>
+            <p className="font-raleway text-[70px] font-extrabold leading-none md:text-[250px]">
+              {countdown}
+            </p>
+          </div>
+        )}
+      </div>
     </main>
   );
 }
