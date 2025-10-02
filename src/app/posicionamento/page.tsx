@@ -48,14 +48,19 @@ export default function PosicionamentoPage() {
     };
 
     getCameraPermission();
+    
+    // Adiciona a classe de fundo preto ao body
+    document.body.classList.add('bg-black');
 
-    // Função de limpeza para parar o stream da câmera ao desmontar o componente
+    // Função de limpeza para parar o stream da câmera e remover a classe do body
     return () => {
       if (videoRef.current && videoRef.current.srcObject) {
         const stream = videoRef.current.srcObject as MediaStream;
         const tracks = stream.getTracks();
         tracks.forEach((track) => track.stop());
       }
+      // Remove a classe de fundo preto do body
+      document.body.classList.remove('bg-black');
     };
   }, [toast]);
 
