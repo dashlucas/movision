@@ -12,6 +12,7 @@ export default function PosicionamentoPage() {
     boolean | undefined
   >(undefined);
   const [shouldRotate, setShouldRotate] = useState(false);
+  const [countdown, setCountdown] = useState(10);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -22,7 +23,7 @@ export default function PosicionamentoPage() {
       (/iPhone|iPad|iPod/.test(navigator.userAgent) &&
         /WebKit/.test(navigator.userAgent) &&
         !(window as any).MSStream) ||
-      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); // iPad on iOS 13+
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
     const isStandalone =
       'standalone' in window.navigator &&
@@ -104,6 +105,15 @@ export default function PosicionamentoPage() {
     };
   }, [toast]);
 
+  useEffect(() => {
+    if (hasCameraPermission) {
+      if (countdown > 0) {
+        const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [countdown, hasCameraPermission]);
+
   return (
     <main className="fixed inset-0 h-[100dvh] w-[100dvw] overflow-hidden bg-black">
       {hasCameraPermission === undefined && (
@@ -153,6 +163,14 @@ export default function PosicionamentoPage() {
               className="object-contain"
             />
           </div>
+        </div>
+      )}
+      {hasCameraPermission && countdown > 0 && (
+        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-black">
+          <p className="text-4xl font-bold">Começa em</p>
+          <p className="font-raleway text-[250px] font-extrabold leading-none">
+            {countdown}
+          </p>
         </div>
       )}
     </main>
