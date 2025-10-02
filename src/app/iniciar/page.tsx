@@ -19,6 +19,11 @@ export default function IniciarPage() {
     setSelections((prev) => ({ ...prev, [option]: value }));
   };
 
+  const isComplete =
+    selections.posicao !== '' &&
+    selections.membros !== '' &&
+    selections.distancia !== '';
+
   const SelectionButton = ({
     option,
     value,
@@ -35,9 +40,9 @@ export default function IniciarPage() {
       <Button
         variant="outline"
         className={cn(
-          'relative w-full flex-1 justify-center rounded-2xl border-4 border-transparent bg-card text-lg font-bold text-[#49416D] shadow-lg hover:bg-card/80 sm:text-xl',
+          'relative w-full flex-1 justify-center rounded-xl border-4 border-transparent bg-card text-lg font-bold text-[#49416D] shadow-lg hover:bg-card/80 sm:text-xl',
           'whitespace-normal break-words py-2',
-          'h-14 sm:h-auto',
+          'flex-1',
           isSelected && 'border-primary ring-4 ring-primary/50',
           className
         )}
@@ -55,19 +60,19 @@ export default function IniciarPage() {
 
   return (
     <main className="flex min-h-screen flex-col bg-[#49416D] p-4 md:p-8">
-      <div className="mb-8 flex items-center">
+      <div className="mb-8 flex items-center justify-between">
         <Button asChild variant="ghost" className="text-white hover:text-white/80">
           <Link href="/">
             <ArrowLeft className="mr-2 h-6 w-6" />
             <span className="text-xl">Voltar</span>
           </Link>
         </Button>
-      </div>
-      <div className="flex w-full flex-1 flex-col px-4 sm:px-8">
-        <h1 className="mb-8 text-left text-3xl font-bold text-white md:mb-12 md:text-4xl">
+        <h1 className="text-3xl font-bold text-white md:text-4xl">
           Configurações
         </h1>
-        <div className="flex flex-1 items-start justify-center">
+      </div>
+      <div className="flex w-full flex-1 flex-col justify-center px-4 sm:px-8">
+        <div className="flex items-start justify-center">
           <div className="grid w-full max-w-6xl grid-cols-1 gap-6 sm:grid-cols-3 md:gap-8">
             {/* Posição */}
             <div className="flex flex-col items-center gap-4">
@@ -89,14 +94,14 @@ export default function IniciarPage() {
                 <SelectionButton
                   option="membros"
                   value="superiores"
-                  className="text-base sm:text-lg"
+                  className="flex-wrap"
                 >
                   Superiores (Braços)
                 </SelectionButton>
                 <SelectionButton
                   option="membros"
                   value="inferiores"
-                  className="text-base sm:text-lg"
+                  className="flex-wrap"
                 >
                   Inferiores (Pernas)
                 </SelectionButton>
@@ -121,6 +126,15 @@ export default function IniciarPage() {
           </div>
         </div>
       </div>
+       <div className="mt-8 flex justify-center pb-4">
+          <Button
+            size="lg"
+            className="h-20 w-full max-w-md rounded-2xl bg-primary text-2xl font-extrabold text-primary-foreground shadow-lg transition-all hover:bg-primary/90 disabled:bg-gray-400 disabled:opacity-50"
+            disabled={!isComplete}
+          >
+            Iniciar
+          </Button>
+        </div>
     </main>
   );
 }
