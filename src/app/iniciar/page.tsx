@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState } from 'react';
@@ -59,13 +58,13 @@ export default function IniciarPage() {
           </Link>
         </Button>
       </div>
-      <div className="flex flex-1 flex-col items-center">
-        <h1 className="mb-12 text-5xl font-bold text-white">
+      <div className="flex w-full flex-1 flex-col px-4 sm:px-8 md:px-16">
+        <h1 className="mb-12 text-left text-5xl font-bold text-white">
           Configurações
         </h1>
         <div className="grid w-full max-w-6xl grid-cols-1 gap-10 sm:grid-cols-3 sm:gap-12 md:gap-20">
           {/* Posição */}
-          <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col items-start gap-4">
             <h2 className="mb-4 text-4xl font-bold text-white">Posição</h2>
             <div className="flex w-full flex-col gap-4">
               <SelectionButton option="posicao" value="em_pe">
@@ -78,7 +77,7 @@ export default function IniciarPage() {
           </div>
 
           {/* Membros */}
-          <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col items-start gap-4">
             <h2 className="mb-4 text-4xl font-bold text-white">Membros</h2>
             <div className="flex w-full flex-col gap-4">
               <SelectionButton option="membros" value="superiores">
@@ -91,7 +90,7 @@ export default function IniciarPage() {
           </div>
 
           {/* Distância */}
-          <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col items-start gap-4">
             <h2 className="mb-4 text-4xl font-bold text-white">Distância</h2>
             <div className="flex w-full flex-col gap-4">
               <SelectionButton option="distancia" value="nivel_1">
