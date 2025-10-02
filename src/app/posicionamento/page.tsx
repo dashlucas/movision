@@ -135,12 +135,12 @@ export default function PosicionamentoPage() {
       />
       {/* Overlay */}
       {hasCameraPermission && (
-        <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-start bg-black/30">
+        <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-start">
           <div className="relative z-10 w-full p-4 pt-8 text-center">
-            <h1 className="text-2xl font-bold text-white md:text-4xl">
+            <h1 className="text-2xl font-bold text-black md:text-4xl">
               Posicione-se corretamente
             </h1>
-            <p className="mt-2 text-sm text-zinc-200 md:text-base">
+            <p className="mt-2 text-sm text-zinc-800 md:text-base">
               Mantenha o dispositivo na horizontal e posicione-se a uma
               distância adequada
             </p>
