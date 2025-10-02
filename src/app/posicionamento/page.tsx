@@ -106,12 +106,12 @@ export default function PosicionamentoPage() {
   return (
     <main className="fixed inset-0 h-[100dvh] w-[100dvw] overflow-hidden bg-black">
       {hasCameraPermission === undefined && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/70 text-white">
+        <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/70 text-white">
           <p className="text-xl">Acessando a câmera...</p>
         </div>
       )}
       {hasCameraPermission === false && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 text-white">
+        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/70 text-white">
           <CameraOff className="h-24 w-24 text-red-500" />
           <p className="mt-4 text-2xl font-semibold">Câmera indisponível</p>
           <p className="mt-2 max-w-sm text-center text-base text-zinc-300">
@@ -132,6 +132,20 @@ export default function PosicionamentoPage() {
         playsInline
         muted
       />
+      {/* Overlay */}
+      {hasCameraPermission && (
+        <div className="absolute inset-x-0 top-0 z-10 flex h-1/3 items-center justify-center bg-gradient-to-b from-black/70 to-transparent p-4 text-center">
+          <div className="text-white">
+            <h1 className="text-2xl font-bold text-white md:text-4xl">
+              Posicione-se corretamente
+            </h1>
+            <p className="mt-2 text-sm text-zinc-200 md:text-base">
+              Mantenha o dispositivo na horizontal e posicione-se a uma
+              distância adequada
+            </p>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
