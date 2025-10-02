@@ -145,7 +145,7 @@ export default function PosicionamentoPage() {
               distância adequada
             </p>
           </div>
-          <div className="relative mt-4 h-64 w-64 md:h-80 md:w-80">
+          <div className="relative mt-4 h-[512px] w-[512px] md:h-[640px] md:w-[640px]">
             <Image
               src="/img/position.png"
               alt="Posicionamento de exemplo"
