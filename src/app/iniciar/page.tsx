@@ -42,7 +42,7 @@ export default function IniciarPage() {
         className={cn(
           'relative w-full flex-1 justify-center rounded-xl border-4 border-transparent bg-card text-lg font-bold text-[#49416D] shadow-lg hover:bg-card/80 sm:text-xl',
           'whitespace-normal break-words py-2',
-          'flex-1',
+          'h-full',
           isSelected && 'border-primary ring-4 ring-primary/50',
           className
         )}
@@ -61,7 +61,11 @@ export default function IniciarPage() {
   return (
     <main className="flex min-h-screen flex-col bg-[#49416D] p-4 md:p-8">
       <div className="mb-8">
-        <Button asChild variant="ghost" className="text-white hover:bg-primary/90">
+        <Button
+          asChild
+          variant="ghost"
+          className="text-white hover:bg-primary/90 hover:text-white"
+        >
           <Link href="/">
             <ArrowLeft className="mr-2 h-6 w-6" />
             <span className="text-xl">Voltar</span>
