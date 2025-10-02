@@ -135,7 +135,7 @@ export default function PosicionamentoPage() {
       />
       {/* Overlay */}
       {hasCameraPermission && (
-        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/30 p-4">
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-start bg-black/30 p-4 pt-8">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-white md:text-4xl">
               Posicione-se corretamente
@@ -145,7 +145,7 @@ export default function PosicionamentoPage() {
               distância adequada
             </p>
           </div>
-          <div className="relative mt-4 h-[512px] w-[512px] md:h-[640px] md:w-[640px]">
+          <div className="relative flex-1 w-full mt-4">
             <Image
               src="/img/position.png"
               alt="Posicionamento de exemplo"
