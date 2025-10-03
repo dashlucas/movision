@@ -78,7 +78,7 @@ export default function PosicionamentoPage() {
   }, [countdown, hasCameraPermission, router]);
 
   return (
-    <main className="h-[101svh] w-screen bg-black">
+    <main className="h-[110svh] w-screen bg-black">
       <div className="fixed inset-0 h-[100svh] w-screen">
         {hasCameraPermission === undefined && (
           <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/70 text-white">
@@ -138,7 +138,7 @@ export default function PosicionamentoPage() {
           Browser
         </div>
       </div>
-      <div className="h-[1svh] w-full" />
+      <div className="h-[10svh] w-full" />
     </main>
   );
 }
