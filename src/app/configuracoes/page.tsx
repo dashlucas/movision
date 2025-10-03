@@ -67,7 +67,7 @@ export default function ConfiguracoesPage() {
   return (
     <>
       <OrientationLock />
-      <main className="flex min-h-[calc(100vh+1px)] flex-col bg-[#49416D] p-4 md:p-8">
+      <main className="flex min-h-[100svh] flex-col bg-[#49416D] p-4 md:p-8">
         <div className="mb-8">
           <Button
             asChild
