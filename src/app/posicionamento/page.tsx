@@ -106,8 +106,10 @@ export default function PosicionamentoPage() {
         <video
           ref={videoRef}
           className={cn(
-            'absolute left-1/2 top-1/2 h-[100dvh] w-[100dvw] -translate-x-1/2 -translate-y-1/2 scale-x-[-1] object-cover',
-            isIOS && '[transform:translateX(-50%)_translateY(-50%)_scaleX(-1)_rotate(270deg)]'
+            'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 scale-x-[-1] object-cover',
+            isIOS
+              ? 'h-[100dvw] w-[100dvh] [transform:translateX(-50%)_translateY(-50%)_scaleX(-1)_rotate(90deg)]'
+              : 'h-[100dvh] w-[100dvw]'
           )}
           autoPlay
           playsInline
