@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <>
       <OrientationLock />
-      <main className="flex h-[100svh] w-full flex-row overscroll-none">
+      <main className="flex h-[100svh] w-full flex-row">
         {/* Left Panel */}
         <div className="flex w-1/2 flex-col items-center justify-center bg-card p-4 md:p-8">
           <Logo className="h-64 w-64 md:h-64 md:w-64 lg:h-96 lg:w-96" />

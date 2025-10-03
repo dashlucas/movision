@@ -78,7 +78,7 @@ export default function PosicionamentoPwaPage() {
   }, [countdown, hasCameraPermission, router]);
 
   return (
-    <main className="min-h-[calc(100svh)] w-screen overflow-y-auto bg-black">
+    <main className="min-h-[calc(100svh)] w-screen overflow-hidden bg-black">
       <div className="fixed inset-0 h-[100dvh] w-[100dvw]">
         {hasCameraPermission === undefined && (
           <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/70 text-white">
