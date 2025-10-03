@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-export default function JogoPage() {
+export default function JogoPwaPage() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [hasCameraPermission, setHasCameraPermission] = useState<
     boolean | undefined
@@ -78,8 +78,8 @@ export default function JogoPage() {
   }, [countdown, hasCameraPermission, router]);
 
   return (
-    <main className="h-[140svh] w-screen overflow-hidden bg-black">
-      <div className="fixed inset-0 h-[100svh] w-screen">
+    <main className="min-h-[calc(100svh)] w-screen overflow-hidden bg-black">
+      <div className="fixed inset-0 h-[100dvh] w-[100dvw]">
         {hasCameraPermission === undefined && (
           <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/70 text-white">
             <p className="text-xl">Acessando a câmera...</p>
@@ -98,7 +98,8 @@ export default function JogoPage() {
         <video
           ref={videoRef}
           className={cn(
-            'absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 scale-x-[-1] object-cover'
+            'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 scale-x-[-1] object-cover',
+            'h-[100dvw] w-[100dvh] [transform:translateX(-50%)_translateY(-50%)_scaleX(-1)_rotate(90deg)]'
           )}
           autoPlay
           playsInline
@@ -106,8 +107,8 @@ export default function JogoPage() {
         />
         {/* Overlay */}
         {hasCameraPermission && countdown > 0 && (
-          <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center">
-            <div className="absolute top-0 z-10 w-full p-4 pt-8 text-center">
+          <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-start">
+            <div className="relative z-10 w-full p-4 pt-8 text-center">
               <h1 className="text-2xl font-bold text-black md:text-4xl">
                 Posicione-se corretamente
               </h1>
@@ -116,7 +117,7 @@ export default function JogoPage() {
                 distância adequada
               </p>
             </div>
-            <div className="relative h-[85vh] w-full">
+            <div className="absolute inset-0 z-0">
               <Image
                 src="/img/position.png"
                 alt="Posicionamento de exemplo"
@@ -135,7 +136,7 @@ export default function JogoPage() {
           </div>
         )}
         <div className="absolute bottom-4 right-4 z-50 text-2xl font-bold text-white opacity-50">
-          Browser
+          PWA
         </div>
       </div>
     </main>

@@ -37,9 +37,9 @@ export default function ConfiguracoesPage() {
     const isIOSPWA = isIOS && isStandalone;
 
     if (isIOSPWA) {
-      router.push('/posicionamento-pwa');
+      router.push('/jogopwa');
     } else {
-      router.push('/posicionamento');
+      router.push('/jogo');
     }
   };
 
