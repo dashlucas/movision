@@ -16,11 +16,6 @@ export default function ConfiguracoesPage() {
     distancia: '',
   });
 
-  useEffect(() => {
-    // Força o navegador a redesenhar a viewport, corrigindo a faixa branca no iOS PWA.
-    window.scrollTo(0, 1);
-  }, []);
-
   const handleSelection = (option: Option, value: string) => {
     setSelections((prev) => ({ ...prev, [option]: value }));
   };

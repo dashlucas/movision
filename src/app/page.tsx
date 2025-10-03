@@ -7,11 +7,6 @@ import { OrientationLock } from '@/components/orientation-lock';
 import { useEffect } from 'react';
 
 export default function Home() {
-  useEffect(() => {
-    // Força o navegador a redesenhar a viewport, corrigindo a faixa branca no iOS PWA.
-    window.scrollTo(0, 1);
-  }, []);
-
   return (
     <>
       <OrientationLock />
