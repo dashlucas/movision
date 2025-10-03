@@ -17,6 +17,7 @@ export default function ConfiguracoesPage() {
   });
 
   useEffect(() => {
+    // Força o navegador a redesenhar a viewport, corrigindo a faixa branca no iOS PWA.
     window.scrollTo(0, 1);
   }, []);
 
