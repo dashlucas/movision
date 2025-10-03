@@ -12,7 +12,7 @@ export default function PosicionamentoPage() {
   const [hasCameraPermission, setHasCameraPermission] = useState<
     boolean | undefined
   >(undefined);
-  const [shouldRotate, setShouldRotate] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
   const [countdown, setCountdown] = useState(10);
   const { toast } = useToast();
   const router = useRouter();
@@ -21,16 +21,12 @@ export default function PosicionamentoPage() {
     document.body.classList.add('bg-black');
     document.documentElement.classList.add('bg-black');
 
-    const isIOS =
+    const isIOSDevice =
       (/iPhone|iPad|iPod/.test(navigator.userAgent) &&
         /WebKit/.test(navigator.userAgent) &&
         !(window as any).MSStream) ||
       (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-
-    const isStandalone =
-      'standalone' in window.navigator &&
-      (window.navigator as any).standalone;
-    const isBugged = isIOS && isStandalone;
+    setIsIOS(isIOSDevice);
 
     const getCameraPermission = async () => {
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -67,41 +63,12 @@ export default function PosicionamentoPage() {
 
     getCameraPermission();
 
-    const mql = window.matchMedia('(orientation: landscape)');
-
-    const applyOrientation = () => {
-      const landscape = mql.matches;
-      setShouldRotate(landscape && isBugged);
-    };
-
-    mql.addEventListener('change', applyOrientation);
-    window.addEventListener('orientationchange', applyOrientation);
-    window.addEventListener('resize', applyOrientation);
-    applyOrientation();
-
-    const nudgeWebKit = () => {
-      if (videoRef.current && isBugged) {
-        videoRef.current.style.display = 'none';
-        void videoRef.current.offsetHeight;
-        videoRef.current.style.display = '';
-      }
-    };
-
-    const handleOrientationChange = () => {
-      setTimeout(nudgeWebKit, 120);
-    };
-    window.addEventListener('orientationchange', handleOrientationChange);
-
     return () => {
       if (videoRef.current && videoRef.current.srcObject) {
         const stream = videoRef.current.srcObject as MediaStream;
         const tracks = stream.getTracks();
         tracks.forEach((track) => track.stop());
       }
-      mql.removeEventListener('change', applyOrientation);
-      window.removeEventListener('orientationchange', applyOrientation);
-      window.removeEventListener('resize', applyOrientation);
-      window.removeEventListener('orientationchange', handleOrientationChange);
       document.body.classList.remove('bg-black');
       document.documentElement.classList.remove('bg-black');
     };
@@ -139,10 +106,8 @@ export default function PosicionamentoPage() {
         <video
           ref={videoRef}
           className={cn(
-            'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 scale-x-[-1] object-cover',
-            shouldRotate
-              ? 'h-[100dvw] w-[100dvh] rotate-90'
-              : 'h-[100dvh] w-[100dvw]'
+            'absolute left-1/2 top-1/2 h-[100dvh] w-[100dvw] -translate-x-1/2 -translate-y-1/2 scale-x-[-1] object-cover',
+            isIOS && '[transform:translateX(-50%)_translateY(-50%)_scaleX(-1)_rotate(270deg)]'
           )}
           autoPlay
           playsInline
