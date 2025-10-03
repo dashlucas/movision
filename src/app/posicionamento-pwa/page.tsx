@@ -135,6 +135,9 @@ export default function PosicionamentoPwaPage() {
             </p>
           </div>
         )}
+        <div className="absolute bottom-4 right-4 z-50 text-2xl font-bold text-white opacity-50">
+          PWA
+        </div>
       </div>
     </main>
   );
