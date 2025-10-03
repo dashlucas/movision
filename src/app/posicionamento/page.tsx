@@ -12,7 +12,7 @@ export default function PosicionamentoPage() {
   const [hasCameraPermission, setHasCameraPermission] = useState<
     boolean | undefined
   >(undefined);
-  const [isIOS, setIsIOS] = useState(false);
+  const [isIOSPWA, setIsIOSPWA] = useState(false);
   const [countdown, setCountdown] = useState(10);
   const { toast } = useToast();
   const router = useRouter();
@@ -26,7 +26,11 @@ export default function PosicionamentoPage() {
         /WebKit/.test(navigator.userAgent) &&
         !(window as any).MSStream) ||
       (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-    setIsIOS(isIOSDevice);
+
+    const isStandalone =
+      'standalone' in navigator && (navigator as any).standalone === true;
+    
+    setIsIOSPWA(isIOSDevice && isStandalone);
 
     const getCameraPermission = async () => {
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -107,8 +111,8 @@ export default function PosicionamentoPage() {
           ref={videoRef}
           className={cn(
             'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 scale-x-[-1] object-cover',
-            isIOS
-              ? 'h-[100dvw] w-[100dvh] [transform:translateX(-50%)_translateY(-50%)_scaleX(-1)_rotate(90deg)]'
+            isIOSPWA
+              ? 'h-[100dvw] w-[100dvh] [transform:translateX(-50%)_translateY(-50%)_scaleX(-1)_rotate(270deg)]'
               : 'h-[100dvh] w-[100dvw]'
           )}
           autoPlay
