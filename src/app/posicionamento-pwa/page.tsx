@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-export default function PosicionamentoPage() {
+export default function PosicionamentoPwaPage() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [hasCameraPermission, setHasCameraPermission] = useState<
     boolean | undefined
@@ -98,7 +98,8 @@ export default function PosicionamentoPage() {
         <video
           ref={videoRef}
           className={cn(
-            'absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 scale-x-[-1] object-cover'
+            'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 scale-x-[-1] object-cover',
+            'h-[100dvw] w-[100dvh] [transform:translateX(-50%)_translateY(-50%)_scaleX(-1)_rotate(90deg)]'
           )}
           autoPlay
           playsInline

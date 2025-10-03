@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ArrowLeft, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { OrientationLock } from '@/components/orientation-lock';
+import { useRouter } from 'next/navigation';
 
 type Option = 'posicao' | 'membros' | 'distancia';
 
@@ -15,6 +16,7 @@ export default function ConfiguracoesPage() {
     membros: '',
     distancia: '',
   });
+  const router = useRouter();
 
   const handleSelection = (option: Option, value: string) => {
     setSelections((prev) => ({ ...prev, [option]: value }));
@@ -24,6 +26,22 @@ export default function ConfiguracoesPage() {
     selections.posicao !== '' &&
     selections.membros !== '' &&
     selections.distancia !== '';
+
+  const handleStart = () => {
+    const isIOS =
+      /iPhone|iPad|iPod/.test(navigator.userAgent) &&
+      /WebKit/.test(navigator.userAgent) &&
+      !(window as any).MSStream;
+    const isStandalone =
+      'standalone' in navigator && (navigator as any).standalone === true;
+    const isIOSPWA = isIOS && isStandalone;
+
+    if (isIOSPWA) {
+      router.push('/posicionamento-pwa');
+    } else {
+      router.push('/posicionamento');
+    }
+  };
 
   const SelectionButton = ({
     option,
@@ -135,12 +153,12 @@ export default function ConfiguracoesPage() {
         </div>
         <div className="mt-8 flex justify-center pb-4">
           <Button
-            asChild={isComplete}
             size="lg"
             className="h-20 w-full max-w-md rounded-2xl bg-primary text-2xl font-extrabold text-primary-foreground shadow-lg transition-all hover:bg-primary/90 disabled:bg-gray-400 disabled:opacity-50"
             disabled={!isComplete}
+            onClick={handleStart}
           >
-            {isComplete ? <Link href="/posicionamento">Iniciar</Link> : <span>Iniciar</span>}
+            Iniciar
           </Button>
         </div>
       </main>
