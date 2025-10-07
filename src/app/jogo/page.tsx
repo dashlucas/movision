@@ -1,8 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import Head from 'next/head';
-import Script from 'next/script';
 import {
   PoseLandmarker,
   FilesetResolver,
@@ -12,9 +10,6 @@ import {
 export default function JogoPage() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const liveViewRef = useRef<HTMLDivElement>(null);
-
-  const [mirrored, setMirrored] = useState(true);
 
   // Refs para a lógica do MediaPipe
   const poseLandmarkerRef = useRef<PoseLandmarker | null>(null);
@@ -25,12 +20,8 @@ export default function JogoPage() {
   useEffect(() => {
     const video = videoRef.current;
     const canvas = canvasRef.current;
-    const liveView = liveViewRef.current;
 
-    if (!video || !canvas || !liveView) return;
-
-    // Adiciona a classe para o corpo da página de jogo
-    document.body.classList.add('mediapipe-body');
+    if (!video || !canvas) return;
 
     const canvasCtx = canvas.getContext('2d');
     if (!canvasCtx) return;
@@ -51,7 +42,6 @@ export default function JogoPage() {
       });
       poseLandmarkerRef.current = poseLandmarker;
       console.log('Pose Landmarker created');
-      // Auto-start camera once the model is loaded
       await enableCam();
     };
 
@@ -80,28 +70,38 @@ export default function JogoPage() {
       )
         return;
 
-      // Adjust canvas size to match video
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
+      const videoWidth = video.videoWidth;
+      const videoHeight = video.videoHeight;
+
+      if (canvas.width !== videoWidth) {
+        canvas.width = videoWidth;
+      }
+      if (canvas.height !== videoHeight) {
+        canvas.height = videoHeight;
+      }
 
       const startTimeMs = performance.now();
       if (lastVideoTimeRef.current !== video.currentTime) {
         lastVideoTimeRef.current = video.currentTime;
-        poseLandmarkerRef.current.detectForVideo(video, startTimeMs, (result) => {
-          canvasCtx.save();
-          canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-          for (const landmark of result.landmarks) {
-            drawingUtils.drawLandmarks(landmark, {
-              radius: (data) =>
-                DrawingUtils.lerp(data.from.z, -0.15, 0.1, 5, 1),
-            });
-            drawingUtils.drawConnectors(
-              landmark,
-              PoseLandmarker.POSE_CONNECTIONS
-            );
+        poseLandmarkerRef.current.detectForVideo(
+          video,
+          startTimeMs,
+          (result) => {
+            canvasCtx.save();
+            canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+            for (const landmark of result.landmarks) {
+              drawingUtils.drawLandmarks(landmark, {
+                radius: (data) =>
+                  DrawingUtils.lerp(data.from.z, -0.15, 0.1, 5, 1),
+              });
+              drawingUtils.drawConnectors(
+                landmark,
+                PoseLandmarker.POSE_CONNECTIONS
+              );
+            }
+            canvasCtx.restore();
           }
-          canvasCtx.restore();
-        });
+        );
       }
 
       animationFrameId.current = window.requestAnimationFrame(predictWebcam);
@@ -109,10 +109,8 @@ export default function JogoPage() {
 
     createPoseLandmarker();
 
-    // Cleanup function
     return () => {
       console.log('Cleaning up...');
-      document.body.classList.remove('mediapipe-body'); // Remove a classe ao desmontar
       webcamRunningRef.current = false;
       if (animationFrameId.current) {
         window.cancelAnimationFrame(animationFrameId.current);
@@ -125,54 +123,34 @@ export default function JogoPage() {
       video.removeEventListener('loadeddata', predictWebcam);
       poseLandmarkerRef.current?.close();
     };
-  }, []); // Executa apenas uma vez na montagem do componente
+  }, []);
 
   return (
-    <>
-      <Head>
-        <title>MediaPipe Pose Landmarker Task for web</title>
-        <link
-          href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css"
-          rel="stylesheet"
-        />
-      </Head>
-      <Script
-        src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"
-        strategy="beforeInteractive"
-      />
-      {/* O módulo do MediaPipe será carregado pelo import no topo do arquivo */}
-
-      <div
-        ref={liveViewRef}
-        id="liveView"
-        className={`videoView ${mirrored ? 'mirrored' : ''}`}
-      >
-        <div className="absolute inset-x-0 top-0 z-20 flex flex-col items-center py-4 text-center">
-          <h1 className="text-3xl font-bold text-white md:text-4xl">
-            Posicione-se corretamente
-          </h1>
-          <div className="mt-2 inline-block rounded-md bg-white/80 px-4 py-2 text-black shadow-lg backdrop-blur-sm">
-            <p className="text-base md:text-lg">
-              Mantenha o dispositivo na horizontal e posicione-se a uma
-              distância adequada
-            </p>
-          </div>
-        </div>
-        <div className="stage">
-          <video
-            ref={videoRef}
-            id="webcam"
-            autoPlay
-            playsInline
-            muted
-          ></video>
-          <canvas
-            ref={canvasRef}
-            id="output_canvas"
-            className="output_canvas"
-          ></canvas>
+    <div className="relative h-screen w-screen overflow-hidden bg-black">
+      <video
+        ref={videoRef}
+        autoPlay
+        playsInline
+        muted
+        className="absolute inset-0 h-full w-full object-cover"
+        style={{ transform: 'scaleX(-1)' }}
+      ></video>
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 h-full w-full object-cover"
+        style={{ transform: 'scaleX(-1)' }}
+      ></canvas>
+      <div className="absolute inset-x-0 top-0 z-20 flex flex-col items-center py-4 text-center">
+        <h1 className="text-3xl font-bold text-white md:text-4xl">
+          Posicione-se corretamente
+        </h1>
+        <div className="mt-2 inline-block rounded-md bg-white/80 px-4 py-2 text-black shadow-lg backdrop-blur-sm">
+          <p className="text-base md:text-lg">
+            Mantenha o dispositivo na horizontal e posicione-se a uma distância
+            adequada
+          </p>
         </div>
       </div>
-    </>
+    </div>
   );
 }
