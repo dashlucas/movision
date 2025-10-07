@@ -151,7 +151,7 @@ export default function JogoPage() {
             adequada
           </p>
         </div>
-        <div className="relative h-[70vh] w-full">
+        <div className="relative h-[100vh] w-full">
           <Image
             src="/img/position.png"
             alt="Posicionamento de exemplo"
