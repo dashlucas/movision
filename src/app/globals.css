@@ -90,7 +90,7 @@
   color: #3d3d3d;
   --mdc-theme-primary: #007f8b;
   --mdc-theme-on-primary: #f1f3f4;
-  background: #000;
+  background: hsl(var(--background));
 }
 
 h1 {
@@ -125,19 +125,19 @@ section {
 
 #liveView {
   width: 100%;
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 12px;
-  box-sizing: border-box;
+  height: 100%;
+  position: fixed;
+  inset: 0;
 }
 
 .stage {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: 100%;
   background: #000;
   overflow: hidden;
 }
+
 .stage > video,
 .stage > canvas {
   position: absolute;
