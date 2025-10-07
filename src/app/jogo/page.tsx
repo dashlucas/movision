@@ -6,6 +6,7 @@ import {
   FilesetResolver,
   DrawingUtils,
 } from '@mediapipe/tasks-vision';
+import Image from 'next/image';
 
 export default function JogoPage() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -140,14 +141,24 @@ export default function JogoPage() {
         className="absolute inset-0 h-full w-full object-cover"
         style={{ transform: 'scaleX(-1)' }}
       ></canvas>
-      <div className="absolute inset-x-0 top-0 z-20 flex flex-col items-center py-4 text-center">
-        <h1 className="text-4xl font-bold text-white md:text-5xl">
-          Posicione-se corretamente
-        </h1>
-        <p className="mt-2 text-xl text-white md:text-2xl">
-          Mantenha o dispositivo na horizontal e posicione-se a uma distância
-          adequada
-        </p>
+      <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center">
+        <div className="absolute top-0 z-10 w-full p-4 pt-8 text-center">
+          <h1 className="text-4xl font-bold text-white md:text-5xl">
+            Posicione-se corretamente
+          </h1>
+          <p className="mt-2 text-xl text-white md:text-2xl">
+            Mantenha o dispositivo na horizontal e posicione-se a uma distância
+            adequada
+          </p>
+        </div>
+        <div className="relative h-[70vh] w-full">
+          <Image
+            src="/img/position.png"
+            alt="Posicionamento de exemplo"
+            fill
+            className="object-contain"
+          />
+        </div>
       </div>
     </div>
   );
