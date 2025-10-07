@@ -147,14 +147,16 @@ export default function JogoPage() {
         id="liveView"
         className={`videoView ${mirrored ? 'mirrored' : ''}`}
       >
-        <div className="absolute inset-x-0 top-0 z-20 py-4 text-center">
+        <div className="absolute inset-x-0 top-0 z-20 flex flex-col items-center py-4 text-center">
           <h1 className="text-3xl font-bold text-white md:text-4xl">
             Posicione-se corretamente
           </h1>
-          <p className="mt-1 text-base text-white/90 md:text-lg">
-            Mantenha o dispositivo na horizontal e posicione-se a uma distância
-            adequada
-          </p>
+          <div className="mt-2 inline-block rounded-md bg-white/80 px-4 py-2 text-black shadow-lg backdrop-blur-sm">
+            <p className="text-base md:text-lg">
+              Mantenha o dispositivo na horizontal e posicione-se a uma
+              distância adequada
+            </p>
+          </div>
         </div>
         <div className="stage">
           <video
