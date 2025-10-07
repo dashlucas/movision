@@ -1,16 +1,19 @@
-
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
 import Head from 'next/head';
 import Script from 'next/script';
-import { PoseLandmarker, FilesetResolver, DrawingUtils } from "@mediapipe/tasks-vision";
+import {
+  PoseLandmarker,
+  FilesetResolver,
+  DrawingUtils,
+} from '@mediapipe/tasks-vision';
 
 export default function JogoPage() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const liveViewRef = useRef<HTMLDivElement>(null);
-  
+
   const [mirrored, setMirrored] = useState(true);
 
   // Refs para a lógica do MediaPipe
@@ -36,12 +39,11 @@ export default function JogoPage() {
 
     const createPoseLandmarker = async () => {
       const vision = await FilesetResolver.forVisionTasks(
-        'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0/wasm'
+        'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
       );
       const poseLandmarker = await PoseLandmarker.createFromOptions(vision, {
         baseOptions: {
-          modelAssetPath:
-            `https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_full/float16/latest/pose_landmarker_full.task`,
+          modelAssetPath: `https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_full/float16/latest/pose_landmarker_full.task`,
           delegate: 'GPU',
         },
         runningMode: 'VIDEO',
@@ -55,21 +57,28 @@ export default function JogoPage() {
 
     const enableCam = async () => {
       if (!poseLandmarkerRef.current || webcamRunningRef.current) return;
-      
+
       webcamRunningRef.current = true;
-      
+
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+        });
         video.srcObject = stream;
         video.addEventListener('loadeddata', predictWebcam);
       } catch (error) {
-        console.error("Error accessing webcam:", error);
+        console.error('Error accessing webcam:', error);
         webcamRunningRef.current = false;
       }
     };
 
     const predictWebcam = async () => {
-      if (!webcamRunningRef.current || !poseLandmarkerRef.current || !video.srcObject) return;
+      if (
+        !webcamRunningRef.current ||
+        !poseLandmarkerRef.current ||
+        !video.srcObject
+      )
+        return;
 
       // Adjust canvas size to match video
       canvas.width = video.videoWidth;
@@ -83,9 +92,13 @@ export default function JogoPage() {
           canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
           for (const landmark of result.landmarks) {
             drawingUtils.drawLandmarks(landmark, {
-              radius: (data) => DrawingUtils.lerp(data.from.z, -0.15, 0.1, 5, 1),
+              radius: (data) =>
+                DrawingUtils.lerp(data.from.z, -0.15, 0.1, 5, 1),
             });
-            drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
+            drawingUtils.drawConnectors(
+              landmark,
+              PoseLandmarker.POSE_CONNECTIONS
+            );
           }
           canvasCtx.restore();
         });
@@ -105,12 +118,13 @@ export default function JogoPage() {
         window.cancelAnimationFrame(animationFrameId.current);
       }
       if (video.srcObject) {
-        (video.srcObject as MediaStream).getTracks().forEach(track => track.stop());
+        (video.srcObject as MediaStream)
+          .getTracks()
+          .forEach((track) => track.stop());
       }
       video.removeEventListener('loadeddata', predictWebcam);
       poseLandmarkerRef.current?.close();
     };
-
   }, []); // Executa apenas uma vez na montagem do componente
 
   return (
@@ -128,7 +142,20 @@ export default function JogoPage() {
       />
       {/* O módulo do MediaPipe será carregado pelo import no topo do arquivo */}
 
-      <div ref={liveViewRef} id="liveView" className={`videoView ${mirrored ? 'mirrored' : ''}`}>
+      <div
+        ref={liveViewRef}
+        id="liveView"
+        className={`videoView ${mirrored ? 'mirrored' : ''}`}
+      >
+        <div className="absolute inset-x-0 top-0 z-20 bg-black/30 p-4 text-center">
+          <h1 className="text-2xl font-bold text-white md:text-3xl">
+            Posicione-se corretamente
+          </h1>
+          <p className="mt-1 text-sm text-white/90 md:text-base">
+            Mantenha o dispositivo na horizontal e posicione-se a uma distância
+            adequada
+          </p>
+        </div>
         <div className="stage">
           <video
             ref={videoRef}
