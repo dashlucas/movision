@@ -186,12 +186,7 @@ export default function JogoPage() {
         </div>
       ) : (
         <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center">
-          <div className="w-full p-4 pt-8 text-center">
-            <h1 className="text-4xl font-bold text-white md:text-5xl">
-              Execute o movimento
-            </h1>
-          </div>
-          {/* Outros elementos do jogo podem ser adicionados aqui */}
+          {/* O conteúdo que ficava aqui foi removido */}
         </div>
       )}
     </div>
