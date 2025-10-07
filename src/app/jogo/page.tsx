@@ -144,7 +144,7 @@ export default function JogoPage() {
         <h1 className="text-4xl font-bold text-white md:text-5xl">
           Posicione-se corretamente
         </h1>
-        <p className="mt-2 text-lg text-white md:text-xl">
+        <p className="mt-2 text-xl text-white md:text-2xl">
           Mantenha o dispositivo na horizontal e posicione-se a uma distância
           adequada
         </p>
