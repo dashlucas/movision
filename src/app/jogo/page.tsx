@@ -141,15 +141,13 @@ export default function JogoPage() {
         style={{ transform: 'scaleX(-1)' }}
       ></canvas>
       <div className="absolute inset-x-0 top-0 z-20 flex flex-col items-center py-4 text-center">
-        <h1 className="text-3xl font-bold text-white md:text-4xl">
+        <h1 className="text-4xl font-bold text-white md:text-5xl">
           Posicione-se corretamente
         </h1>
-        <div className="mt-2 inline-block rounded-md bg-white/80 px-4 py-2 text-black shadow-lg backdrop-blur-sm">
-          <p className="text-base md:text-lg">
-            Mantenha o dispositivo na horizontal e posicione-se a uma distância
-            adequada
-          </p>
-        </div>
+        <p className="mt-2 text-lg text-white md:text-xl">
+          Mantenha o dispositivo na horizontal e posicione-se a uma distância
+          adequada
+        </p>
       </div>
     </div>
   );
