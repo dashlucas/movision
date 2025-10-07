@@ -78,10 +78,13 @@
   * {
     @apply border-border;
   }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
 
 /* Estilos do MediaPipe combinados */
-body {
+.mediapipe-body {
   font-family: roboto, sans-serif;
   margin: 0;
   color: #3d3d3d;

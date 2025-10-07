@@ -26,6 +26,9 @@ export default function JogoPage() {
 
     if (!video || !canvas || !liveView) return;
 
+    // Adiciona a classe para o corpo da página de jogo
+    document.body.classList.add('mediapipe-body');
+
     const canvasCtx = canvas.getContext('2d');
     if (!canvasCtx) return;
 
@@ -96,6 +99,7 @@ export default function JogoPage() {
     // Cleanup function
     return () => {
       console.log('Cleaning up...');
+      document.body.classList.remove('mediapipe-body'); // Remove a classe ao desmontar
       webcamRunningRef.current = false;
       if (animationFrameId.current) {
         window.cancelAnimationFrame(animationFrameId.current);
