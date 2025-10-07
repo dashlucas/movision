@@ -20,6 +20,7 @@ export default function JogoPage() {
   const lastVideoTimeRef = useRef(-1);
   const animationFrameId = useRef<number | null>(null);
 
+  // Inicializa a câmera e o MediaPipe
   useEffect(() => {
     const video = videoRef.current;
     const canvas = canvasRef.current;
@@ -110,14 +111,10 @@ export default function JogoPage() {
       animationFrameId.current = window.requestAnimationFrame(predictWebcam);
     };
 
-    if (countdown > 0) {
-      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
-      return () => clearTimeout(timer);
-    } else if (showCountdown) {
-      setShowCountdown(false);
-      createPoseLandmarker();
-    }
+    // Inicia a câmera assim que o componente é montado
+    createPoseLandmarker();
 
+    // Cleanup
     return () => {
       console.log('Cleaning up...');
       webcamRunningRef.current = false;
@@ -132,7 +129,18 @@ export default function JogoPage() {
       video.removeEventListener('loadeddata', predictWebcam);
       poseLandmarkerRef.current?.close();
     };
+  }, []);
+
+  // Lógica da contagem regressiva
+  useEffect(() => {
+    if (countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
+    } else if (showCountdown) {
+      setShowCountdown(false);
+    }
   }, [countdown, showCountdown]);
+
 
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-black">
