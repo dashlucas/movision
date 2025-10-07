@@ -111,10 +111,8 @@ export default function JogoPage() {
       animationFrameId.current = window.requestAnimationFrame(predictWebcam);
     };
 
-    // Inicia a câmera assim que o componente é montado
     createPoseLandmarker();
 
-    // Cleanup
     return () => {
       console.log('Cleaning up...');
       webcamRunningRef.current = false;
@@ -131,7 +129,6 @@ export default function JogoPage() {
     };
   }, []);
 
-  // Lógica da contagem regressiva
   useEffect(() => {
     if (countdown > 0) {
       const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
