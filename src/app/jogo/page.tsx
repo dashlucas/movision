@@ -11,6 +11,8 @@ import Image from 'next/image';
 export default function JogoPage() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [countdown, setCountdown] = useState(10);
+  const [showCountdown, setShowCountdown] = useState(true);
 
   // Refs para a lógica do MediaPipe
   const poseLandmarkerRef = useRef<PoseLandmarker | null>(null);
@@ -108,7 +110,13 @@ export default function JogoPage() {
       animationFrameId.current = window.requestAnimationFrame(predictWebcam);
     };
 
-    createPoseLandmarker();
+    if (countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
+    } else if (showCountdown) {
+      setShowCountdown(false);
+      createPoseLandmarker();
+    }
 
     return () => {
       console.log('Cleaning up...');
@@ -124,7 +132,7 @@ export default function JogoPage() {
       video.removeEventListener('loadeddata', predictWebcam);
       poseLandmarkerRef.current?.close();
     };
-  }, []);
+  }, [countdown, showCountdown]);
 
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-black">
@@ -141,25 +149,43 @@ export default function JogoPage() {
         className="absolute inset-0 h-full w-full object-cover"
         style={{ transform: 'scaleX(-1)' }}
       ></canvas>
-      <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center">
-        <div className="absolute top-0 z-10 w-full p-4 pt-8 text-center">
-          <h1 className="text-4xl font-bold text-white md:text-5xl">
-            Posicione-se corretamente
-          </h1>
-          <p className="mt-2 text-xl text-white md:text-2xl">
-            Mantenha o dispositivo na horizontal e posicione-se a uma distância
-            adequada
-          </p>
+
+      {showCountdown ? (
+        <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center">
+          <div className="absolute top-0 z-10 w-full p-4 pt-8 text-center">
+            <h1 className="text-4xl font-bold text-white md:text-5xl">
+              Posicione-se corretamente
+            </h1>
+            <p className="mt-2 text-2xl text-white md:text-3xl">
+              Mantenha o dispositivo na horizontal e posicione-se a uma distância
+              adequada
+            </p>
+          </div>
+          <div className="relative h-[70vh] w-full">
+            <Image
+              src="/img/position.png"
+              alt="Posicionamento de exemplo"
+              fill
+              className="object-contain"
+            />
+          </div>
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-black">
+            <p className="text-4xl font-bold text-white md:text-5xl">Começa em</p>
+            <p className="font-headline text-[250px] font-extrabold leading-none text-white">
+              {countdown}
+            </p>
+          </div>
         </div>
-        <div className="relative h-[100vh] w-full">
-          <Image
-            src="/img/position.png"
-            alt="Posicionamento de exemplo"
-            fill
-            className="object-contain"
-          />
+      ) : (
+        <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center">
+          <div className="w-full p-4 pt-8 text-center">
+            <h1 className="text-4xl font-bold text-white md:text-5xl">
+              Execute o movimento
+            </h1>
+          </div>
+          {/* Outros elementos do jogo podem ser adicionados aqui */}
         </div>
-      </div>
+      )}
     </div>
   );
 }
