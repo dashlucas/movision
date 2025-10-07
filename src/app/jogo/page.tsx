@@ -168,7 +168,7 @@ export default function JogoPage() {
           </div>
           <div className="relative h-[70vh] w-full">
             <Image
-              src="/img/position.png"
+              src="/img/icon_position.png"
               alt="Posicionamento de exemplo"
               fill
               className="object-contain"
@@ -176,7 +176,7 @@ export default function JogoPage() {
           </div>
           <div className="absolute inset-0 flex flex-col items-center justify-center text-black">
             <p className="text-4xl font-bold text-white md:text-5xl">Começa em</p>
-            <p className="font-headline text-[250px] font-extrabold leading-none text-white">
+            <p className="font-raleway text-[250px] font-extrabold leading-none text-white">
               {countdown}
             </p>
           </div>
