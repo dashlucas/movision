@@ -133,7 +133,7 @@ function ConfiguracoesView({ onStart }: { onStart: () => void }) {
           </div>
         </div>
       </div>
-      <div className="flex justify-center pb-2 pt-2">
+      <div className="mt-4 flex justify-center pb-2 pt-2">
         <Button
           size="lg"
           className="h-16 w-full max-w-md rounded-2xl bg-primary text-xl font-extrabold text-primary-foreground shadow-lg transition-all hover:bg-primary/90 disabled:bg-gray-400 disabled:opacity-50 sm:h-20 sm:text-2xl"
@@ -338,12 +338,14 @@ function JogoView({
         <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
           <div className="flex w-full items-center justify-around gap-8 px-4">
             <div className="relative h-52 w-1/3 lg:h-72 xl:h-80">
-               <Image
-                src="/img/aviso_posicionamento.png"
-                alt="Aviso de posicionamento"
-                fill
-                className="object-contain"
-              />
+              <div className="relative h-full w-full">
+                <Image
+                  src="/img/aviso_posicionamento.png"
+                  alt="Aviso de posicionamento"
+                  fill
+                  className="object-contain"
+                />
+              </div>
             </div>
              <div className="relative h-[70vh] w-1/3">
               <Image
@@ -354,12 +356,14 @@ function JogoView({
               />
             </div>
             <div className="relative flex h-52 w-1/3 items-center justify-center lg:h-72 xl:h-80">
-              <Image
-                src="/img/T_timer.png"
-                alt="Timer"
-                fill
-                className="object-contain"
-              />
+              <div className="relative h-full w-full">
+                <Image
+                  src="/img/T_timer.png"
+                  alt="Timer"
+                  fill
+                  className="object-contain"
+                />
+              </div>
               <p className="font-headline absolute text-[8rem] font-extrabold leading-none text-white lg:text-[10vw]">
                 {countdown}
               </p>
