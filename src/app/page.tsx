@@ -367,10 +367,10 @@ function JogoView({
           </div>
         </div>
       ) : (
-        <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-start p-8">
-           <div className="rounded-lg bg-black/50 p-4">
-            <p className="font-headline text-4xl font-extrabold text-white">
-              PONTOS: {score}
+        <div className="pointer-events-none absolute inset-0 z-10 p-8">
+           <div className="absolute right-8 top-8 rounded-2xl bg-panel-right px-6 py-3 shadow-lg">
+            <p className="font-headline text-2xl font-bold text-white md:text-3xl">
+              Pontos: {score}
             </p>
           </div>
         </div>
