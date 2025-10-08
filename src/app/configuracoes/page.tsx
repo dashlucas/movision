@@ -67,14 +67,14 @@ export default function ConfiguracoesPage() {
   return (
     <>
       <OrientationLock />
-      <main className="flex min-h-[100svh] flex-col bg-[#49416D] p-4 md:p-8">
-        <div className="flex w-full flex-1 flex-col justify-center px-4 sm:px-8">
-          <div className="flex items-start justify-center">
-            <div className="grid w-full max-w-6xl grid-cols-1 gap-6 sm:grid-cols-3 md:gap-8">
+      <main className="flex min-h-[100svh] flex-col bg-[#49416D] p-4">
+        <div className="flex w-full flex-1 flex-col justify-center">
+          <div className="flex items-center justify-center">
+            <div className="grid w-full max-w-6xl grid-cols-1 gap-4 sm:grid-cols-3 md:gap-6">
               {/* Posição */}
-              <div className="flex flex-col items-center gap-4">
-                <h2 className="mb-2 text-2xl font-bold text-white sm:text-3xl">Posição</h2>
-                <div className="flex w-full flex-1 flex-col gap-4">
+              <div className="flex flex-col items-center gap-2 sm:gap-4">
+                <h2 className="mb-1 text-xl font-bold text-white sm:text-2xl md:text-3xl">Posição</h2>
+                <div className="flex w-full flex-1 flex-col gap-3 sm:gap-4">
                   <SelectionButton option="posicao" value="em_pe">
                     Em pé
                   </SelectionButton>
@@ -85,9 +85,9 @@ export default function ConfiguracoesPage() {
               </div>
 
               {/* Membros */}
-              <div className="flex flex-col items-center gap-4">
-                <h2 className="mb-2 text-2xl font-bold text-white sm:text-3xl">Membros</h2>
-                <div className="flex w-full flex-1 flex-col gap-4">
+              <div className="flex flex-col items-center gap-2 sm:gap-4">
+                <h2 className="mb-1 text-xl font-bold text-white sm:text-2xl md:text-3xl">Membros</h2>
+                <div className="flex w-full flex-1 flex-col gap-3 sm:gap-4">
                   <SelectionButton
                     option="membros"
                     value="superiores"
@@ -106,9 +106,9 @@ export default function ConfiguracoesPage() {
               </div>
 
               {/* Distância */}
-              <div className="flex flex-col items-center gap-4">
-                <h2 className="mb-2 text-2xl font-bold text-white sm:text-3xl">Distância</h2>
-                <div className="flex w-full flex-1 flex-col gap-4">
+              <div className="flex flex-col items-center gap-2 sm:gap-4">
+                <h2 className="mb-1 text-xl font-bold text-white sm:text-2xl md:text-3xl">Distância</h2>
+                <div className="flex w-full flex-1 flex-col gap-3 sm:gap-4">
                   <SelectionButton option="distancia" value="nivel_1">
                     Nível 1
                   </SelectionButton>
@@ -123,10 +123,10 @@ export default function ConfiguracoesPage() {
             </div>
           </div>
         </div>
-        <div className="mt-8 flex justify-center pb-4">
+        <div className="mt-6 flex justify-center pb-2">
           <Button
             size="lg"
-            className="h-20 w-full max-w-md rounded-2xl bg-primary text-2xl font-extrabold text-primary-foreground shadow-lg transition-all hover:bg-primary/90 disabled:bg-gray-400 disabled:opacity-50"
+            className="h-16 w-full max-w-md rounded-2xl bg-primary text-xl font-extrabold text-primary-foreground shadow-lg transition-all hover:bg-primary/90 disabled:bg-gray-400 disabled:opacity-50 sm:h-20 sm:text-2xl"
             disabled={!isComplete}
             onClick={handleStart}
           >
