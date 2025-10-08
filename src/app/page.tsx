@@ -141,13 +141,11 @@ function ConfiguracoesView({ onStart }: { onStart: () => void }) {
 }
 
 
-function JogoView() {
+function JogoView({ hasCameraPermission }: { hasCameraPermission: boolean | null }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [countdown, setCountdown] = useState(10);
   const [showCountdown, setShowCountdown] = useState(true);
-  const { toast } = useToast();
-  const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
 
   // Refs para a lógica do MediaPipe
   const poseLandmarkerRef = useRef<PoseLandmarker | null>(null);
@@ -155,32 +153,6 @@ function JogoView() {
   const lastVideoTimeRef = useRef(-1);
   const animationFrameId = useRef<number | null>(null);
 
-  // 1. Solicita permissão da câmera primeiro
-  useEffect(() => {
-    const getCameraPermission = async () => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-        }
-        setHasCameraPermission(true);
-      } catch (error) {
-        console.error('Error accessing camera:', error);
-        setHasCameraPermission(false);
-        toast({
-          variant: 'destructive',
-          title: 'Acesso à câmera negado',
-          description: 'Por favor, habilite a permissão da câmera nas configurações do seu navegador.',
-          duration: 5000
-        });
-      }
-    };
-
-    getCameraPermission();
-  }, [toast]);
-  
-  
-  // 2. Inicializa o MediaPipe APÓS ter permissão
   useEffect(() => {
     if (!hasCameraPermission) return;
 
@@ -193,8 +165,22 @@ function JogoView() {
     if (!canvasCtx) return;
 
     const drawingUtils = new DrawingUtils(canvasCtx);
+    
+    // Conecta o stream da câmera (já obtido) ao elemento de vídeo
+    const connectStream = async () => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            if (video) {
+              video.srcObject = stream;
+            }
+        } catch (error) {
+            console.error("Erro ao reconectar o stream da câmera:", error);
+        }
+    };
+
 
     const createPoseLandmarker = async () => {
+      await connectStream(); // Garante que o stream está conectado
       const vision = await FilesetResolver.forVisionTasks(
         'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
       );
@@ -266,17 +252,17 @@ function JogoView() {
     createPoseLandmarker();
 
     return () => {
-      console.log('Cleaning up...');
+      console.log('Cleaning up JogoView...');
       webcamRunningRef.current = false;
       if (animationFrameId.current) {
         window.cancelAnimationFrame(animationFrameId.current);
       }
-      if (video.srcObject) {
+      if (video?.srcObject) {
         (video.srcObject as MediaStream)
           .getTracks()
           .forEach((track) => track.stop());
       }
-      video.removeEventListener('loadeddata', predictWebcam);
+       if(video) video.removeEventListener('loadeddata', predictWebcam);
       poseLandmarkerRef.current?.close();
     };
   }, [hasCameraPermission]);
@@ -318,7 +304,7 @@ function JogoView() {
                 className="object-contain"
               />
             </div>
-            <div className="relative h-full w-1/3">
+            <div className="relative h-[70vh] w-1/3">
               <Image
                 src="/img/icon_position.png"
                 alt="Posicionamento de exemplo"
@@ -359,7 +345,7 @@ function JogoView() {
 }
 
 
-function HomeView({ onStart }: { onStart: () => void }) {
+function HomeView({ onStart, hasCameraPermission }: { onStart: () => void, hasCameraPermission: boolean | null }) {
   return (
     <main className="flex h-[100svh] w-full flex-row">
       {/* Left Panel */}
@@ -373,7 +359,8 @@ function HomeView({ onStart }: { onStart: () => void }) {
           <Button
             onClick={onStart}
             size="lg"
-            className="h-14 w-40 rounded-2xl bg-primary text-base font-extrabold text-primary-foreground shadow-lg transition-transform hover:scale-105 hover:bg-primary/90 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-panel-right md:h-24 md:w-[300px] md:text-2xl"
+            className="h-14 w-40 rounded-2xl bg-primary text-base font-extrabold text-primary-foreground shadow-lg transition-transform hover:scale-105 hover:bg-primary/90 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-panel-right md:h-24 md:w-[300px] md:text-2xl disabled:cursor-not-allowed disabled:bg-gray-500 disabled:opacity-70"
+            disabled={!hasCameraPermission}
           >
             Iniciar
           </Button>
@@ -395,23 +382,66 @@ function HomeView({ onStart }: { onStart: () => void }) {
           </Button>
         </div>
       </div>
+       {hasCameraPermission === false && (
+          <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/50">
+            <Alert variant="destructive" className="max-w-md">
+                <AlertTitle>Acesso à câmera necessário</AlertTitle>
+                <AlertDescription>
+                  Para continuar, por favor, habilite a permissão da câmera nas configurações do seu navegador e atualize a página.
+                </AlertDescription>
+              </Alert>
+          </div>
+        )}
     </main>
   );
 }
 
 export default function Page() {
   const [currentView, setCurrentView] = useState<View>('home');
+  const { toast } = useToast();
+  const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
+
+  // Solicita permissão da câmera ao carregar o app
+  useEffect(() => {
+    const getCameraPermission = async () => {
+      // Libera o stream anterior, se houver
+      if (hasCameraPermission && window.stream) {
+        window.stream.getTracks().forEach(track => track.stop());
+      }
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        // Guarda o stream globalmente para que JogoView possa usá-lo sem pedir de novo
+        (window as any).stream = stream;
+        setHasCameraPermission(true);
+        // Não precisamos mais parar o stream aqui, ele será passado para o vídeo
+      } catch (error) {
+        console.error('Error accessing camera:', error);
+        setHasCameraPermission(false);
+        toast({
+          variant: 'destructive',
+          title: 'Acesso à câmera negado',
+          description: 'Por favor, habilite a permissão da câmera nas configurações do seu navegador.',
+          duration: 9000
+        });
+      }
+    };
+
+    if (hasCameraPermission === null) {
+      getCameraPermission();
+    }
+    
+  }, [toast, hasCameraPermission]);
 
   const renderView = () => {
     switch (currentView) {
       case 'home':
-        return <HomeView onStart={() => setCurrentView('configuracoes')} />;
+        return <HomeView onStart={() => setCurrentView('configuracoes')} hasCameraPermission={hasCameraPermission} />;
       case 'configuracoes':
         return <ConfiguracoesView onStart={() => setCurrentView('jogo')} />;
       case 'jogo':
-        return <JogoView />;
+        return <JogoView hasCameraPermission={hasCameraPermission} />;
       default:
-        return <HomeView onStart={() => setCurrentView('configuracoes')} />;
+        return <HomeView onStart={() => setCurrentView('configuracoes')} hasCameraPermission={hasCameraPermission}/>;
     }
   };
 
