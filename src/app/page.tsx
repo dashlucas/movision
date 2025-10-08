@@ -152,22 +152,23 @@ function JogoView({ hasCameraPermission }: { hasCameraPermission: boolean | null
   const animationFrameId = useRef<number | null>(null);
 
   useEffect(() => {
-    // Garante que a lógica só rode se a permissão foi concedida
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Conecta o stream da câmera ao elemento de vídeo
+    const stream = (window as any).stream;
+    if (stream) {
+      video.srcObject = stream;
+    } else if (hasCameraPermission !== null) {
+      // Se a permissão foi tratada mas o stream não existe, algo está errado.
+      // O alerta para `hasCameraPermission === false` cuidará de avisar o usuário.
+    }
+    
+    // A inicialização do MediaPipe só deve ocorrer se a permissão foi concedida.
     if (hasCameraPermission !== true) return;
 
-    const video = videoRef.current;
     const canvas = canvasRef.current;
-    
-    if (!video || !canvas) return;
-
-    // Acessa o stream da câmera que foi armazenado globalmente
-    const stream = (window as any).stream;
-    if (!stream) {
-      // O stream deve existir se hasCameraPermission é true. Se não, há um problema de lógica.
-      return;
-    }
-
-    video.srcObject = stream;
+    if (!canvas) return;
 
     const startMediaPipe = async () => {
       const canvasCtx = canvas.getContext('2d');
@@ -201,7 +202,6 @@ function JogoView({ hasCameraPermission }: { hasCameraPermission: boolean | null
 
       const canvasCtx = canvas.getContext('2d')!;
       
-      // Checa se o vídeo está pronto para processamento
       if (video.paused || video.ended || video.readyState < 2) {
         animationFrameId.current = window.requestAnimationFrame(() => predictWebcam(drawingUtils));
         return;
