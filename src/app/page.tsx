@@ -179,11 +179,15 @@ function JogoView({
   const spawnCircle = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const radius = 30;
+    
+    // Raio responsivo (8% da menor dimensão do canvas)
+    const radius = Math.min(canvas.width, canvas.height) * 0.08;
+    
     // Garante que o círculo não apareça muito perto das bordas
-    const padding = 50; 
-    const x = Math.random() * (canvas.width - radius * 2 - padding * 2) + radius + padding;
-    const y = Math.random() * (canvas.height - radius * 2 - padding * 2) + radius + padding;
+    const padding = radius + 10; 
+    const x = Math.random() * (canvas.width - padding * 2) + padding;
+    const y = Math.random() * (canvas.height - padding * 2) + padding;
+    
     circleRef.current = { x, y, radius, visible: true };
   };
   
