@@ -91,7 +91,7 @@ function ConfiguracoesView({ onStart }: { onStart: () => void }) {
           <div className="flex flex-col items-center gap-2 sm:gap-4">
             <h2 className="mb-1 text-xl font-bold text-white sm:text-2xl md:text-3xl">Membros</h2>
             <div className="flex w-full flex-1 flex-col gap-3 sm:gap-4">
-              <SelectionButton
+               <SelectionButton
                 option="membros"
                 value="superiores"
                 className="flex-wrap"
@@ -251,11 +251,13 @@ function JogoView({
           // Desenha landmarks
           for (const landmark of result.landmarks) {
             drawingUtils.drawLandmarks(landmark, {
+              color: '#FFFFFF',
               radius: (data) => DrawingUtils.lerp(data.from!.z!, -0.15, 0.1, 5, 1),
             });
             drawingUtils.drawConnectors(
                 landmark,
-                PoseLandmarker.POSE_CONNECTIONS
+                PoseLandmarker.POSE_CONNECTIONS,
+                { color: '#FFFFFF' }
             );
             
             // Lógica de colisão
@@ -335,7 +337,7 @@ function JogoView({
       {showCountdown ? (
         <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
           <div className="flex w-full items-center justify-around gap-8 px-4">
-            <div className="relative h-60 w-1/3">
+            <div className="relative h-56 w-1/3">
                <Image
                 src="/img/aviso_posicionamento.png"
                 alt="Aviso de posicionamento"
@@ -505,3 +507,5 @@ export default function Page() {
     </>
   );
 }
+
+    

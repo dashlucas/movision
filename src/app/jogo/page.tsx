@@ -157,7 +157,7 @@ export default function JogoPage() {
       {showCountdown ? (
         <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
           <div className="flex w-full items-center justify-around gap-8 px-4">
-            <div className="relative h-[50vh] w-1/3">
+            <div className="relative h-56 w-1/3">
               <Image
                 src="/img/aviso_posicionamento.png"
                 alt="Aviso de posicionamento"
@@ -194,3 +194,5 @@ export default function JogoPage() {
     </div>
   );
 }
+
+    
