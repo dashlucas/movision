@@ -55,7 +55,7 @@ function ConfiguracoesView({ onStart }: { onStart: () => void }) {
           'whitespace-normal break-words py-2',
           'h-full',
           isSelected && 'border-primary ring-4 ring-primary/50',
-          'flex items-center gap-4 px-4',
+          'flex items-center justify-between gap-4 px-4',
           className
         )}
         onClick={() => handleSelection(option, value)}
@@ -250,10 +250,10 @@ function JogoView({
 
           // Desenha landmarks
           for (const landmark of result.landmarks) {
-            // drawingUtils.drawLandmarks(landmark, {
-            //   radius: (data) => DrawingUtils.lerp(data.from!.z!, -0.15, 0.1, 5, 1),
-            // });
-            // drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
+            drawingUtils.drawLandmarks(landmark, {
+              radius: (data) => DrawingUtils.lerp(data.from!.z!, -0.15, 0.1, 5, 1),
+            });
+            drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
             
             // Lógica de colisão
             if (circleRef.current && circleRef.current.visible) {
