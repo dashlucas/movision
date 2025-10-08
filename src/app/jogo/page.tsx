@@ -138,7 +138,6 @@ export default function JogoPage() {
     }
   }, [countdown, showCountdown]);
 
-
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-black">
       <video
@@ -157,17 +156,29 @@ export default function JogoPage() {
 
       {showCountdown ? (
         <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center">
-          
-          <div className="relative h-[70vh] w-full">
-            <Image
-              src="/img/icon_position.png"
-              alt="Posicionamento de exemplo"
-              fill
-              className="object-contain"
-            />
+          <div className="flex w-full items-center justify-center gap-8 px-4">
+            <div className="relative h-[70vh] w-1/3">
+              <Image
+                src="/img/aviso_posicionamento.png"
+                alt="Aviso de posicionamento"
+                fill
+                className="object-contain"
+              />
+            </div>
+            <div className="relative h-[70vh] w-1/3">
+              <Image
+                src="/img/icon_position.png"
+                alt="Posicionamento de exemplo"
+                fill
+                className="object-contain"
+              />
+            </div>
           </div>
+
           <div className="absolute inset-0 flex flex-col items-center justify-center text-black">
-            <p className="text-4xl font-bold text-white md:text-5xl">Começa em</p>
+            <p className="text-4xl font-bold text-white md:text-5xl">
+              Começa em
+            </p>
             <p className="font-raleway text-[250px] font-extrabold leading-none text-white">
               {countdown}
             </p>
