@@ -13,6 +13,8 @@ import {
   DrawingUtils,
 } from '@mediapipe/tasks-vision';
 import Image from 'next/image';
+import { useToast } from '@/hooks/use-toast';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 type View = 'home' | 'configuracoes' | 'jogo';
 type Option = 'posicao' | 'membros' | 'distancia';
@@ -144,6 +146,8 @@ function JogoView() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [countdown, setCountdown] = useState(10);
   const [showCountdown, setShowCountdown] = useState(true);
+  const { toast } = useToast();
+  const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
 
   // Refs para a lógica do MediaPipe
   const poseLandmarkerRef = useRef<PoseLandmarker | null>(null);
@@ -151,8 +155,35 @@ function JogoView() {
   const lastVideoTimeRef = useRef(-1);
   const animationFrameId = useRef<number | null>(null);
 
-  // Inicializa a câmera e o MediaPipe
+  // 1. Solicita permissão da câmera primeiro
   useEffect(() => {
+    const getCameraPermission = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+        }
+        setHasCameraPermission(true);
+      } catch (error) {
+        console.error('Error accessing camera:', error);
+        setHasCameraPermission(false);
+        toast({
+          variant: 'destructive',
+          title: 'Acesso à câmera negado',
+          description: 'Por favor, habilite a permissão da câmera nas configurações do seu navegador.',
+          duration: 5000
+        });
+      }
+    };
+
+    getCameraPermission();
+  }, [toast]);
+  
+  
+  // 2. Inicializa o MediaPipe APÓS ter permissão
+  useEffect(() => {
+    if (!hasCameraPermission) return;
+
     const video = videoRef.current;
     const canvas = canvasRef.current;
 
@@ -177,24 +208,13 @@ function JogoView() {
       });
       poseLandmarkerRef.current = poseLandmarker;
       console.log('Pose Landmarker created');
-      await enableCam();
+      startWebcam();
     };
 
-    const enableCam = async () => {
-      if (!poseLandmarkerRef.current || webcamRunningRef.current) return;
-
+    const startWebcam = () => {
+      if (webcamRunningRef.current) return;
       webcamRunningRef.current = true;
-
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
-        });
-        video.srcObject = stream;
-        video.addEventListener('loadeddata', predictWebcam);
-      } catch (error) {
-        console.error('Error accessing webcam:', error);
-        webcamRunningRef.current = false;
-      }
+      video.addEventListener('loadeddata', predictWebcam);
     };
 
     const predictWebcam = async () => {
@@ -204,16 +224,17 @@ function JogoView() {
         !video.srcObject
       )
         return;
+      
+      if (video.videoWidth === 0 || video.videoHeight === 0) {
+        animationFrameId.current = window.requestAnimationFrame(predictWebcam);
+        return;
+      }
 
       const videoWidth = video.videoWidth;
       const videoHeight = video.videoHeight;
 
-      if (canvas.width !== videoWidth) {
-        canvas.width = videoWidth;
-      }
-      if (canvas.height !== videoHeight) {
-        canvas.height = videoHeight;
-      }
+      if (canvas.width !== videoWidth) canvas.width = videoWidth;
+      if (canvas.height !== videoHeight) canvas.height = videoHeight;
 
       const startTimeMs = performance.now();
       if (lastVideoTimeRef.current !== video.currentTime) {
@@ -258,7 +279,8 @@ function JogoView() {
       video.removeEventListener('loadeddata', predictWebcam);
       poseLandmarkerRef.current?.close();
     };
-  }, []);
+  }, [hasCameraPermission]);
+
 
   useEffect(() => {
     if (countdown > 0) {
@@ -289,14 +311,14 @@ function JogoView() {
         <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
           <div className="flex w-full items-center justify-around gap-8 px-4">
             <div className="relative h-[70vh] w-1/3">
-              <Image
+               <Image
                 src="/img/aviso_posicionamento.png"
                 alt="Aviso de posicionamento"
                 fill
                 className="object-contain"
               />
             </div>
-            <div className="relative h-[70vh] w-1/3">
+            <div className="relative h-full w-1/3">
               <Image
                 src="/img/icon_position.png"
                 alt="Posicionamento de exemplo"
@@ -311,7 +333,7 @@ function JogoView() {
                 fill
                 className="object-contain"
               />
-              <p className="font-headline absolute mt-4 text-[15vw] font-extrabold leading-none text-white lg:mt-8 lg:text-[10vw]">
+              <p className="font-headline absolute mt-8 text-[15vw] font-extrabold leading-none text-white lg:mt-8 lg:text-[10vw]">
                 {countdown}
               </p>
             </div>
@@ -321,6 +343,17 @@ function JogoView() {
         <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center">
         </div>
       )}
+      
+       {hasCameraPermission === false && (
+          <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/80">
+            <Alert variant="destructive" className="max-w-sm">
+                <AlertTitle>Acesso à câmera necessário</AlertTitle>
+                <AlertDescription>
+                  Por favor, habilite a permissão da câmera nas configurações do seu navegador para usar o aplicativo.
+                </AlertDescription>
+              </Alert>
+          </div>
+        )}
     </div>
   );
 }
