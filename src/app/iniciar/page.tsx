@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ArrowLeft, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 type Option = 'posicao' | 'membros' | 'distancia';
 
@@ -44,6 +45,7 @@ export default function IniciarPage() {
           'whitespace-normal break-words py-2',
           'h-full',
           isSelected && 'border-primary ring-4 ring-primary/50',
+          'flex items-center gap-4 px-4',
           className
         )}
         onClick={() => handleSelection(option, value)}
@@ -77,7 +79,7 @@ export default function IniciarPage() {
       </div>
       <div className="flex w-full flex-1 flex-col justify-center">
         <div className="flex items-center justify-center">
-          <div className="grid w-full max-w-6xl grid-cols-1 gap-4 sm:grid-cols-3 md:gap-6">
+          <div className="grid w-full max-w-6xl grid-cols-1 gap-2 sm:grid-cols-3 md:gap-4">
             {/* Posição */}
             <div className="flex flex-col items-center gap-2 sm:gap-4">
               <h2 className="mb-1 text-xl font-bold text-white sm:text-2xl md:text-3xl">Posição</h2>
@@ -100,14 +102,22 @@ export default function IniciarPage() {
                   value="superiores"
                   className="flex-wrap"
                 >
-                  Superiores (Braços)
+                  <div className="flex flex-col items-center text-center">
+                    <span>Superiores</span>
+                    <span>(Braços)</span>
+                  </div>
+                  <Image src="/img/hand.svg" alt="Mãos" width={40} height={40} className="object-contain" />
                 </SelectionButton>
                 <SelectionButton
                   option="membros"
                   value="inferiores"
                   className="flex-wrap"
                 >
-                  Inferiores (Pernas)
+                  <div className="flex flex-col items-center text-center">
+                    <span>Inferiores</span>
+                    <span>(Pernas)</span>
+                  </div>
+                  <Image src="/img/feet.svg" alt="Pés" width={40} height={40} className="object-contain" />
                 </SelectionButton>
               </div>
             </div>
@@ -130,7 +140,7 @@ export default function IniciarPage() {
           </div>
         </div>
       </div>
-       <div className="mt-6 flex justify-center pb-2">
+       <div className="flex justify-center pb-2 pt-4">
           <Button
             size="lg"
             className="h-16 w-full max-w-md rounded-2xl bg-primary text-xl font-extrabold text-primary-foreground shadow-lg transition-all hover:bg-primary/90 disabled:bg-gray-400 disabled:opacity-50 sm:h-20 sm:text-2xl"

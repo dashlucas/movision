@@ -55,7 +55,7 @@ function ConfiguracoesView({ onStart }: { onStart: () => void }) {
           'whitespace-normal break-words py-2',
           'h-full',
           isSelected && 'border-primary ring-4 ring-primary/50',
-          'flex items-center justify-between gap-4 px-4',
+          'flex items-center gap-4 px-4',
           className
         )}
         onClick={() => handleSelection(option, value)}
@@ -253,7 +253,10 @@ function JogoView({
             drawingUtils.drawLandmarks(landmark, {
               radius: (data) => DrawingUtils.lerp(data.from!.z!, -0.15, 0.1, 5, 1),
             });
-            drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
+            drawingUtils.drawConnectors(
+                landmark,
+                PoseLandmarker.POSE_CONNECTIONS
+            );
             
             // Lógica de colisão
             if (circleRef.current && circleRef.current.visible) {
@@ -355,7 +358,7 @@ function JogoView({
                 fill
                 className="object-contain"
               />
-              <p className="font-headline absolute mt-4 text-7xl font-extrabold leading-none text-white md:text-8xl lg:text-[8rem]">
+              <p className="font-headline absolute mt-4 text-[8rem] font-extrabold leading-none text-white lg:mt-8 lg:text-[10vw]">
                 {countdown}
               </p>
             </div>
