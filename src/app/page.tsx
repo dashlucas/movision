@@ -151,35 +151,24 @@ function JogoView({ hasCameraPermission }: { hasCameraPermission: boolean | null
   const poseLandmarkerRef = useRef<PoseLandmarker | null>(null);
   const webcamRunningRef = useRef(false);
   const lastVideoTimeRef = useRef(-1);
-  const animationFrameId = useRef<number | null>(null);
+  let animationFrameId: number | null = null;
+  let drawingUtils: DrawingUtils | null = null;
+  let canvasCtx: CanvasRenderingContext2D | null = null;
+
 
   useEffect(() => {
     if (!hasCameraPermission) return;
 
     const video = videoRef.current;
     const canvas = canvasRef.current;
-    let localAnimationFrameId: number | null = null;
-
-
-    if (!video || !canvas) return;
-
-    const waitForStream = () => {
-        const stream = (window as any).stream;
-        if (stream) {
-            console.log("Stream da câmera encontrado, iniciando MediaPipe.");
-            video.srcObject = stream;
-            video.addEventListener('loadeddata', startMediaPipe);
-        } else {
-            console.log("Aguardando stream da câmera...");
-            localAnimationFrameId = requestAnimationFrame(waitForStream);
-        }
-    };
 
     const startMediaPipe = async () => {
-        const canvasCtx = canvas.getContext('2d');
+        if (!video || !canvas) return;
+
+        canvasCtx = canvas.getContext('2d');
         if (!canvasCtx) return;
-    
-        const drawingUtils = new DrawingUtils(canvasCtx);
+        
+        drawingUtils = new DrawingUtils(canvasCtx);
     
         try {
             const vision = await FilesetResolver.forVisionTasks(
@@ -200,17 +189,24 @@ function JogoView({ hasCameraPermission }: { hasCameraPermission: boolean | null
             console.error("Erro ao criar PoseLandmarker", e);
         }
     };
+    
+    const stream = (window as any).stream;
+    if (stream && video) {
+        video.srcObject = stream;
+        video.addEventListener('loadeddata', startMediaPipe);
+    }
+
 
     const predictWebcam = () => {
-      if (!webcamRunningRef.current || !poseLandmarkerRef.current || !video?.srcObject || video.readyState < 2) {
+      if (!webcamRunningRef.current || !poseLandmarkerRef.current || !video?.srcObject || !canvasCtx || !drawingUtils) {
         if (webcamRunningRef.current) {
-          localAnimationFrameId = window.requestAnimationFrame(predictWebcam);
+          animationFrameId = window.requestAnimationFrame(predictWebcam);
         }
         return;
       }
       
-      if (video.videoWidth === 0 || video.videoHeight === 0) {
-        localAnimationFrameId = window.requestAnimationFrame(predictWebcam);
+      if (video.readyState < 2 || video.videoWidth === 0 || video.videoHeight === 0) {
+        animationFrameId = window.requestAnimationFrame(predictWebcam);
         return;
       }
 
@@ -227,36 +223,34 @@ function JogoView({ hasCameraPermission }: { hasCameraPermission: boolean | null
           video,
           startTimeMs,
           (result) => {
-            canvasCtx.save();
-            canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+            canvasCtx!.save();
+            canvasCtx!.clearRect(0, 0, canvas.width, canvas.height);
             for (const landmark of result.landmarks) {
-              drawingUtils.drawLandmarks(landmark, {
+              drawingUtils!.drawLandmarks(landmark, {
                 radius: (data) =>
                   DrawingUtils.lerp(data.from!.z!, -0.15, 0.1, 5, 1),
               });
-              drawingUtils.drawConnectors(
+              drawingUtils!.drawConnectors(
                 landmark,
                 PoseLandmarker.POSE_CONNECTIONS
               );
             }
-            canvasCtx.restore();
+            canvasCtx!.restore();
           }
         );
       }
 
-      localAnimationFrameId = window.requestAnimationFrame(predictWebcam);
+      animationFrameId = window.requestAnimationFrame(predictWebcam);
     };
-
-    waitForStream();
 
     return () => {
       console.log('Cleaning up JogoView...');
-      if (localAnimationFrameId) {
-        window.cancelAnimationFrame(localAnimationFrameId);
+      if (animationFrameId) {
+        window.cancelAnimationFrame(animationFrameId);
       }
       webcamRunningRef.current = false;
-      video.removeEventListener('loadeddata', startMediaPipe);
       if (video) {
+        video.removeEventListener('loadeddata', startMediaPipe);
         video.srcObject = null;
       }
       poseLandmarkerRef.current?.close();
