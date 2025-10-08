@@ -55,6 +55,7 @@ function ConfiguracoesView({ onStart }: { onStart: () => void }) {
           'whitespace-normal break-words py-2',
           'h-full',
           isSelected && 'border-primary ring-4 ring-primary/50',
+          'flex items-center gap-4 px-4',
           className
         )}
         onClick={() => handleSelection(option, value)}
@@ -72,7 +73,7 @@ function ConfiguracoesView({ onStart }: { onStart: () => void }) {
   return (
     <main className="flex min-h-[100svh] flex-col justify-center bg-[#49416D] p-4">
       <div className="flex w-full flex-1 flex-col items-center justify-center">
-        <div className="grid w-full max-w-6xl grid-cols-1 gap-4 sm:grid-cols-3 md:gap-6">
+        <div className="grid w-full max-w-6xl grid-cols-1 gap-2 sm:grid-cols-3 md:gap-4">
           {/* Posição */}
           <div className="flex flex-col items-center gap-2 sm:gap-4">
             <h2 className="mb-1 text-xl font-bold text-white sm:text-2xl md:text-3xl">Posição</h2>
@@ -95,14 +96,22 @@ function ConfiguracoesView({ onStart }: { onStart: () => void }) {
                 value="superiores"
                 className="flex-wrap"
               >
-                Superiores (Braços)
+                <div className="flex flex-col items-center text-center">
+                  <span>Superiores</span>
+                  <span>(Braços)</span>
+                </div>
+                 <Image src="/img/hand.svg" alt="Mãos" width={40} height={40} className="object-contain" />
               </SelectionButton>
               <SelectionButton
                 option="membros"
                 value="inferiores"
                 className="flex-wrap"
               >
-                Inferiores (Pernas)
+                <div className="flex flex-col items-center text-center">
+                  <span>Inferiores</span>
+                  <span>(Pernas)</span>
+                </div>
+                 <Image src="/img/feet.svg" alt="Pés" width={40} height={40} className="object-contain" />
               </SelectionButton>
             </div>
           </div>
@@ -139,7 +148,15 @@ function ConfiguracoesView({ onStart }: { onStart: () => void }) {
 }
 
 
-function JogoView({ cameraStream }: { cameraStream: MediaStream | null }) {
+function JogoView({ 
+  cameraStream,
+  score,
+  setScore 
+}: { 
+  cameraStream: MediaStream | null;
+  score: number;
+  setScore: React.Dispatch<React.SetStateAction<number>>;
+}) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [countdown, setCountdown] = useState(10);
@@ -233,10 +250,10 @@ function JogoView({ cameraStream }: { cameraStream: MediaStream | null }) {
 
           // Desenha landmarks
           for (const landmark of result.landmarks) {
-            drawingUtils.drawLandmarks(landmark, {
-              radius: (data) => DrawingUtils.lerp(data.from!.z!, -0.15, 0.1, 5, 1),
-            });
-            drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
+            // drawingUtils.drawLandmarks(landmark, {
+            //   radius: (data) => DrawingUtils.lerp(data.from!.z!, -0.15, 0.1, 5, 1),
+            // });
+            // drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
             
             // Lógica de colisão
             if (circleRef.current && circleRef.current.visible) {
@@ -244,6 +261,7 @@ function JogoView({ cameraStream }: { cameraStream: MediaStream | null }) {
               for (const point of landmark) {
                 if (point && checkCollision(point, circleRef.current)) {
                   circleRef.current.visible = false;
+                  setScore((prevScore) => prevScore + 1);
                   // Spawn a new circle after a delay
                   setTimeout(spawnCircle, 1000); 
                   break; 
@@ -278,7 +296,7 @@ function JogoView({ cameraStream }: { cameraStream: MediaStream | null }) {
       }
       poseLandmarkerRef.current?.close();
     };
-  }, [cameraStream]);
+  }, [cameraStream, setScore]);
 
 
   useEffect(() => {
@@ -314,7 +332,7 @@ function JogoView({ cameraStream }: { cameraStream: MediaStream | null }) {
       {showCountdown ? (
         <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
           <div className="flex w-full items-center justify-around gap-8 px-4">
-            <div className="relative h-[50vh] w-1/3">
+            <div className="relative h-60 w-1/3">
                <Image
                 src="/img/aviso_posicionamento.png"
                 alt="Aviso de posicionamento"
@@ -344,7 +362,12 @@ function JogoView({ cameraStream }: { cameraStream: MediaStream | null }) {
           </div>
         </div>
       ) : (
-        <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center">
+        <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-start p-8">
+           <div className="rounded-lg bg-black/50 p-4">
+            <p className="font-headline text-4xl font-extrabold text-white">
+              PONTOS: {score}
+            </p>
+          </div>
         </div>
       )}
       
@@ -419,7 +442,12 @@ export default function Page() {
   const { toast } = useToast();
   const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
   const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
+  const [score, setScore] = useState(0);
 
+  const handleStartGame = () => {
+    setScore(0); // Reseta a pontuação
+    setCurrentView('jogo');
+  };
 
   // Solicita permissão da câmera ao carregar o app
   useEffect(() => {
@@ -459,9 +487,9 @@ export default function Page() {
       case 'home':
         return <HomeView onStart={() => setCurrentView('configuracoes')} hasCameraPermission={hasCameraPermission} />;
       case 'configuracoes':
-        return <ConfiguracoesView onStart={() => setCurrentView('jogo')} />;
+        return <ConfiguracoesView onStart={handleStartGame} />;
       case 'jogo':
-        return <JogoView cameraStream={cameraStream} />;
+        return <JogoView cameraStream={cameraStream} score={score} setScore={setScore} />;
       default:
         return <HomeView onStart={() => setCurrentView('configuracoes')} hasCameraPermission={hasCameraPermission}/>;
     }
