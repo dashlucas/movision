@@ -479,13 +479,8 @@ export default function Page() {
 
     getCameraPermission();
     
-    return () => {
-        if (cameraStream) {
-            cameraStream.getTracks().forEach((track: MediaStreamTrack) => track.stop());
-        }
-    };
-    // Adicionado cameraStream como dependência para garantir a limpeza correta
-  }, [toast, hasCameraPermission, cameraStream]);
+    // A limpeza do stream agora é tratada no JogoView para evitar que a câmera desligue prematuramente
+  }, [toast, hasCameraPermission]);
 
   const renderView = () => {
     switch (currentView) {
