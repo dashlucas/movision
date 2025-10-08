@@ -146,19 +146,21 @@ function JogoView({ cameraStream }: { cameraStream: MediaStream | null }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [countdown, setCountdown] = useState(10);
   const [showCountdown, setShowCountdown] = useState(true);
-  const [circle, setCircle] = useState<{ x: number; y: number; radius: number; visible: boolean } | null>(null);
-
+  
   const poseLandmarkerRef = useRef<PoseLandmarker | null>(null);
   const lastVideoTimeRef = useRef(-1);
   const animationFrameId = useRef<number | null>(null);
+  const circleRef = useRef<{ x: number; y: number; radius: number; visible: boolean } | null>(null);
 
   const spawnCircle = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const radius = 30;
-    const x = Math.random() * (canvas.width - radius * 2) + radius;
-    const y = Math.random() * (canvas.height - radius * 2) + radius;
-    setCircle({ x, y, radius, visible: true });
+    // Garante que o círculo não apareça muito perto das bordas
+    const padding = 50; 
+    const x = Math.random() * (canvas.width - radius * 2 - padding * 2) + radius + padding;
+    const y = Math.random() * (canvas.height - radius * 2 - padding * 2) + radius + padding;
+    circleRef.current = { x, y, radius, visible: true };
   };
   
   useEffect(() => {
@@ -194,8 +196,9 @@ function JogoView({ cameraStream }: { cameraStream: MediaStream | null }) {
     };
 
     const checkCollision = (landmark: any, currentCircle: any) => {
-      const dx = landmark.x * canvasRef.current!.width - currentCircle.x;
-      const dy = landmark.y * canvasRef.current!.height - currentCircle.y;
+      if (!canvasRef.current) return false;
+      const dx = landmark.x * canvasRef.current.width - currentCircle.x;
+      const dy = landmark.y * canvasRef.current.height - currentCircle.y;
       const distance = Math.sqrt(dx * dx + dy * dy);
       return distance < currentCircle.radius;
     };
@@ -205,8 +208,13 @@ function JogoView({ cameraStream }: { cameraStream: MediaStream | null }) {
       const canvas = canvasRef.current;
       const poseLandmarker = poseLandmarkerRef.current;
 
-      if (!video || !canvas || !poseLandmarker || !canvas.getContext('2d')) return;
-
+      if (!video || !canvas || !poseLandmarker || !canvas.getContext('2d')) {
+         if (webcamRunningRef.current) {
+            animationFrameId.current = window.requestAnimationFrame(() => predictWebcam(drawingUtils));
+         }
+         return;
+      }
+      
       const canvasCtx = canvas.getContext('2d')!;
       
       if (video.paused || video.ended || video.readyState < 2) {
@@ -220,11 +228,12 @@ function JogoView({ cameraStream }: { cameraStream: MediaStream | null }) {
       const startTimeMs = performance.now();
       if (lastVideoTimeRef.current !== video.currentTime) {
         lastVideoTimeRef.current = video.currentTime;
+
         poseLandmarker.detectForVideo(video, startTimeMs, (result) => {
           canvasCtx.save();
           canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
 
-          // Desenha landmarks e checa colisão
+          // Desenha landmarks
           for (const landmark of result.landmarks) {
             drawingUtils.drawLandmarks(landmark, {
               radius: (data) => DrawingUtils.lerp(data.from!.z!, -0.15, 0.1, 5, 1),
@@ -232,22 +241,24 @@ function JogoView({ cameraStream }: { cameraStream: MediaStream | null }) {
             drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
             
             // Lógica de colisão
-            setCircle(currentCircle => {
-              if (currentCircle && currentCircle.visible) {
-                for (const point of landmark) {
-                  if (checkCollision(point, currentCircle)) {
-                    return { ...currentCircle, visible: false }; // Esconde o círculo
-                  }
+            if (circleRef.current && circleRef.current.visible) {
+              // Itera sobre pontos específicos (mãos e pés) para otimizar
+              const keypoints = [landmark[15], landmark[16], landmark[27], landmark[28]]; // Mãos e Pés
+              for (const point of keypoints) {
+                if (point && checkCollision(point, circleRef.current)) {
+                  circleRef.current.visible = false;
+                  // Spawn a new circle after a delay
+                  setTimeout(spawnCircle, 1000); 
+                  break; 
                 }
               }
-              return currentCircle;
-            });
+            }
           }
           
           // Desenha o círculo
-          if (circle && circle.visible) {
+          if (circleRef.current && circleRef.current.visible) {
             canvasCtx.beginPath();
-            canvasCtx.arc(circle.x, circle.y, circle.radius, 0, 2 * Math.PI);
+            canvasCtx.arc(circleRef.current.x, circleRef.current.y, circleRef.current.radius, 0, 2 * Math.PI);
             canvasCtx.fillStyle = 'red';
             canvasCtx.fill();
             canvasCtx.closePath();
@@ -259,16 +270,18 @@ function JogoView({ cameraStream }: { cameraStream: MediaStream | null }) {
       animationFrameId.current = window.requestAnimationFrame(() => predictWebcam(drawingUtils));
     };
     
+    const webcamRunningRef = { current: true };
     video.addEventListener('loadeddata', startMediaPipe);
 
     return () => {
+      webcamRunningRef.current = false;
       video.removeEventListener('loadeddata', startMediaPipe);
       if (animationFrameId.current) {
         window.cancelAnimationFrame(animationFrameId.current);
       }
       poseLandmarkerRef.current?.close();
     };
-  }, [cameraStream, circle]);
+  }, [cameraStream]);
 
 
   useEffect(() => {
