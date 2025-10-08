@@ -242,9 +242,8 @@ function JogoView({ cameraStream }: { cameraStream: MediaStream | null }) {
             
             // Lógica de colisão
             if (circleRef.current && circleRef.current.visible) {
-              // Itera sobre pontos específicos (mãos e pés) para otimizar
-              const keypoints = [landmark[15], landmark[16], landmark[27], landmark[28]]; // Mãos e Pés
-              for (const point of keypoints) {
+              // Itera sobre todos os pontos do corpo
+              for (const point of landmark) {
                 if (point && checkCollision(point, circleRef.current)) {
                   circleRef.current.visible = false;
                   // Spawn a new circle after a delay
