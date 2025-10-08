@@ -176,9 +176,6 @@ export default function JogoPage() {
           </div>
 
           <div className="absolute inset-0 flex flex-col items-center justify-center text-black">
-            <p className="text-4xl font-bold text-white md:text-5xl">
-              Começa em
-            </p>
             <p className="font-raleway text-[250px] font-extrabold leading-none text-white">
               {countdown}
             </p>
