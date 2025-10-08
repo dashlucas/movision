@@ -180,7 +180,7 @@ export default function JogoPage() {
                 fill
                 className="object-contain"
               />
-              <p className="font-raleway absolute text-[15vw] font-extrabold leading-none text-white lg:text-[10vw]">
+              <p className="font-raleway absolute mt-4 text-[15vw] font-extrabold leading-none text-white lg:mt-8 lg:text-[10vw]">
                 {countdown}
               </p>
             </div>
