@@ -166,6 +166,15 @@ function JogoView({
   const lastVideoTimeRef = useRef(-1);
   const animationFrameId = useRef<number | null>(null);
   const circleRef = useRef<{ x: number; y: number; radius: number; visible: boolean } | null>(null);
+  const [sphereImage, setSphereImage] = useState<HTMLImageElement | null>(null);
+
+  useEffect(() => {
+    const img = new window.Image();
+    img.src = '/img/sphere.png';
+    img.onload = () => {
+      setSphereImage(img);
+    };
+  }, []);
 
   const spawnCircle = () => {
     const canvas = canvasRef.current;
@@ -275,13 +284,16 @@ function JogoView({
             }
           }
           
-          // Desenha o círculo
-          if (circleRef.current && circleRef.current.visible) {
-            canvasCtx.beginPath();
-            canvasCtx.arc(circleRef.current.x, circleRef.current.y, circleRef.current.radius, 0, 2 * Math.PI);
-            canvasCtx.fillStyle = 'red';
-            canvasCtx.fill();
-            canvasCtx.closePath();
+          // Desenha a esfera
+          if (sphereImage && circleRef.current && circleRef.current.visible) {
+            const radius = circleRef.current.radius;
+            canvasCtx.drawImage(
+              sphereImage,
+              circleRef.current.x - radius,
+              circleRef.current.y - radius,
+              radius * 2,
+              radius * 2
+            );
           }
 
           canvasCtx.restore();
@@ -301,7 +313,7 @@ function JogoView({
       }
       poseLandmarkerRef.current?.close();
     };
-  }, [cameraStream, setScore]);
+  }, [cameraStream, setScore, sphereImage]);
 
 
   useEffect(() => {
@@ -368,7 +380,7 @@ function JogoView({
         </div>
       ) : (
         <div className="pointer-events-none absolute inset-0 z-10 p-8">
-           <div className="absolute right-8 top-8 rounded-2xl bg-panel-right px-6 py-3 shadow-lg">
+           <div className="absolute right-8 top-8 rounded-2xl bg-[#49416D] px-6 py-3 shadow-lg">
             <p className="font-headline text-2xl font-bold text-white md:text-3xl">
               Pontos: {score}
             </p>
