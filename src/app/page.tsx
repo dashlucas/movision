@@ -146,11 +146,21 @@ function JogoView({ cameraStream }: { cameraStream: MediaStream | null }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [countdown, setCountdown] = useState(10);
   const [showCountdown, setShowCountdown] = useState(true);
+  const [circle, setCircle] = useState<{ x: number; y: number; radius: number; visible: boolean } | null>(null);
 
   const poseLandmarkerRef = useRef<PoseLandmarker | null>(null);
   const lastVideoTimeRef = useRef(-1);
   const animationFrameId = useRef<number | null>(null);
 
+  const spawnCircle = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const radius = 30;
+    const x = Math.random() * (canvas.width - radius * 2) + radius;
+    const y = Math.random() * (canvas.height - radius * 2) + radius;
+    setCircle({ x, y, radius, visible: true });
+  };
+  
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !cameraStream) return;
@@ -175,12 +185,19 @@ function JogoView({ cameraStream }: { cameraStream: MediaStream | null }) {
             delegate: 'GPU',
           },
           runningMode: 'VIDEO',
-          numPoses: 2,
+          numPoses: 1, // Apenas 1 jogador
         });
         predictWebcam(drawingUtils);
       } catch (e) {
         console.error("Erro ao criar PoseLandmarker", e);
       }
+    };
+
+    const checkCollision = (landmark: any, currentCircle: any) => {
+      const dx = landmark.x * canvasRef.current!.width - currentCircle.x;
+      const dy = landmark.y * canvasRef.current!.height - currentCircle.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      return distance < currentCircle.radius;
     };
 
     const predictWebcam = (drawingUtils: DrawingUtils) => {
@@ -206,12 +223,36 @@ function JogoView({ cameraStream }: { cameraStream: MediaStream | null }) {
         poseLandmarker.detectForVideo(video, startTimeMs, (result) => {
           canvasCtx.save();
           canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+
+          // Desenha landmarks e checa colisão
           for (const landmark of result.landmarks) {
             drawingUtils.drawLandmarks(landmark, {
               radius: (data) => DrawingUtils.lerp(data.from!.z!, -0.15, 0.1, 5, 1),
             });
             drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
+            
+            // Lógica de colisão
+            setCircle(currentCircle => {
+              if (currentCircle && currentCircle.visible) {
+                for (const point of landmark) {
+                  if (checkCollision(point, currentCircle)) {
+                    return { ...currentCircle, visible: false }; // Esconde o círculo
+                  }
+                }
+              }
+              return currentCircle;
+            });
           }
+          
+          // Desenha o círculo
+          if (circle && circle.visible) {
+            canvasCtx.beginPath();
+            canvasCtx.arc(circle.x, circle.y, circle.radius, 0, 2 * Math.PI);
+            canvasCtx.fillStyle = 'red';
+            canvasCtx.fill();
+            canvasCtx.closePath();
+          }
+
           canvasCtx.restore();
         });
       }
@@ -227,17 +268,22 @@ function JogoView({ cameraStream }: { cameraStream: MediaStream | null }) {
       }
       poseLandmarkerRef.current?.close();
     };
-  }, [cameraStream]);
+  }, [cameraStream, circle]);
 
 
   useEffect(() => {
-    if (countdown > 0) {
-      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
-      return () => clearTimeout(timer);
-    } else if (showCountdown) {
-      setShowCountdown(false);
+    if (showCountdown) {
+      if (countdown > 0) {
+        const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+        return () => clearTimeout(timer);
+      } else {
+        setShowCountdown(false);
+        // Quando o contador acabar, gere o primeiro círculo
+        spawnCircle();
+      }
     }
   }, [countdown, showCountdown]);
+
 
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-black">
