@@ -165,26 +165,12 @@ function JogoView({ hasCameraPermission }: { hasCameraPermission: boolean | null
     if (!canvasCtx) return;
 
     const drawingUtils = new DrawingUtils(canvasCtx);
-    
-    // Conecta o stream da câmera (já obtido) ao elemento de vídeo
-    const connectStream = async () => {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-            if (video) {
-              video.srcObject = stream;
-            }
-        } catch (error) {
-            console.error("Erro ao reconectar o stream da câmera:", error);
-        }
-    };
-
 
     const createPoseLandmarker = async () => {
-      await connectStream(); // Garante que o stream está conectado
       const vision = await FilesetResolver.forVisionTasks(
         'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
       );
-      const poseLandmarker = await PoseLandmarker.createFromOptions(vision, {
+      poseLandmarkerRef.current = await PoseLandmarker.createFromOptions(vision, {
         baseOptions: {
           modelAssetPath: `https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_full/float16/latest/pose_landmarker_full.task`,
           delegate: 'GPU',
@@ -192,24 +178,36 @@ function JogoView({ hasCameraPermission }: { hasCameraPermission: boolean | null
         runningMode: 'VIDEO',
         numPoses: 2,
       });
-      poseLandmarkerRef.current = poseLandmarker;
       console.log('Pose Landmarker created');
       startWebcam();
     };
 
     const startWebcam = () => {
-      if (webcamRunningRef.current) return;
-      webcamRunningRef.current = true;
-      video.addEventListener('loadeddata', predictWebcam);
+        if (webcamRunningRef.current || !video) return;
+        
+        // Use o stream global que foi obtido na página principal
+        const stream = (window as any).stream;
+        if (stream) {
+            video.srcObject = stream;
+            video.addEventListener('loadeddata', predictWebcam);
+            webcamRunningRef.current = true;
+        } else {
+            console.error("Stream da câmera não encontrado.");
+        }
     };
 
     const predictWebcam = async () => {
       if (
         !webcamRunningRef.current ||
         !poseLandmarkerRef.current ||
-        !video.srcObject
-      )
+        !video?.srcObject ||
+        video.readyState < 2 // Garante que o vídeo está pronto
+      ) {
+         if (webcamRunningRef.current) {
+          animationFrameId.current = window.requestAnimationFrame(predictWebcam);
+        }
         return;
+      }
       
       if (video.videoWidth === 0 || video.videoHeight === 0) {
         animationFrameId.current = window.requestAnimationFrame(predictWebcam);
@@ -221,7 +219,7 @@ function JogoView({ hasCameraPermission }: { hasCameraPermission: boolean | null
 
       if (canvas.width !== videoWidth) canvas.width = videoWidth;
       if (canvas.height !== videoHeight) canvas.height = videoHeight;
-
+      
       const startTimeMs = performance.now();
       if (lastVideoTimeRef.current !== video.currentTime) {
         lastVideoTimeRef.current = video.currentTime;
@@ -256,14 +254,15 @@ function JogoView({ hasCameraPermission }: { hasCameraPermission: boolean | null
       webcamRunningRef.current = false;
       if (animationFrameId.current) {
         window.cancelAnimationFrame(animationFrameId.current);
+        animationFrameId.current = null;
       }
-      if (video?.srcObject) {
-        (video.srcObject as MediaStream)
-          .getTracks()
-          .forEach((track) => track.stop());
+      if (video) {
+        video.removeEventListener('loadeddata', predictWebcam);
+        // Não pare o stream global aqui, pois ele é gerenciado no componente Page
+        video.srcObject = null;
       }
-       if(video) video.removeEventListener('loadeddata', predictWebcam);
       poseLandmarkerRef.current?.close();
+      poseLandmarkerRef.current = null;
     };
   }, [hasCameraPermission]);
 
@@ -304,7 +303,7 @@ function JogoView({ hasCameraPermission }: { hasCameraPermission: boolean | null
                 className="object-contain"
               />
             </div>
-            <div className="relative h-[70vh] w-1/3">
+             <div className="relative h-[70vh] w-1/3">
               <Image
                 src="/img/icon_position.png"
                 alt="Posicionamento de exemplo"
@@ -360,7 +359,7 @@ function HomeView({ onStart, hasCameraPermission }: { onStart: () => void, hasCa
             onClick={onStart}
             size="lg"
             className="h-14 w-40 rounded-2xl bg-primary text-base font-extrabold text-primary-foreground shadow-lg transition-transform hover:scale-105 hover:bg-primary/90 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-panel-right md:h-24 md:w-[300px] md:text-2xl disabled:cursor-not-allowed disabled:bg-gray-500 disabled:opacity-70"
-            disabled={!hasCameraPermission}
+            disabled={hasCameraPermission !== true}
           >
             Iniciar
           </Button>
@@ -404,16 +403,11 @@ export default function Page() {
   // Solicita permissão da câmera ao carregar o app
   useEffect(() => {
     const getCameraPermission = async () => {
-      // Libera o stream anterior, se houver
-      if (hasCameraPermission && window.stream) {
-        window.stream.getTracks().forEach(track => track.stop());
-      }
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
         // Guarda o stream globalmente para que JogoView possa usá-lo sem pedir de novo
         (window as any).stream = stream;
         setHasCameraPermission(true);
-        // Não precisamos mais parar o stream aqui, ele será passado para o vídeo
       } catch (error) {
         console.error('Error accessing camera:', error);
         setHasCameraPermission(false);
@@ -430,6 +424,14 @@ export default function Page() {
       getCameraPermission();
     }
     
+    // Limpa o stream quando o componente principal é desmontado
+    return () => {
+        const stream = (window as any).stream;
+        if (stream) {
+            stream.getTracks().forEach((track: MediaStreamTrack) => track.stop());
+            (window as any).stream = null;
+        }
+    };
   }, [toast, hasCameraPermission]);
 
   const renderView = () => {
