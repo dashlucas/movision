@@ -2,8 +2,7 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import { ArrowLeft, Check } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { OrientationLock } from '@/components/orientation-lock';
 import { useRouter } from 'next/navigation';
@@ -81,11 +80,6 @@ export default function ConfiguracoesPage() {
     <>
       <OrientationLock />
       <main className="flex min-h-[100svh] flex-col bg-[#49416D] p-4 md:p-8">
-        <div className="mb-8">
-          <h1 className="mt-4 text-3xl font-bold text-white md:text-4xl">
-            Configurações
-          </h1>
-        </div>
         <div className="flex w-full flex-1 flex-col justify-center px-4 sm:px-8">
           <div className="flex items-start justify-center">
             <div className="grid w-full max-w-6xl grid-cols-1 gap-6 sm:grid-cols-3 md:gap-8">
