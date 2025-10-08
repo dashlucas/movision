@@ -1,143 +1,139 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { CameraOff } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import Image from 'next/image';
+import { OrientationLock } from '@/components/orientation-lock';
 import { useRouter } from 'next/navigation';
 
-export default function PosicionamentoPage() {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [hasCameraPermission, setHasCameraPermission] = useState<
-    boolean | undefined
-  >(undefined);
-  const [countdown, setCountdown] = useState(10);
-  const { toast } = useToast();
+type Option = 'posicao' | 'membros' | 'distancia';
+
+export default function ConfiguracoesPage() {
+  const [selections, setSelections] = useState({
+    posicao: '',
+    membros: '',
+    distancia: '',
+  });
   const router = useRouter();
 
-  useEffect(() => {
-    document.body.classList.add('bg-black');
-    document.documentElement.classList.add('bg-black');
+  const handleSelection = (option: Option, value: string) => {
+    setSelections((prev) => ({ ...prev, [option]: value }));
+  };
 
-    const getCameraPermission = async () => {
-      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        console.error('Media Devices API not supported');
-        setHasCameraPermission(false);
-        toast({
-          variant: 'destructive',
-          title: 'Erro de Câmera',
-          description:
-            'Seu navegador não suporta o acesso à câmera. Tente usar um navegador diferente.',
-        });
-        return;
-      }
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: 'user' },
-        });
-        setHasCameraPermission(true);
+  const isComplete =
+    selections.posicao !== '' &&
+    selections.membros !== '' &&
+    selections.distancia !== '';
 
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-        }
-      } catch (error) {
-        console.error('Error accessing camera:', error);
-        setHasCameraPermission(false);
-        toast({
-          variant: 'destructive',
-          title: 'Acesso à Câmera Negado',
-          description:
-            'Por favor, habilite a permissão de câmera nas configurações do seu navegador para usar esta função.',
-        });
-      }
-    };
+  const handleStart = () => {
+    router.push('/jogo');
+  };
 
-    getCameraPermission();
-
-    return () => {
-      if (videoRef.current && videoRef.current.srcObject) {
-        const stream = videoRef.current.srcObject as MediaStream;
-        const tracks = stream.getTracks();
-        tracks.forEach((track) => track.stop());
-      }
-      document.body.classList.remove('bg-black');
-      document.documentElement.classList.remove('bg-black');
-    };
-  }, [toast]);
-
-  useEffect(() => {
-    if (hasCameraPermission) {
-      if (countdown > 0) {
-        const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
-        return () => clearTimeout(timer);
-      } else {
-        router.push('/jogo');
-      }
-    }
-  }, [countdown, hasCameraPermission, router]);
+  const SelectionButton = ({
+    option,
+    value,
+    children,
+    className,
+  }: {
+    option: Option;
+    value: string;
+    children: React.ReactNode;
+    className?: string;
+  }) => {
+    const isSelected = selections[option] === value;
+    return (
+      <Button
+        variant="outline"
+        className={cn(
+          'relative w-full flex-1 justify-center rounded-xl border-4 border-transparent bg-card text-lg font-bold text-[#49416D] shadow-lg hover:bg-card/80 sm:text-xl',
+          'whitespace-normal break-words py-2',
+          'h-full',
+          isSelected && 'border-primary ring-4 ring-primary/50',
+          className
+        )}
+        onClick={() => handleSelection(option, value)}
+      >
+        {children}
+        {isSelected && (
+          <div className="absolute -right-3 -top-3 flex h-8 w-8 items-center justify-center rounded-full bg-primary">
+            <Check className="h-6 w-6 text-primary-foreground" />
+          </div>
+        )}
+      </Button>
+    );
+  };
 
   return (
-    <main className="h-[140svh] w-screen overflow-hidden bg-black">
-      <div className="fixed inset-0 h-[140svh] w-screen">
-        {hasCameraPermission === undefined && (
-          <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/70 text-white">
-            <p className="text-xl">Acessando a câmera...</p>
-          </div>
-        )}
-        {hasCameraPermission === false && (
-          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/70 text-white">
-            <CameraOff className="h-24 w-24 text-red-500" />
-            <p className="mt-4 text-2xl font-semibold">Câmera indisponível</p>
-            <p className="mt-2 max-w-sm text-center text-base text-zinc-300">
-              Não foi possível acessar a câmera. Verifique as permissões no seu
-              navegador e tente novamente.
-            </p>
-          </div>
-        )}
-        <video
-          ref={videoRef}
-          className={cn(
-            'absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 scale-x-[-1] object-cover'
-          )}
-          autoPlay
-          playsInline
-          muted
-        />
-        {/* Overlay */}
-        {hasCameraPermission && countdown > 0 && (
-          <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center">
-            <div className="absolute top-0 z-10 w-full p-4 pt-8 text-center">
-              <h1 className="text-2xl font-bold text-black md:text-4xl">
-                Posicione-se corretamente
-              </h1>
-              <p className="mt-2 text-sm text-black/80 md:text-base">
-                Mantenha o dispositivo na horizontal e posicione-se a uma
-                distância adequada
-              </p>
+    <>
+      <OrientationLock />
+      <main className="flex min-h-[100svh] flex-col bg-[#49416D] p-4 md:p-8">
+        <div className="flex w-full flex-1 flex-col justify-center px-4 sm:px-8">
+          <div className="flex items-start justify-center">
+            <div className="grid w-full max-w-6xl grid-cols-1 gap-6 sm:grid-cols-3 md:gap-8">
+              {/* Posição */}
+              <div className="flex flex-col items-center gap-4">
+                <h2 className="mb-2 text-2xl font-bold text-white sm:text-3xl">Posição</h2>
+                <div className="flex w-full flex-1 flex-col gap-4">
+                  <SelectionButton option="posicao" value="em_pe">
+                    Em pé
+                  </SelectionButton>
+                  <SelectionButton option="posicao" value="sentado">
+                    Sentado
+                  </SelectionButton>
+                </div>
+              </div>
+
+              {/* Membros */}
+              <div className="flex flex-col items-center gap-4">
+                <h2 className="mb-2 text-2xl font-bold text-white sm:text-3xl">Membros</h2>
+                <div className="flex w-full flex-1 flex-col gap-4">
+                  <SelectionButton
+                    option="membros"
+                    value="superiores"
+                    className="flex-wrap"
+                  >
+                    Superiores (Braços)
+                  </SelectionButton>
+                  <SelectionButton
+                    option="membros"
+                    value="inferiores"
+                    className="flex-wrap"
+                  >
+                    Inferiores (Pernas)
+                  </SelectionButton>
+                </div>
+              </div>
+
+              {/* Distância */}
+              <div className="flex flex-col items-center gap-4">
+                <h2 className="mb-2 text-2xl font-bold text-white sm:text-3xl">Distância</h2>
+                <div className="flex w-full flex-1 flex-col gap-4">
+                  <SelectionButton option="distancia" value="nivel_1">
+                    Nível 1
+                  </SelectionButton>
+                  <SelectionButton option="distancia" value="nivel_2">
+                    Nível 2
+                  </SelectionButton>
+                  <SelectionButton option="distancia" value="nivel_3">
+                    Nível 3
+                  </SelectionButton>
+                </div>
+              </div>
             </div>
-            <div className="relative h-[85vh] w-full">
-              <Image
-                src="/img/position.png"
-                alt="Posicionamento de exemplo"
-                fill
-                className="object-contain"
-              />
-            </div>
           </div>
-        )}
-        {hasCameraPermission && countdown > 0 && (
-          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-black">
-            <p className="text-2xl font-bold md:text-4xl">Começa em</p>
-            <p className="font-raleway text-[70px] font-extrabold leading-none md:text-[250px]">
-              {countdown}
-            </p>
-          </div>
-        )}
-        <div className="absolute bottom-4 right-4 z-50 text-2xl font-bold text-white opacity-50">
-          Browser
         </div>
-      </div>
-    </main>
+        <div className="mt-8 flex justify-center pb-4">
+          <Button
+            size="lg"
+            className="h-20 w-full max-w-md rounded-2xl bg-primary text-2xl font-extrabold text-primary-foreground shadow-lg transition-all hover:bg-primary/90 disabled:bg-gray-400 disabled:opacity-50"
+            disabled={!isComplete}
+            onClick={handleStart}
+          >
+            Iniciar
+          </Button>
+        </div>
+      </main>
+    </>
   );
 }

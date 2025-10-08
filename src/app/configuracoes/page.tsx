@@ -27,19 +27,7 @@ export default function ConfiguracoesPage() {
     selections.distancia !== '';
 
   const handleStart = () => {
-    const isIOS =
-      /iPhone|iPad|iPod/.test(navigator.userAgent) &&
-      /WebKit/.test(navigator.userAgent) &&
-      !(window as any).MSStream;
-    const isStandalone =
-      'standalone' in navigator && (navigator as any).standalone === true;
-    const isIOSPWA = isIOS && isStandalone;
-
-    if (isIOSPWA) {
-      router.push('/jogopwa');
-    } else {
-      router.push('/jogo');
-    }
+    router.push('/jogo');
   };
 
   const SelectionButton = ({
