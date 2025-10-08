@@ -73,7 +73,7 @@ function ConfiguracoesView({ onStart }: { onStart: () => void }) {
   return (
     <main className="flex min-h-[100svh] flex-col justify-center bg-[#49416D] p-4">
       <div className="flex w-full flex-1 flex-col items-center justify-center">
-        <div className="grid w-full max-w-6xl grid-cols-1 gap-2 sm:grid-cols-3 md:gap-4">
+        <div className="grid w-full max-w-6xl grid-cols-1 gap-2 sm:grid-cols-3 md:gap-2">
           {/* Posição */}
           <div className="flex flex-col items-center gap-2 sm:gap-4">
             <h2 className="mb-1 text-xl font-bold text-white sm:text-2xl md:text-3xl">Posição</h2>
@@ -91,7 +91,7 @@ function ConfiguracoesView({ onStart }: { onStart: () => void }) {
           <div className="flex flex-col items-center gap-2 sm:gap-4">
             <h2 className="mb-1 text-xl font-bold text-white sm:text-2xl md:text-3xl">Membros</h2>
             <div className="flex w-full flex-1 flex-col gap-3 sm:gap-4">
-               <SelectionButton
+              <SelectionButton
                 option="membros"
                 value="superiores"
                 className="flex-wrap"
@@ -100,7 +100,7 @@ function ConfiguracoesView({ onStart }: { onStart: () => void }) {
                   <span>Superiores</span>
                   <span>(Braços)</span>
                 </div>
-                 <Image src="/img/hand.svg" alt="Mãos" width={40} height={40} className="object-contain" />
+                <Image src="/img/hand.svg" alt="Mãos" width={40} height={40} className="object-contain" />
               </SelectionButton>
               <SelectionButton
                 option="membros"
@@ -111,7 +111,7 @@ function ConfiguracoesView({ onStart }: { onStart: () => void }) {
                   <span>Inferiores</span>
                   <span>(Pernas)</span>
                 </div>
-                 <Image src="/img/feet.svg" alt="Pés" width={40} height={40} className="object-contain" />
+                <Image src="/img/feet.svg" alt="Pés" width={40} height={40} className="object-contain" />
               </SelectionButton>
             </div>
           </div>
@@ -133,7 +133,7 @@ function ConfiguracoesView({ onStart }: { onStart: () => void }) {
           </div>
         </div>
       </div>
-      <div className="flex justify-center pb-2 pt-4">
+      <div className="flex justify-center pb-2 pt-2">
         <Button
           size="lg"
           className="h-16 w-full max-w-md rounded-2xl bg-primary text-xl font-extrabold text-primary-foreground shadow-lg transition-all hover:bg-primary/90 disabled:bg-gray-400 disabled:opacity-50 sm:h-20 sm:text-2xl"
@@ -337,7 +337,7 @@ function JogoView({
       {showCountdown ? (
         <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
           <div className="flex w-full items-center justify-around gap-8 px-4">
-            <div className="relative h-56 w-1/3">
+            <div className="relative h-52 w-1/3">
                <Image
                 src="/img/aviso_posicionamento.png"
                 alt="Aviso de posicionamento"
@@ -353,7 +353,7 @@ function JogoView({
                 className="object-contain"
               />
             </div>
-            <div className="relative flex h-[70vh] w-1/3 items-center justify-center">
+            <div className="relative flex h-52 w-1/3 items-center justify-center">
               <Image
                 src="/img/T_timer.png"
                 alt="Timer"
@@ -507,5 +507,3 @@ export default function Page() {
     </>
   );
 }
-
-    
