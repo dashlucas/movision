@@ -155,8 +155,8 @@ export default function JogoPage() {
       ></canvas>
 
       {showCountdown ? (
-        <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center">
-          <div className="flex w-full items-center justify-center gap-8 px-4">
+        <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
+          <div className="flex w-full items-center justify-around gap-8 px-4">
             <div className="relative h-[70vh] w-1/3">
               <Image
                 src="/img/aviso_posicionamento.png"
@@ -173,20 +173,17 @@ export default function JogoPage() {
                 className="object-contain"
               />
             </div>
-            <div className="relative h-[70vh] w-1/3">
+            <div className="relative flex h-[70vh] w-1/3 items-center justify-center">
               <Image
                 src="/img/T_timer.png"
                 alt="Timer"
                 fill
                 className="object-contain"
               />
+              <p className="font-raleway absolute text-[15vw] font-extrabold leading-none text-white lg:text-[10vw]">
+                {countdown}
+              </p>
             </div>
-          </div>
-
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-black">
-            <p className="font-raleway text-[250px] font-extrabold leading-none text-white">
-              {countdown}
-            </p>
           </div>
         </div>
       ) : (
