@@ -173,6 +173,14 @@ export default function JogoPage() {
                 className="object-contain"
               />
             </div>
+            <div className="relative h-[70vh] w-1/3">
+              <Image
+                src="/img/T_timer.png"
+                alt="Timer"
+                fill
+                className="object-contain"
+              />
+            </div>
           </div>
 
           <div className="absolute inset-0 flex flex-col items-center justify-center text-black">
