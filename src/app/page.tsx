@@ -281,7 +281,7 @@ function JogoView({ cameraStream }: { cameraStream: MediaStream | null }) {
                 fill
                 className="object-contain"
               />
-              <p className="font-headline absolute mt-8 text-[15vw] font-extrabold leading-none text-white lg:mt-8 lg:text-[10vw]">
+              <p className="font-headline absolute mt-4 text-8xl font-extrabold leading-none text-white md:text-9xl lg:text-[10rem]">
                 {countdown}
               </p>
             </div>
