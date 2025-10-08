@@ -4,47 +4,388 @@ import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/logo';
 import Link from 'next/link';
 import { OrientationLock } from '@/components/orientation-lock';
-import { useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { cn } from '@/lib/utils';
+import { Check } from 'lucide-react';
+import {
+  PoseLandmarker,
+  FilesetResolver,
+  DrawingUtils,
+} from '@mediapipe/tasks-vision';
+import Image from 'next/image';
 
-export default function Home() {
+type View = 'home' | 'configuracoes' | 'jogo';
+type Option = 'posicao' | 'membros' | 'distancia';
+
+function ConfiguracoesView({ onStart }: { onStart: () => void }) {
+  const [selections, setSelections] = useState({
+    posicao: '',
+    membros: '',
+    distancia: '',
+  });
+
+  const handleSelection = (option: Option, value: string) => {
+    setSelections((prev) => ({ ...prev, [option]: value }));
+  };
+
+  const isComplete =
+    selections.posicao !== '' &&
+    selections.membros !== '' &&
+    selections.distancia !== '';
+
+  const SelectionButton = ({
+    option,
+    value,
+    children,
+    className,
+  }: {
+    option: Option;
+    value: string;
+    children: React.ReactNode;
+    className?: string;
+  }) => {
+    const isSelected = selections[option] === value;
+    return (
+      <Button
+        variant="outline"
+        className={cn(
+          'relative w-full flex-1 justify-center rounded-xl border-4 border-transparent bg-card text-lg font-bold text-[#49416D] shadow-lg hover:bg-card/80 sm:text-xl',
+          'whitespace-normal break-words py-2',
+          'h-full',
+          isSelected && 'border-primary ring-4 ring-primary/50',
+          className
+        )}
+        onClick={() => handleSelection(option, value)}
+      >
+        {children}
+        {isSelected && (
+          <div className="absolute -right-3 -top-3 flex h-8 w-8 items-center justify-center rounded-full bg-primary">
+            <Check className="h-6 w-6 text-primary-foreground" />
+          </div>
+        )}
+      </Button>
+    );
+  };
+
+  return (
+    <main className="flex min-h-[100svh] flex-col bg-[#49416D] p-4 md:p-8">
+      <div className="flex w-full flex-1 flex-col justify-center px-4 sm:px-8">
+        <div className="flex items-start justify-center">
+          <div className="grid w-full max-w-6xl grid-cols-1 gap-6 sm:grid-cols-3 md:gap-8">
+            {/* Posição */}
+            <div className="flex flex-col items-center gap-4">
+              <h2 className="mb-2 text-2xl font-bold text-white sm:text-3xl">Posição</h2>
+              <div className="flex w-full flex-1 flex-col gap-4">
+                <SelectionButton option="posicao" value="em_pe">
+                  Em pé
+                </SelectionButton>
+                <SelectionButton option="posicao" value="sentado">
+                  Sentado
+                </SelectionButton>
+              </div>
+            </div>
+
+            {/* Membros */}
+            <div className="flex flex-col items-center gap-4">
+              <h2 className="mb-2 text-2xl font-bold text-white sm:text-3xl">Membros</h2>
+              <div className="flex w-full flex-1 flex-col gap-4">
+                <SelectionButton
+                  option="membros"
+                  value="superiores"
+                  className="flex-wrap"
+                >
+                  Superiores (Braços)
+                </SelectionButton>
+                <SelectionButton
+                  option="membros"
+                  value="inferiores"
+                  className="flex-wrap"
+                >
+                  Inferiores (Pernas)
+                </SelectionButton>
+              </div>
+            </div>
+
+            {/* Distância */}
+            <div className="flex flex-col items-center gap-4">
+              <h2 className="mb-2 text-2xl font-bold text-white sm:text-3xl">Distância</h2>
+              <div className="flex w-full flex-1 flex-col gap-4">
+                <SelectionButton option="distancia" value="nivel_1">
+                  Nível 1
+                </SelectionButton>
+                <SelectionButton option="distancia" value="nivel_2">
+                  Nível 2
+                </SelectionButton>
+                <SelectionButton option="distancia" value="nivel_3">
+                  Nível 3
+                </SelectionButton>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="mt-8 flex justify-center pb-4">
+        <Button
+          size="lg"
+          className="h-20 w-full max-w-md rounded-2xl bg-primary text-2xl font-extrabold text-primary-foreground shadow-lg transition-all hover:bg-primary/90 disabled:bg-gray-400 disabled:opacity-50"
+          disabled={!isComplete}
+          onClick={onStart}
+        >
+          Iniciar
+        </Button>
+      </div>
+    </main>
+  );
+}
+
+
+function JogoView() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [countdown, setCountdown] = useState(10);
+  const [showCountdown, setShowCountdown] = useState(true);
+
+  // Refs para a lógica do MediaPipe
+  const poseLandmarkerRef = useRef<PoseLandmarker | null>(null);
+  const webcamRunningRef = useRef(false);
+  const lastVideoTimeRef = useRef(-1);
+  const animationFrameId = useRef<number | null>(null);
+
+  // Inicializa a câmera e o MediaPipe
+  useEffect(() => {
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+
+    if (!video || !canvas) return;
+
+    const canvasCtx = canvas.getContext('2d');
+    if (!canvasCtx) return;
+
+    const drawingUtils = new DrawingUtils(canvasCtx);
+
+    const createPoseLandmarker = async () => {
+      const vision = await FilesetResolver.forVisionTasks(
+        'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
+      );
+      const poseLandmarker = await PoseLandmarker.createFromOptions(vision, {
+        baseOptions: {
+          modelAssetPath: `https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_full/float16/latest/pose_landmarker_full.task`,
+          delegate: 'GPU',
+        },
+        runningMode: 'VIDEO',
+        numPoses: 2,
+      });
+      poseLandmarkerRef.current = poseLandmarker;
+      console.log('Pose Landmarker created');
+      await enableCam();
+    };
+
+    const enableCam = async () => {
+      if (!poseLandmarkerRef.current || webcamRunningRef.current) return;
+
+      webcamRunningRef.current = true;
+
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+        });
+        video.srcObject = stream;
+        video.addEventListener('loadeddata', predictWebcam);
+      } catch (error) {
+        console.error('Error accessing webcam:', error);
+        webcamRunningRef.current = false;
+      }
+    };
+
+    const predictWebcam = async () => {
+      if (
+        !webcamRunningRef.current ||
+        !poseLandmarkerRef.current ||
+        !video.srcObject
+      )
+        return;
+
+      const videoWidth = video.videoWidth;
+      const videoHeight = video.videoHeight;
+
+      if (canvas.width !== videoWidth) {
+        canvas.width = videoWidth;
+      }
+      if (canvas.height !== videoHeight) {
+        canvas.height = videoHeight;
+      }
+
+      const startTimeMs = performance.now();
+      if (lastVideoTimeRef.current !== video.currentTime) {
+        lastVideoTimeRef.current = video.currentTime;
+        poseLandmarkerRef.current.detectForVideo(
+          video,
+          startTimeMs,
+          (result) => {
+            canvasCtx.save();
+            canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+            for (const landmark of result.landmarks) {
+              drawingUtils.drawLandmarks(landmark, {
+                radius: (data) =>
+                  DrawingUtils.lerp(data.from.z, -0.15, 0.1, 5, 1),
+              });
+              drawingUtils.drawConnectors(
+                landmark,
+                PoseLandmarker.POSE_CONNECTIONS
+              );
+            }
+            canvasCtx.restore();
+          }
+        );
+      }
+
+      animationFrameId.current = window.requestAnimationFrame(predictWebcam);
+    };
+
+    createPoseLandmarker();
+
+    return () => {
+      console.log('Cleaning up...');
+      webcamRunningRef.current = false;
+      if (animationFrameId.current) {
+        window.cancelAnimationFrame(animationFrameId.current);
+      }
+      if (video.srcObject) {
+        (video.srcObject as MediaStream)
+          .getTracks()
+          .forEach((track) => track.stop());
+      }
+      video.removeEventListener('loadeddata', predictWebcam);
+      poseLandmarkerRef.current?.close();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
+    } else if (showCountdown) {
+      setShowCountdown(false);
+    }
+  }, [countdown, showCountdown]);
+
+  return (
+    <div className="relative h-screen w-screen overflow-hidden bg-black">
+      <video
+        ref={videoRef}
+        autoPlay
+        playsInline
+        muted
+        className="absolute inset-0 h-full w-full object-cover"
+        style={{ transform: 'scaleX(-1)' }}
+      ></video>
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 h-full w-full object-cover"
+        style={{ transform: 'scaleX(-1)' }}
+      ></canvas>
+
+      {showCountdown ? (
+        <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
+          <div className="flex w-full items-center justify-around gap-8 px-4">
+            <div className="relative h-[70vh] w-1/3">
+              <Image
+                src="/img/aviso_posicionamento.png"
+                alt="Aviso de posicionamento"
+                fill
+                className="object-contain"
+              />
+            </div>
+            <div className="relative h-full w-1/3">
+              <Image
+                src="/img/icon_position.png"
+                alt="Posicionamento de exemplo"
+                fill
+                className="object-contain"
+              />
+            </div>
+            <div className="relative flex h-[70vh] w-1/3 items-center justify-center">
+              <Image
+                src="/img/T_timer.png"
+                alt="Timer"
+                fill
+                className="object-contain"
+              />
+              <p className="font-headline absolute mt-4 text-[15vw] font-extrabold leading-none text-white lg:mt-8 lg:text-[10vw]">
+                {countdown}
+              </p>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center">
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+function HomeView({ onStart }: { onStart: () => void }) {
+  return (
+    <main className="flex h-[100svh] w-full flex-row">
+      {/* Left Panel */}
+      <div className="flex w-1/2 flex-col items-center justify-center bg-card p-4 md:p-8">
+        <Logo className="h-64 w-64 md:h-64 md:w-64 lg:h-96 lg:w-96" />
+      </div>
+
+      {/* Right Panel */}
+      <div className="flex h-full w-1/2 flex-1 flex-col items-center justify-center bg-panel-right p-4 md:p-8">
+        <div className="flex flex-col items-center gap-4 md:gap-6">
+          <Button
+            onClick={onStart}
+            size="lg"
+            className="h-14 w-40 rounded-2xl bg-primary text-base font-extrabold text-primary-foreground shadow-lg transition-transform hover:scale-105 hover:bg-primary/90 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-panel-right md:h-24 md:w-[300px] md:text-2xl"
+          >
+            Iniciar
+          </Button>
+          <Button
+            asChild
+            size="lg"
+            variant="outline"
+            className="h-10 w-40 rounded-2xl border-4 border-primary bg-card font-bold text-[#49416D] shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background md:h-14 md:w-[300px] md:text-xl"
+          >
+            <Link href="#">Tutorial</Link>
+          </Button>
+          <Button
+            asChild
+            size="lg"
+            variant="outline"
+            className="h-10 w-40 rounded-2xl border-4 border-primary bg-card font-bold text-[#49416D] shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background md:h-14 md:w-[300px] md:text-xl"
+          >
+            <Link href="#">Recomendações</Link>
+          </Button>
+        </div>
+      </div>
+    </main>
+  );
+}
+
+export default function Page() {
+  const [currentView, setCurrentView] = useState<View>('home');
+
+  const renderView = () => {
+    switch (currentView) {
+      case 'home':
+        return <HomeView onStart={() => setCurrentView('configuracoes')} />;
+      case 'configuracoes':
+        return <ConfiguracoesView onStart={() => setCurrentView('jogo')} />;
+      case 'jogo':
+        return <JogoView />;
+      default:
+        return <HomeView onStart={() => setCurrentView('configuracoes')} />;
+    }
+  };
+
   return (
     <>
       <OrientationLock />
-      <main className="flex h-[100svh] w-full flex-row">
-        {/* Left Panel */}
-        <div className="flex w-1/2 flex-col items-center justify-center bg-card p-4 md:p-8">
-          <Logo className="h-64 w-64 md:h-64 md:w-64 lg:h-96 lg:w-96" />
-        </div>
-
-        {/* Right Panel */}
-        <div className="flex h-full w-1/2 flex-1 flex-col items-center justify-center bg-panel-right p-4 md:p-8">
-          <div className="flex flex-col items-center gap-4 md:gap-6">
-            <Button
-              asChild
-              size="lg"
-              className="h-14 w-40 rounded-2xl bg-primary text-base font-extrabold text-primary-foreground shadow-lg transition-transform hover:scale-105 hover:bg-primary/90 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-panel-right md:h-24 md:w-[300px] md:text-2xl"
-            >
-              <Link href="/configuracoes">Iniciar</Link>
-            </Button>
-            <Button
-              asChild
-              size="lg"
-              variant="outline"
-              className="h-10 w-40 rounded-2xl border-4 border-primary bg-card font-bold text-[#49416D] shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background md:h-14 md:w-[300px] md:text-xl"
-            >
-              <Link href="#">Tutorial</Link>
-            </Button>
-            <Button
-              asChild
-              size="lg"
-              variant="outline"
-              className="h-10 w-40 rounded-2xl border-4 border-primary bg-card font-bold text-[#49416D] shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background md:h-14 md:w-[300px] md:text-xl"
-            >
-              <Link href="#">Recomendações</Link>
-            </Button>
-          </div>
-        </div>
-      </main>
+      {renderView()}
     </>
   );
 }
