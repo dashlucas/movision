@@ -296,7 +296,7 @@ function JogoView() {
                 className="object-contain"
               />
             </div>
-            <div className="relative h-full w-1/3">
+            <div className="relative h-[70vh] w-1/3">
               <Image
                 src="/img/icon_position.png"
                 alt="Posicionamento de exemplo"
