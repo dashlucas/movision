@@ -360,7 +360,7 @@ function JogoView({
                 fill
                 className="object-contain"
               />
-              <p className="font-headline absolute text-[8rem] font-extrabold leading-none text-white xl:text-[10rem] 2xl:text-[12rem]">
+              <p className="font-headline absolute text-[6rem] font-extrabold leading-none text-white xl:text-[8rem] 2xl:text-[10rem]">
                 {countdown}
               </p>
             </div>
