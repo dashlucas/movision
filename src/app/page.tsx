@@ -152,23 +152,24 @@ function JogoView({ hasCameraPermission }: { hasCameraPermission: boolean | null
   const animationFrameId = useRef<number | null>(null);
 
   useEffect(() => {
+    // Garante que a lógica só rode se a permissão foi concedida
     if (hasCameraPermission !== true) return;
 
     const video = videoRef.current;
     const canvas = canvasRef.current;
-
+    
     if (!video || !canvas) return;
 
+    // Acessa o stream da câmera que foi armazenado globalmente
     const stream = (window as any).stream;
     if (!stream) {
-      console.error("Stream da câmera não encontrado ao iniciar JogoView.");
+      // O stream deve existir se hasCameraPermission é true. Se não, há um problema de lógica.
       return;
     }
 
     video.srcObject = stream;
 
     const startMediaPipe = async () => {
-      console.log("startMediaPipe chamado");
       const canvasCtx = canvas.getContext('2d');
       if (!canvasCtx) return;
 
@@ -185,7 +186,6 @@ function JogoView({ hasCameraPermission }: { hasCameraPermission: boolean | null
           runningMode: 'VIDEO',
           numPoses: 2,
         });
-        console.log('Pose Landmarker criado e pronto.');
         predictWebcam(drawingUtils);
       } catch (e) {
         console.error("Erro ao criar PoseLandmarker", e);
@@ -193,14 +193,16 @@ function JogoView({ hasCameraPermission }: { hasCameraPermission: boolean | null
     };
 
     const predictWebcam = (drawingUtils: DrawingUtils) => {
-      if (!videoRef.current || !canvasRef.current || !poseLandmarkerRef.current) return;
       const video = videoRef.current;
       const canvas = canvasRef.current;
-      const canvasCtx = canvas.getContext('2d');
+      const poseLandmarker = poseLandmarkerRef.current;
+
+      if (!video || !canvas || !poseLandmarker || !canvas.getContext('2d')) return;
+
+      const canvasCtx = canvas.getContext('2d')!;
       
-      if (!canvasCtx) return;
-      
-      if (video.paused || video.ended || video.videoWidth === 0) {
+      // Checa se o vídeo está pronto para processamento
+      if (video.paused || video.ended || video.readyState < 2) {
         animationFrameId.current = window.requestAnimationFrame(() => predictWebcam(drawingUtils));
         return;
       }
@@ -211,7 +213,7 @@ function JogoView({ hasCameraPermission }: { hasCameraPermission: boolean | null
       const startTimeMs = performance.now();
       if (lastVideoTimeRef.current !== video.currentTime) {
         lastVideoTimeRef.current = video.currentTime;
-        poseLandmarkerRef.current.detectForVideo(video, startTimeMs, (result) => {
+        poseLandmarker.detectForVideo(video, startTimeMs, (result) => {
           canvasCtx.save();
           canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
           for (const landmark of result.landmarks) {
@@ -225,17 +227,16 @@ function JogoView({ hasCameraPermission }: { hasCameraPermission: boolean | null
       }
       animationFrameId.current = window.requestAnimationFrame(() => predictWebcam(drawingUtils));
     };
-
+    
+    // Inicia o mediapipe somente quando o vídeo estiver carregado
     video.addEventListener('loadeddata', startMediaPipe);
 
     return () => {
-      console.log('Cleaning up JogoView...');
       video.removeEventListener('loadeddata', startMediaPipe);
       if (animationFrameId.current) {
         window.cancelAnimationFrame(animationFrameId.current);
       }
       poseLandmarkerRef.current?.close();
-      // Não limpe o video.srcObject aqui, pois o stream é gerenciado pelo componente pai
     };
   }, [hasCameraPermission]);
 
@@ -276,7 +277,7 @@ function JogoView({ hasCameraPermission }: { hasCameraPermission: boolean | null
                 className="object-contain"
               />
             </div>
-             <div className="relative flex h-[70vh] w-1/3 items-center justify-center">
+             <div className="relative h-[70vh] w-1/3">
               <Image
                 src="/img/icon_position.png"
                 alt="Posicionamento de exemplo"
