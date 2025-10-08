@@ -157,15 +157,7 @@ export default function JogoPage() {
 
       {showCountdown ? (
         <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center">
-          <div className="absolute top-0 z-10 w-full p-4 pt-8 text-center">
-            <h1 className="text-4xl font-bold text-white md:text-5xl">
-              Posicione-se corretamente
-            </h1>
-            <p className="mt-2 text-2xl text-white md:text-3xl">
-              Mantenha o dispositivo na horizontal e posicione-se a uma distância
-              adequada
-            </p>
-          </div>
+          
           <div className="relative h-[70vh] w-full">
             <Image
               src="/img/icon_position.png"
