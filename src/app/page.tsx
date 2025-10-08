@@ -158,57 +158,59 @@ function JogoView({ hasCameraPermission }: { hasCameraPermission: boolean | null
 
     const video = videoRef.current;
     const canvas = canvasRef.current;
+    let localAnimationFrameId: number | null = null;
+
 
     if (!video || !canvas) return;
 
-    const stream = (window as any).stream;
-    if (!stream) {
-      console.error("Stream da câmera não foi encontrado no JogoView.");
-      return;
-    }
-
-    const canvasCtx = canvas.getContext('2d');
-    if (!canvasCtx) return;
-
-    const drawingUtils = new DrawingUtils(canvasCtx);
-
-    const createPoseLandmarker = async () => {
-      const vision = await FilesetResolver.forVisionTasks(
-        'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
-      );
-      poseLandmarkerRef.current = await PoseLandmarker.createFromOptions(vision, {
-        baseOptions: {
-          modelAssetPath: `https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_full/float16/latest/pose_landmarker_full.task`,
-          delegate: 'GPU',
-        },
-        runningMode: 'VIDEO',
-        numPoses: 2,
-      });
-      console.log('Pose Landmarker created');
-      
-      // Inicia a webcam
-      if (!webcamRunningRef.current) {
-        video.srcObject = stream;
-        video.addEventListener('loadeddata', predictWebcam);
-        webcamRunningRef.current = true;
-      }
+    const waitForStream = () => {
+        const stream = (window as any).stream;
+        if (stream) {
+            console.log("Stream da câmera encontrado, iniciando MediaPipe.");
+            video.srcObject = stream;
+            video.addEventListener('loadeddata', startMediaPipe);
+        } else {
+            console.log("Aguardando stream da câmera...");
+            localAnimationFrameId = requestAnimationFrame(waitForStream);
+        }
     };
 
-    const predictWebcam = async () => {
-      if (
-        !webcamRunningRef.current ||
-        !poseLandmarkerRef.current ||
-        !video?.srcObject ||
-        video.readyState < 2 // Garante que o vídeo está pronto
-      ) {
-         if (webcamRunningRef.current) {
-          animationFrameId.current = window.requestAnimationFrame(predictWebcam);
+    const startMediaPipe = async () => {
+        const canvasCtx = canvas.getContext('2d');
+        if (!canvasCtx) return;
+    
+        const drawingUtils = new DrawingUtils(canvasCtx);
+    
+        try {
+            const vision = await FilesetResolver.forVisionTasks(
+            'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
+            );
+            poseLandmarkerRef.current = await PoseLandmarker.createFromOptions(vision, {
+            baseOptions: {
+                modelAssetPath: `https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_full/float16/latest/pose_landmarker_full.task`,
+                delegate: 'GPU',
+            },
+            runningMode: 'VIDEO',
+            numPoses: 2,
+            });
+            console.log('Pose Landmarker criado e pronto.');
+            webcamRunningRef.current = true;
+            predictWebcam();
+        } catch(e) {
+            console.error("Erro ao criar PoseLandmarker", e);
+        }
+    };
+
+    const predictWebcam = () => {
+      if (!webcamRunningRef.current || !poseLandmarkerRef.current || !video?.srcObject || video.readyState < 2) {
+        if (webcamRunningRef.current) {
+          localAnimationFrameId = window.requestAnimationFrame(predictWebcam);
         }
         return;
       }
       
       if (video.videoWidth === 0 || video.videoHeight === 0) {
-        animationFrameId.current = window.requestAnimationFrame(predictWebcam);
+        localAnimationFrameId = window.requestAnimationFrame(predictWebcam);
         return;
       }
 
@@ -230,7 +232,7 @@ function JogoView({ hasCameraPermission }: { hasCameraPermission: boolean | null
             for (const landmark of result.landmarks) {
               drawingUtils.drawLandmarks(landmark, {
                 radius: (data) =>
-                  DrawingUtils.lerp(data.from.z, -0.15, 0.1, 5, 1),
+                  DrawingUtils.lerp(data.from!.z!, -0.15, 0.1, 5, 1),
               });
               drawingUtils.drawConnectors(
                 landmark,
@@ -242,21 +244,19 @@ function JogoView({ hasCameraPermission }: { hasCameraPermission: boolean | null
         );
       }
 
-      animationFrameId.current = window.requestAnimationFrame(predictWebcam);
+      localAnimationFrameId = window.requestAnimationFrame(predictWebcam);
     };
 
-    createPoseLandmarker();
+    waitForStream();
 
     return () => {
       console.log('Cleaning up JogoView...');
-      webcamRunningRef.current = false;
-      if (animationFrameId.current) {
-        window.cancelAnimationFrame(animationFrameId.current);
-        animationFrameId.current = null;
+      if (localAnimationFrameId) {
+        window.cancelAnimationFrame(localAnimationFrameId);
       }
+      webcamRunningRef.current = false;
+      video.removeEventListener('loadeddata', startMediaPipe);
       if (video) {
-        video.removeEventListener('loadeddata', predictWebcam);
-        // Não pare o stream global aqui, pois ele é gerenciado no componente Page
         video.srcObject = null;
       }
       poseLandmarkerRef.current?.close();
