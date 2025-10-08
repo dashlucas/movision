@@ -147,114 +147,95 @@ function JogoView({ hasCameraPermission }: { hasCameraPermission: boolean | null
   const [countdown, setCountdown] = useState(10);
   const [showCountdown, setShowCountdown] = useState(true);
 
-  // Refs para a lógica do MediaPipe
   const poseLandmarkerRef = useRef<PoseLandmarker | null>(null);
-  const webcamRunningRef = useRef(false);
   const lastVideoTimeRef = useRef(-1);
-  let animationFrameId: number | null = null;
-  let drawingUtils: DrawingUtils | null = null;
-  let canvasCtx: CanvasRenderingContext2D | null = null;
-
+  const animationFrameId = useRef<number | null>(null);
 
   useEffect(() => {
-    if (!hasCameraPermission) return;
+    if (hasCameraPermission !== true) return;
 
     const video = videoRef.current;
     const canvas = canvasRef.current;
 
-    const startMediaPipe = async () => {
-        if (!video || !canvas) return;
+    if (!video || !canvas) return;
 
-        canvasCtx = canvas.getContext('2d');
-        if (!canvasCtx) return;
-        
-        drawingUtils = new DrawingUtils(canvasCtx);
-    
-        try {
-            const vision = await FilesetResolver.forVisionTasks(
-            'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
-            );
-            poseLandmarkerRef.current = await PoseLandmarker.createFromOptions(vision, {
-            baseOptions: {
-                modelAssetPath: `https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_full/float16/latest/pose_landmarker_full.task`,
-                delegate: 'GPU',
-            },
-            runningMode: 'VIDEO',
-            numPoses: 2,
-            });
-            console.log('Pose Landmarker criado e pronto.');
-            webcamRunningRef.current = true;
-            predictWebcam();
-        } catch(e) {
-            console.error("Erro ao criar PoseLandmarker", e);
-        }
-    };
-    
     const stream = (window as any).stream;
-    if (stream && video) {
-        video.srcObject = stream;
-        video.addEventListener('loadeddata', startMediaPipe);
+    if (!stream) {
+      console.error("Stream da câmera não encontrado ao iniciar JogoView.");
+      return;
     }
 
+    video.srcObject = stream;
 
-    const predictWebcam = () => {
-      if (!webcamRunningRef.current || !poseLandmarkerRef.current || !video?.srcObject || !canvasCtx || !drawingUtils) {
-        if (webcamRunningRef.current) {
-          animationFrameId = window.requestAnimationFrame(predictWebcam);
-        }
+    const startMediaPipe = async () => {
+      console.log("startMediaPipe chamado");
+      const canvasCtx = canvas.getContext('2d');
+      if (!canvasCtx) return;
+
+      const drawingUtils = new DrawingUtils(canvasCtx);
+      try {
+        const vision = await FilesetResolver.forVisionTasks(
+          'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
+        );
+        poseLandmarkerRef.current = await PoseLandmarker.createFromOptions(vision, {
+          baseOptions: {
+            modelAssetPath: `https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_full/float16/latest/pose_landmarker_full.task`,
+            delegate: 'GPU',
+          },
+          runningMode: 'VIDEO',
+          numPoses: 2,
+        });
+        console.log('Pose Landmarker criado e pronto.');
+        predictWebcam(drawingUtils);
+      } catch (e) {
+        console.error("Erro ao criar PoseLandmarker", e);
+      }
+    };
+
+    const predictWebcam = (drawingUtils: DrawingUtils) => {
+      if (!videoRef.current || !canvasRef.current || !poseLandmarkerRef.current) return;
+      const video = videoRef.current;
+      const canvas = canvasRef.current;
+      const canvasCtx = canvas.getContext('2d');
+      
+      if (!canvasCtx) return;
+      
+      if (video.paused || video.ended || video.videoWidth === 0) {
+        animationFrameId.current = window.requestAnimationFrame(() => predictWebcam(drawingUtils));
         return;
       }
       
-      if (video.readyState < 2 || video.videoWidth === 0 || video.videoHeight === 0) {
-        animationFrameId = window.requestAnimationFrame(predictWebcam);
-        return;
-      }
-
-      const videoWidth = video.videoWidth;
-      const videoHeight = video.videoHeight;
-
-      if (canvas.width !== videoWidth) canvas.width = videoWidth;
-      if (canvas.height !== videoHeight) canvas.height = videoHeight;
+      if (canvas.width !== video.videoWidth) canvas.width = video.videoWidth;
+      if (canvas.height !== video.videoHeight) canvas.height = video.videoHeight;
       
       const startTimeMs = performance.now();
       if (lastVideoTimeRef.current !== video.currentTime) {
         lastVideoTimeRef.current = video.currentTime;
-        poseLandmarkerRef.current.detectForVideo(
-          video,
-          startTimeMs,
-          (result) => {
-            canvasCtx!.save();
-            canvasCtx!.clearRect(0, 0, canvas.width, canvas.height);
-            for (const landmark of result.landmarks) {
-              drawingUtils!.drawLandmarks(landmark, {
-                radius: (data) =>
-                  DrawingUtils.lerp(data.from!.z!, -0.15, 0.1, 5, 1),
-              });
-              drawingUtils!.drawConnectors(
-                landmark,
-                PoseLandmarker.POSE_CONNECTIONS
-              );
-            }
-            canvasCtx!.restore();
+        poseLandmarkerRef.current.detectForVideo(video, startTimeMs, (result) => {
+          canvasCtx.save();
+          canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+          for (const landmark of result.landmarks) {
+            drawingUtils.drawLandmarks(landmark, {
+              radius: (data) => DrawingUtils.lerp(data.from!.z!, -0.15, 0.1, 5, 1),
+            });
+            drawingUtils.drawConnectors(landmark, PoseLandmarker.POSE_CONNECTIONS);
           }
-        );
+          canvasCtx.restore();
+        });
       }
-
-      animationFrameId = window.requestAnimationFrame(predictWebcam);
+      animationFrameId.current = window.requestAnimationFrame(() => predictWebcam(drawingUtils));
     };
+
+    video.addEventListener('loadeddata', startMediaPipe);
 
     return () => {
       console.log('Cleaning up JogoView...');
-      if (animationFrameId) {
-        window.cancelAnimationFrame(animationFrameId);
-      }
-      webcamRunningRef.current = false;
-      if (video) {
-        video.removeEventListener('loadeddata', startMediaPipe);
-        video.srcObject = null;
+      video.removeEventListener('loadeddata', startMediaPipe);
+      if (animationFrameId.current) {
+        window.cancelAnimationFrame(animationFrameId.current);
       }
       poseLandmarkerRef.current?.close();
-      poseLandmarkerRef.current = null;
+      // Não limpe o video.srcObject aqui, pois o stream é gerenciado pelo componente pai
     };
   }, [hasCameraPermission]);
 
@@ -270,7 +251,7 @@ function JogoView({ hasCameraPermission }: { hasCameraPermission: boolean | null
 
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-black">
-      <video
+       <video
         ref={videoRef}
         autoPlay
         playsInline
@@ -295,7 +276,7 @@ function JogoView({ hasCameraPermission }: { hasCameraPermission: boolean | null
                 className="object-contain"
               />
             </div>
-             <div className="relative h-[70vh] w-1/3">
+             <div className="relative flex h-[70vh] w-1/3 items-center justify-center">
               <Image
                 src="/img/icon_position.png"
                 alt="Posicionamento de exemplo"
@@ -394,6 +375,9 @@ export default function Page() {
 
   // Solicita permissão da câmera ao carregar o app
   useEffect(() => {
+    // Evita pedir permissão novamente se já foi definida
+    if (hasCameraPermission !== null) return;
+    
     const getCameraPermission = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -412,9 +396,7 @@ export default function Page() {
       }
     };
 
-    if (hasCameraPermission === null) {
-      getCameraPermission();
-    }
+    getCameraPermission();
     
     // Limpa o stream quando o componente principal é desmontado
     return () => {
