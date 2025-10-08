@@ -70,63 +70,61 @@ function ConfiguracoesView({ onStart }: { onStart: () => void }) {
   };
 
   return (
-    <main className="flex min-h-[100svh] flex-col bg-[#49416D] p-4">
-      <div className="flex w-full flex-1 flex-col justify-center">
-        <div className="flex items-center justify-center">
-          <div className="grid w-full max-w-6xl grid-cols-1 gap-4 sm:grid-cols-3 md:gap-6">
-            {/* Posição */}
-            <div className="flex flex-col items-center gap-2 sm:gap-4">
-              <h2 className="mb-1 text-xl font-bold text-white sm:text-2xl md:text-3xl">Posição</h2>
-              <div className="flex w-full flex-1 flex-col gap-3 sm:gap-4">
-                <SelectionButton option="posicao" value="em_pe">
-                  Em pé
-                </SelectionButton>
-                <SelectionButton option="posicao" value="sentado">
-                  Sentado
-                </SelectionButton>
-              </div>
+    <main className="flex min-h-[100svh] flex-col justify-center bg-[#49416D] p-4">
+      <div className="flex w-full flex-1 flex-col items-center justify-center">
+        <div className="grid w-full max-w-6xl grid-cols-1 gap-4 sm:grid-cols-3 md:gap-6">
+          {/* Posição */}
+          <div className="flex flex-col items-center gap-2 sm:gap-4">
+            <h2 className="mb-1 text-xl font-bold text-white sm:text-2xl md:text-3xl">Posição</h2>
+            <div className="flex w-full flex-1 flex-col gap-3 sm:gap-4">
+              <SelectionButton option="posicao" value="em_pe">
+                Em pé
+              </SelectionButton>
+              <SelectionButton option="posicao" value="sentado">
+                Sentado
+              </SelectionButton>
             </div>
+          </div>
 
-            {/* Membros */}
-            <div className="flex flex-col items-center gap-2 sm:gap-4">
-              <h2 className="mb-1 text-xl font-bold text-white sm:text-2xl md:text-3xl">Membros</h2>
-              <div className="flex w-full flex-1 flex-col gap-3 sm:gap-4">
-                <SelectionButton
-                  option="membros"
-                  value="superiores"
-                  className="flex-wrap"
-                >
-                  Superiores (Braços)
-                </SelectionButton>
-                <SelectionButton
-                  option="membros"
-                  value="inferiores"
-                  className="flex-wrap"
-                >
-                  Inferiores (Pernas)
-                </SelectionButton>
-              </div>
+          {/* Membros */}
+          <div className="flex flex-col items-center gap-2 sm:gap-4">
+            <h2 className="mb-1 text-xl font-bold text-white sm:text-2xl md:text-3xl">Membros</h2>
+            <div className="flex w-full flex-1 flex-col gap-3 sm:gap-4">
+              <SelectionButton
+                option="membros"
+                value="superiores"
+                className="flex-wrap"
+              >
+                Superiores (Braços)
+              </SelectionButton>
+              <SelectionButton
+                option="membros"
+                value="inferiores"
+                className="flex-wrap"
+              >
+                Inferiores (Pernas)
+              </SelectionButton>
             </div>
+          </div>
 
-            {/* Distância */}
-            <div className="flex flex-col items-center gap-2 sm:gap-4">
-              <h2 className="mb-1 text-xl font-bold text-white sm:text-2xl md:text-3xl">Distância</h2>
-              <div className="flex w-full flex-1 flex-col gap-3 sm:gap-4">
-                <SelectionButton option="distancia" value="nivel_1">
-                  Nível 1
-                </SelectionButton>
-                <SelectionButton option="distancia" value="nivel_2">
-                  Nível 2
-                </SelectionButton>
-                <SelectionButton option="distancia" value="nivel_3">
-                  Nível 3
-                </SelectionButton>
-              </div>
+          {/* Distância */}
+          <div className="flex flex-col items-center gap-2 sm:gap-4">
+            <h2 className="mb-1 text-xl font-bold text-white sm:text-2xl md:text-3xl">Distância</h2>
+            <div className="flex w-full flex-1 flex-col gap-3 sm:gap-4">
+              <SelectionButton option="distancia" value="nivel_1">
+                Nível 1
+              </SelectionButton>
+              <SelectionButton option="distancia" value="nivel_2">
+                Nível 2
+              </SelectionButton>
+              <SelectionButton option="distancia" value="nivel_3">
+                Nível 3
+              </SelectionButton>
             </div>
           </div>
         </div>
       </div>
-      <div className="mt-6 flex justify-center pb-2">
+      <div className="flex justify-center pb-2 pt-4">
         <Button
           size="lg"
           className="h-16 w-full max-w-md rounded-2xl bg-primary text-xl font-extrabold text-primary-foreground shadow-lg transition-all hover:bg-primary/90 disabled:bg-gray-400 disabled:opacity-50 sm:h-20 sm:text-2xl"
@@ -316,7 +314,7 @@ function JogoView({ cameraStream }: { cameraStream: MediaStream | null }) {
       {showCountdown ? (
         <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
           <div className="flex w-full items-center justify-around gap-8 px-4">
-            <div className="relative h-[70vh] w-1/3">
+            <div className="relative h-[50vh] w-1/3">
                <Image
                 src="/img/aviso_posicionamento.png"
                 alt="Aviso de posicionamento"

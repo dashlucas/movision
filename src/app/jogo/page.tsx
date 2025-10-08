@@ -96,7 +96,7 @@ export default function JogoPage() {
             for (const landmark of result.landmarks) {
               drawingUtils.drawLandmarks(landmark, {
                 radius: (data) =>
-                  DrawingUtils.lerp(data.from.z, -0.15, 0.1, 5, 1),
+                  DrawingUtils.lerp(data.from!.z!, -0.15, 0.1, 5, 1),
               });
               drawingUtils.drawConnectors(
                 landmark,
@@ -157,7 +157,7 @@ export default function JogoPage() {
       {showCountdown ? (
         <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
           <div className="flex w-full items-center justify-around gap-8 px-4">
-            <div className="relative h-[70vh] w-1/3">
+            <div className="relative h-[50vh] w-1/3">
               <Image
                 src="/img/aviso_posicionamento.png"
                 alt="Aviso de posicionamento"
