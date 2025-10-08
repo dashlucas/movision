@@ -161,6 +161,12 @@ function JogoView({ hasCameraPermission }: { hasCameraPermission: boolean | null
 
     if (!video || !canvas) return;
 
+    const stream = (window as any).stream;
+    if (!stream) {
+      console.error("Stream da câmera não foi encontrado no JogoView.");
+      return;
+    }
+
     const canvasCtx = canvas.getContext('2d');
     if (!canvasCtx) return;
 
@@ -179,21 +185,13 @@ function JogoView({ hasCameraPermission }: { hasCameraPermission: boolean | null
         numPoses: 2,
       });
       console.log('Pose Landmarker created');
-      startWebcam();
-    };
-
-    const startWebcam = () => {
-        if (webcamRunningRef.current || !video) return;
-        
-        // Use o stream global que foi obtido na página principal
-        const stream = (window as any).stream;
-        if (stream) {
-            video.srcObject = stream;
-            video.addEventListener('loadeddata', predictWebcam);
-            webcamRunningRef.current = true;
-        } else {
-            console.error("Stream da câmera não encontrado.");
-        }
+      
+      // Inicia a webcam
+      if (!webcamRunningRef.current) {
+        video.srcObject = stream;
+        video.addEventListener('loadeddata', predictWebcam);
+        webcamRunningRef.current = true;
+      }
     };
 
     const predictWebcam = async () => {
