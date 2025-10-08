@@ -72,7 +72,7 @@ function ConfiguracoesView({ onStart }: { onStart: () => void }) {
 
   return (
     <main className="flex min-h-[100svh] flex-col justify-center bg-[#49416D] p-4">
-      <div className="flex w-full flex-1 flex-col items-center justify-center">
+      <div className="flex w-full flex-col items-center justify-center">
         <div className="grid w-full max-w-6xl grid-cols-1 gap-2 sm:grid-cols-3 md:gap-2">
           {/* Posição */}
           <div className="flex flex-col items-center gap-2 sm:gap-4">
