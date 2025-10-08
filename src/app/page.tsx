@@ -345,7 +345,7 @@ function JogoView({
                 className="object-contain"
               />
             </div>
-             <div className="relative h-[70vh] w-1/3">
+             <div className="relative h-screen w-1/3">
               <Image
                 src="/img/icon_position.png"
                 alt="Posicionamento de exemplo"
@@ -360,7 +360,7 @@ function JogoView({
                 fill
                 className="object-contain"
               />
-              <p className="font-headline absolute text-[6rem] font-extrabold leading-none text-white xl:text-[8rem] 2xl:text-[10rem]">
+              <p className="font-headline absolute text-4xl font-extrabold leading-none text-white sm:text-5xl md:text-6xl">
                 {countdown}
               </p>
             </div>
