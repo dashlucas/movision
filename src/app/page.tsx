@@ -337,7 +337,7 @@ function JogoView({
       {showCountdown ? (
         <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
           <div className="flex w-full items-center justify-around gap-8 px-4">
-            <div className="relative h-52 w-1/3 lg:h-72 xl:h-80">
+            <div className="relative w-1/3 h-[40vh] max-h-80">
               <Image
                 src="/img/aviso_posicionamento.png"
                 alt="Aviso de posicionamento"
@@ -353,14 +353,14 @@ function JogoView({
                 className="object-contain"
               />
             </div>
-            <div className="relative flex h-52 w-1/3 items-center justify-center lg:h-72 xl:h-80">
+            <div className="relative flex w-1/3 items-center justify-center h-[40vh] max-h-80">
               <Image
                 src="/img/T_timer.png"
                 alt="Timer"
                 fill
                 className="object-contain"
               />
-              <p className="font-headline absolute text-[8rem] font-extrabold leading-none text-white lg:text-[10vw]">
+              <p className="font-headline absolute text-[8rem] font-extrabold leading-none text-white xl:text-[10rem]">
                 {countdown}
               </p>
             </div>
