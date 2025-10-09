@@ -216,6 +216,22 @@ function JogoView({
 
     video.srcObject = cameraStream;
     
+    const spawnCircle = () => {
+      const canvas = canvasRef.current;
+      if (!canvas || canvas.width === 0 || canvas.height === 0) return;
+  
+      // Raio responsivo (12% da menor dimensão do canvas)
+      const radius = Math.min(canvas.width, canvas.height) * 0.12;
+      
+      // Garante que o círculo não apareça muito perto das bordas
+      const padding = radius + 10; 
+      const x = Math.random() * (canvas.width - padding * 2) + padding;
+      const y = Math.random() * (canvas.height - padding * 2) + padding;
+      
+      circleRef.current = { x, y, radius, visible: true };
+      needsToSpawnCircle.current = false;
+    };
+    
     const startMediaPipe = async () => {
       const canvas = canvasRef.current;
       if (!canvas) return;
@@ -250,22 +266,6 @@ function JogoView({
       return distance < currentCircle.radius;
     };
     
-    const spawnCircle = () => {
-      const canvas = canvasRef.current;
-      if (!canvas || canvas.width === 0 || canvas.height === 0) return;
-  
-      // Raio responsivo (12% da menor dimensão do canvas)
-      const radius = Math.min(canvas.width, canvas.height) * 0.12;
-      
-      // Garante que o círculo não apareça muito perto das bordas
-      const padding = radius + 10; 
-      const x = Math.random() * (canvas.width - padding * 2) + padding;
-      const y = Math.random() * (canvas.height - padding * 2) + padding;
-      
-      circleRef.current = { x, y, radius, visible: true };
-      needsToSpawnCircle.current = false;
-    };
-
     const predictWebcam = () => {
       const video = videoRef.current;
       const canvas = canvasRef.current;
@@ -374,7 +374,7 @@ function JogoView({
 
 
   return (
-    <div className="relative h-[100svh] w-screen overflow-hidden bg-black">
+    <div className="relative h-[140svh] w-screen overflow-hidden bg-black">
        <video
         ref={videoRef}
         autoPlay
