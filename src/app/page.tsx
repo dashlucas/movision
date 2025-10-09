@@ -193,6 +193,7 @@ function JogoView({
   const circleRef = useRef<{ x: number; y: number; radius: number; visible: boolean } | null>(null);
   const [sphereImage, setSphereImage] = useState<HTMLImageElement | null>(null);
   const [isGameReady, setIsGameReady] = useState(false);
+  const needsToSpawnCircle = useRef(false);
 
   useEffect(() => {
     const img = new window.Image();
@@ -202,21 +203,6 @@ function JogoView({
       setIsGameReady(true);
     };
   }, []);
-
-  const spawnCircle = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    
-    // Raio responsivo (12% da menor dimensão do canvas)
-    const radius = Math.min(canvas.width, canvas.height) * 0.12;
-    
-    // Garante que o círculo não apareça muito perto das bordas
-    const padding = radius + 10; 
-    const x = Math.random() * (canvas.width - padding * 2) + padding;
-    const y = Math.random() * (canvas.height - padding * 2) + padding;
-    
-    circleRef.current = { x, y, radius, visible: true };
-  };
   
   useEffect(() => {
     if (!isGameReady) return;
@@ -265,6 +251,21 @@ function JogoView({
       const canvas = canvasRef.current;
       const poseLandmarker = poseLandmarkerRef.current;
 
+      const spawnCircle = () => {
+        if (!canvas || canvas.width === 0 || canvas.height === 0) return;
+    
+        // Raio responsivo (12% da menor dimensão do canvas)
+        const radius = Math.min(canvas.width, canvas.height) * 0.12;
+        
+        // Garante que o círculo não apareça muito perto das bordas
+        const padding = radius + 10; 
+        const x = Math.random() * (canvas.width - padding * 2) + padding;
+        const y = Math.random() * (canvas.height - padding * 2) + padding;
+        
+        circleRef.current = { x, y, radius, visible: true };
+        needsToSpawnCircle.current = false;
+      };
+
       if (!video || !canvas || !poseLandmarker || !canvas.getContext('2d')) {
          if (webcamRunningRef.current) {
             animationFrameId.current = window.requestAnimationFrame(() => predictWebcam(drawingUtils));
@@ -284,6 +285,10 @@ function JogoView({
       
       canvasCtx.save();
       canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+
+      if (needsToSpawnCircle.current) {
+        spawnCircle();
+      }
 
       const startTimeMs = performance.now();
       if (lastVideoTimeRef.current !== video.currentTime) {
@@ -310,7 +315,9 @@ function JogoView({
                   circleRef.current.visible = false;
                   setScore((prevScore) => prevScore + 1);
                   // Spawn a new circle after a delay
-                  setTimeout(spawnCircle, 1000); 
+                  setTimeout(() => {
+                    needsToSpawnCircle.current = true;
+                  }, 1000); 
                   break; 
                 }
               }
@@ -356,8 +363,8 @@ function JogoView({
         return () => clearTimeout(timer);
       } else {
         setShowCountdown(false);
-        // Quando o contador acabar, gere o primeiro círculo
-        spawnCircle();
+        // Quando o contador acabar, sinalize para gerar o primeiro círculo
+        needsToSpawnCircle.current = true;
       }
     }
   }, [countdown, showCountdown, isGameReady]);
