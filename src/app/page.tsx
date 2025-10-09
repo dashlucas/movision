@@ -222,28 +222,57 @@ function JogoView({
 
     video.srcObject = cameraStream;
     
-    const spawnCircle = () => {
-      const canvas = canvasRef.current;
-      if (!canvas || canvas.width === 0 || canvas.height === 0) return;
-  
-      const radius = Math.min(canvas.width, canvas.height) * 0.12;
-      const padding = radius + 10; 
-      const x = Math.random() * (canvas.width - padding * 2) + padding;
-      const y = Math.random() * (canvas.height - padding * 2) + padding;
-      
-      const newCircleId = Date.now();
-      circleRef.current = { id: newCircleId, x, y, radius, visible: true };
-      needsToSpawnCircle.current = false;
-
-      if (sphereTimeoutRef.current) {
-        clearTimeout(sphereTimeoutRef.current);
-      }
-
-      sphereTimeoutRef.current = setTimeout(() => {
-        if (circleRef.current && circleRef.current.id === newCircleId) {
-          needsToSpawnCircle.current = true;
+    const spawnCircle = (landmarks: any[]) => {
+        const canvas = canvasRef.current;
+        if (!canvas || canvas.width === 0 || canvas.height === 0) return;
+    
+        const radius = Math.min(canvas.width, canvas.height) * 0.12;
+        const padding = radius + 10;
+        const collisionRadius = radius * 2.5; // Safety distance from player
+        let x: number, y: number;
+        let isColliding = true;
+        let attempts = 0;
+    
+        while (isColliding && attempts < 10) {
+            isColliding = false;
+            x = Math.random() * (canvas.width - padding * 2) + padding;
+            y = Math.random() * (canvas.height - padding * 2) + padding;
+    
+            if (landmarks) {
+                for (const landmark of landmarks) {
+                    for (const point of landmark) {
+                        const dx = point.x * canvas.width - x;
+                        const dy = point.y * canvas.height - y;
+                        if (Math.sqrt(dx * dx + dy * dy) < collisionRadius) {
+                            isColliding = true;
+                            break;
+                        }
+                    }
+                    if (isColliding) break;
+                }
+            }
+            attempts++;
         }
-      }, 4000);
+        
+        // Fallback to random position if it can't find a free spot
+        if (isColliding) {
+            x = Math.random() * (canvas.width - padding * 2) + padding;
+            y = Math.random() * (canvas.height - padding * 2) + padding;
+        }
+    
+        const newCircleId = Date.now();
+        circleRef.current = { id: newCircleId, x: x!, y: y!, radius, visible: true };
+        needsToSpawnCircle.current = false;
+    
+        if (sphereTimeoutRef.current) {
+            clearTimeout(sphereTimeoutRef.current);
+        }
+    
+        sphereTimeoutRef.current = setTimeout(() => {
+            if (circleRef.current && circleRef.current.id === newCircleId) {
+                needsToSpawnCircle.current = true;
+            }
+        }, 4000);
     };
     
     const startMediaPipe = async () => {
@@ -304,15 +333,15 @@ function JogoView({
       canvasCtx.save();
       canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
 
-      if (needsToSpawnCircle.current && canvas.width > 0 && canvas.height > 0) {
-        spawnCircle();
-      }
-
       const startTimeMs = performance.now();
       if (lastVideoTimeRef.current !== video.currentTime) {
         lastVideoTimeRef.current = video.currentTime;
 
         poseLandmarker.detectForVideo(video, startTimeMs, (result) => {
+          if (needsToSpawnCircle.current && canvas.width > 0 && canvas.height > 0) {
+            spawnCircle(result.landmarks);
+          }
+
           for (const landmark of result.landmarks) {
             const drawingUtils = new DrawingUtils(canvasCtx);
             drawingUtils.drawLandmarks(landmark, {
