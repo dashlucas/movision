@@ -366,7 +366,7 @@ function JogoView({
 
 
   return (
-    <div className="relative h-screen w-screen overflow-hidden bg-black">
+    <div className="relative h-[100svh] w-screen overflow-hidden bg-black">
        <video
         ref={videoRef}
         autoPlay
@@ -407,7 +407,7 @@ function JogoView({
                 fill
                 className="object-contain"
               />
-              <p className="font-headline absolute font-extrabold leading-none text-white text-7xl sm:text-8xl md:text-9xl">
+              <p className="font-headline absolute font-extrabold leading-none text-white text-6xl sm:text-7xl md:text-8xl">
                 {countdown}
               </p>
             </div>
@@ -440,7 +440,7 @@ function JogoView({
 
 function HomeView({ onStart, hasCameraPermission }: { onStart: () => void, hasCameraPermission: boolean | null }) {
   return (
-    <main className="flex h-[100svh] w-full flex-row">
+    <main className="flex h-[100svh] w-full flex-row pb-2">
       {/* Left Panel */}
       <div className="flex w-1/2 flex-col items-center justify-center bg-card p-4 md:p-8">
         <Logo className="h-64 w-64 md:h-64 md:w-64 lg:h-96 lg:w-96" />
