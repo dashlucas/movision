@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/logo';
 import Link from 'next/link';
 import { OrientationLock } from '@/components/orientation-lock';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, memo } from 'react';
 import { cn } from '@/lib/utils';
 import { Check } from 'lucide-react';
 import {
@@ -18,6 +18,31 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 type View = 'home' | 'configuracoes' | 'jogo';
 type Option = 'posicao' | 'membros' | 'distancia';
+
+// Memoized content for the buttons with icons to prevent re-rendering on state change
+const SuperioresIconContent = memo(function SuperioresIconContent() {
+  return (
+    <>
+      <div className="flex flex-col items-center text-center">
+        <span>Superiores</span>
+        <span>(Braços)</span>
+      </div>
+      <Image src="/img/hand.svg" alt="Mãos" width={40} height={40} className="object-contain" />
+    </>
+  );
+});
+
+const InferioresIconContent = memo(function InferioresIconContent() {
+  return (
+    <>
+      <div className="flex flex-col items-center text-center">
+        <span>Inferiores</span>
+        <span>(Pernas)</span>
+      </div>
+      <Image src="/img/feet.svg" alt="Pés" width={40} height={40} className="object-contain" />
+    </>
+  );
+});
 
 function ConfiguracoesView({ onStart }: { onStart: () => void }) {
   const [selections, setSelections] = useState({
@@ -96,22 +121,14 @@ function ConfiguracoesView({ onStart }: { onStart: () => void }) {
                 value="superiores"
                 className="flex-wrap"
               >
-                <div className="flex flex-col items-center text-center">
-                  <span>Superiores</span>
-                  <span>(Braços)</span>
-                </div>
-                <Image src="/img/hand.svg" alt="Mãos" width={40} height={40} className="object-contain" />
+                <SuperioresIconContent />
               </SelectionButton>
               <SelectionButton
                 option="membros"
                 value="inferiores"
                 className="flex-wrap"
               >
-                <div className="flex flex-col items-center text-center">
-                  <span>Inferiores</span>
-                  <span>(Pernas)</span>
-                </div>
-                <Image src="/img/feet.svg" alt="Pés" width={40} height={40} className="object-contain" />
+                <InferioresIconContent />
               </SelectionButton>
             </div>
           </div>
