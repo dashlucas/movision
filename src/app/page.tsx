@@ -3,7 +3,6 @@
 import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/logo';
 import Link from 'next/link';
-import { OrientationLock } from '@/components/orientation-lock';
 import { useState, useEffect, useRef, memo } from 'react';
 import { cn } from '@/lib/utils';
 import { Check } from 'lucide-react';
@@ -552,7 +551,6 @@ export default function Page() {
 
   return (
     <>
-      <OrientationLock />
       {renderView()}
     </>
   );
