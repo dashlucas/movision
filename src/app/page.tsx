@@ -195,7 +195,6 @@ function JogoView({
   const animationFrameId = useRef<number | null>(null);
   const circleRef = useRef<{ id: number; x: number; y: number; radius: number; visible: boolean } | null>(null);
   const [sphereImage, setSphereImage] = useState<HTMLImageElement | null>(null);
-  const [isGameReady, setIsGameReady] = useState(false);
   const needsToSpawnCircle = useRef(false);
   const sphereTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -204,12 +203,11 @@ function JogoView({
     img.src = '/img/sphere.png';
     img.onload = () => {
       setSphereImage(img);
-      setIsGameReady(true);
     };
   }, []);
   
   useEffect(() => {
-    if (!isGameReady) return;
+    if (!sphereImage) return;
 
     const video = videoRef.current;
     if (!video || !cameraStream) return;
@@ -229,14 +227,11 @@ function JogoView({
       circleRef.current = { id: newCircleId, x, y, radius, visible: true };
       needsToSpawnCircle.current = false;
 
-      // Clear any existing timeout
       if (sphereTimeoutRef.current) {
         clearTimeout(sphereTimeoutRef.current);
       }
 
-      // Set a new timeout
       sphereTimeoutRef.current = setTimeout(() => {
-        // Check if the circle is still the same one that started the timer
         if (circleRef.current && circleRef.current.id === newCircleId) {
           needsToSpawnCircle.current = true;
         }
@@ -370,11 +365,11 @@ function JogoView({
       }
       poseLandmarkerRef.current?.close();
     };
-  }, [cameraStream, setScore, sphereImage, isGameReady]);
+  }, [cameraStream, setScore, sphereImage]);
 
 
   useEffect(() => {
-    if (isGameReady && showCountdown) {
+    if (sphereImage && showCountdown) {
       if (countdown > 0) {
         const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
         return () => clearTimeout(timer);
@@ -383,7 +378,7 @@ function JogoView({
         needsToSpawnCircle.current = true;
       }
     }
-  }, [countdown, showCountdown, isGameReady]);
+  }, [countdown, showCountdown, sphereImage]);
 
 
   return (
