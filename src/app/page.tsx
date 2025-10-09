@@ -179,11 +179,13 @@ function ConfiguracoesView({ onStart }: { onStart: () => void }) {
 function JogoView({ 
   cameraStream,
   score,
-  setScore 
+  setScore,
+  isIos,
 }: { 
   cameraStream: MediaStream | null;
   score: number;
   setScore: React.Dispatch<React.SetStateAction<number>>;
+  isIos: boolean;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -448,7 +450,10 @@ function JogoView({
 
 
   return (
-    <div className="relative h-[120svh] w-screen overflow-hidden bg-black">
+    <div className={cn(
+        "relative w-screen overflow-hidden bg-black",
+        isIos ? "h-[130svh]" : "h-[100svh]"
+      )}>
        <video
         ref={videoRef}
         autoPlay
@@ -577,6 +582,12 @@ export default function Page() {
   const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
   const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
   const [score, setScore] = useState(0);
+  const [isIos, setIsIos] = useState(false);
+
+  useEffect(() => {
+    // This check runs only on the client, where navigator is available.
+    setIsIos(/iPad|iPhone|iPod/.test(navigator.userAgent));
+  }, []);
 
   const handleStartGame = () => {
     setScore(0); // Reseta a pontuação
@@ -618,7 +629,7 @@ export default function Page() {
       case 'configuracoes':
         return <ConfiguracoesView onStart={handleStartGame} />;
       case 'jogo':
-        return <JogoView cameraStream={cameraStream} score={score} setScore={setScore} />;
+        return <JogoView cameraStream={cameraStream} score={score} setScore={setScore} isIos={isIos} />;
       default:
         return <HomeView onStart={() => setCurrentView('configuracoes')} hasCameraPermission={hasCameraPermission}/>;
     }
