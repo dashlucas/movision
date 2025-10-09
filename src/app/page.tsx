@@ -196,7 +196,7 @@ function JogoView({
   const circleRef = useRef<{ id: number; x: number; y: number; radius: number; visible: boolean } | null>(null);
   const [sphereImage, setSphereImage] = useState<HTMLImageElement | null>(null);
   const [explosionImage, setExplosionImage] = useState<HTMLImageElement | null>(null);
-  const [explosion, setExplosion] = useState<{ x: number; y: number; radius: number } | null>(null);
+  const explosionRef = useRef<{ x: number; y: number; radius: number, timestamp: number } | null>(null);
   const needsToSpawnCircle = useRef(false);
   const sphereTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -328,12 +328,12 @@ function JogoView({
             if (circleRef.current && circleRef.current.visible) {
               for (const point of landmark) {
                 if (point && checkCollision(point, circleRef.current)) {
-                  setExplosion({
+                  explosionRef.current = {
                     x: circleRef.current.x,
                     y: circleRef.current.y,
                     radius: circleRef.current.radius,
-                  });
-                  setTimeout(() => setExplosion(null), 300);
+                    timestamp: Date.now(),
+                  };
 
                   circleRef.current.visible = false;
                   setScore((prevScore) => prevScore + 1);
@@ -360,15 +360,20 @@ function JogoView({
         );
       }
       
-      if (explosionImage && explosion) {
-        const radius = explosion.radius;
-        canvasCtx.drawImage(
-          explosionImage,
-          explosion.x - radius,
-          explosion.y - radius,
-          radius * 2,
-          radius * 2
-        );
+      if (explosionImage && explosionRef.current) {
+        const now = Date.now();
+        if (now - explosionRef.current.timestamp < 300) {
+            const radius = explosionRef.current.radius;
+            canvasCtx.drawImage(
+              explosionImage,
+              explosionRef.current.x - radius,
+              explosionRef.current.y - radius,
+              radius * 2,
+              radius * 2
+            );
+        } else {
+            explosionRef.current = null;
+        }
       }
 
       canvasCtx.restore();
@@ -391,7 +396,7 @@ function JogoView({
       }
       poseLandmarkerRef.current?.close();
     };
-  }, [cameraStream, setScore, sphereImage, explosionImage, explosion]);
+  }, [cameraStream, setScore, sphereImage, explosionImage]);
 
 
   useEffect(() => {
