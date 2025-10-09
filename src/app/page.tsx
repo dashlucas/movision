@@ -195,19 +195,27 @@ function JogoView({
   const animationFrameId = useRef<number | null>(null);
   const circleRef = useRef<{ id: number; x: number; y: number; radius: number; visible: boolean } | null>(null);
   const [sphereImage, setSphereImage] = useState<HTMLImageElement | null>(null);
+  const [explosionImage, setExplosionImage] = useState<HTMLImageElement | null>(null);
+  const [explosion, setExplosion] = useState<{ x: number; y: number; radius: number } | null>(null);
   const needsToSpawnCircle = useRef(false);
   const sphereTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    const img = new window.Image();
-    img.src = '/img/sphere.png';
-    img.onload = () => {
-      setSphereImage(img);
+    const sphereImg = new window.Image();
+    sphereImg.src = '/img/sphere.png';
+    sphereImg.onload = () => {
+      setSphereImage(sphereImg);
+    };
+
+    const explodeImg = new window.Image();
+    explodeImg.src = '/img/explode.png';
+    explodeImg.onload = () => {
+        setExplosionImage(explodeImg);
     };
   }, []);
   
   useEffect(() => {
-    if (!sphereImage) return;
+    if (!sphereImage || !explosionImage) return;
 
     const video = videoRef.current;
     if (!video || !cameraStream) return;
@@ -320,6 +328,13 @@ function JogoView({
             if (circleRef.current && circleRef.current.visible) {
               for (const point of landmark) {
                 if (point && checkCollision(point, circleRef.current)) {
+                  setExplosion({
+                    x: circleRef.current.x,
+                    y: circleRef.current.y,
+                    radius: circleRef.current.radius,
+                  });
+                  setTimeout(() => setExplosion(null), 300);
+
                   circleRef.current.visible = false;
                   setScore((prevScore) => prevScore + 1);
                   needsToSpawnCircle.current = true;
@@ -340,6 +355,17 @@ function JogoView({
           sphereImage,
           circleRef.current.x - radius,
           circleRef.current.y - radius,
+          radius * 2,
+          radius * 2
+        );
+      }
+      
+      if (explosionImage && explosion) {
+        const radius = explosion.radius;
+        canvasCtx.drawImage(
+          explosionImage,
+          explosion.x - radius,
+          explosion.y - radius,
           radius * 2,
           radius * 2
         );
@@ -365,11 +391,11 @@ function JogoView({
       }
       poseLandmarkerRef.current?.close();
     };
-  }, [cameraStream, setScore, sphereImage]);
+  }, [cameraStream, setScore, sphereImage, explosionImage, explosion]);
 
 
   useEffect(() => {
-    if (sphereImage && showCountdown) {
+    if ((sphereImage && explosionImage) && showCountdown) {
       if (countdown > 0) {
         const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
         return () => clearTimeout(timer);
@@ -378,7 +404,7 @@ function JogoView({
         needsToSpawnCircle.current = true;
       }
     }
-  }, [countdown, showCountdown, sphereImage]);
+  }, [countdown, showCountdown, sphereImage, explosionImage]);
 
 
   return (
