@@ -44,6 +44,47 @@ const InferioresIconContent = memo(function InferioresIconContent() {
   );
 });
 
+// Moved outside ConfiguracoesView to prevent re-definition on re-render
+const SelectionButton = ({
+  option,
+  value,
+  children,
+  className,
+  selections,
+  handleSelection,
+}: {
+  option: Option;
+  value: string;
+  children: React.ReactNode;
+  className?: string;
+  selections: { posicao: string; membros: string; distancia: string };
+  handleSelection: (option: Option, value: string) => void;
+}) => {
+  const isSelected = selections[option] === value;
+  return (
+    <Button
+      variant="outline"
+      className={cn(
+        'relative w-full flex-1 justify-center rounded-xl border-4 border-transparent bg-card text-lg font-bold text-[#49416D] shadow-lg hover:bg-card/80 sm:text-xl',
+        'whitespace-normal break-words py-2',
+        'h-full',
+        isSelected && 'border-primary ring-4 ring-primary/50',
+        'flex items-center gap-4 px-4',
+        className
+      )}
+      onClick={() => handleSelection(option, value)}
+    >
+      {children}
+      {isSelected && (
+        <div className="absolute -right-3 -top-3 flex h-8 w-8 items-center justify-center rounded-full bg-primary">
+          <Check className="h-6 w-6 text-primary-foreground" />
+        </div>
+      )}
+    </Button>
+  );
+};
+
+
 function ConfiguracoesView({ onStart }: { onStart: () => void }) {
   const [selections, setSelections] = useState({
     posicao: '',
@@ -60,41 +101,6 @@ function ConfiguracoesView({ onStart }: { onStart: () => void }) {
     selections.membros !== '' &&
     selections.distancia !== '';
 
-  const SelectionButton = ({
-    option,
-    value,
-    children,
-    className,
-  }: {
-    option: Option;
-    value: string;
-    children: React.ReactNode;
-    className?: string;
-  }) => {
-    const isSelected = selections[option] === value;
-    return (
-      <Button
-        variant="outline"
-        className={cn(
-          'relative w-full flex-1 justify-center rounded-xl border-4 border-transparent bg-card text-lg font-bold text-[#49416D] shadow-lg hover:bg-card/80 sm:text-xl',
-          'whitespace-normal break-words py-2',
-          'h-full',
-          isSelected && 'border-primary ring-4 ring-primary/50',
-          'flex items-center gap-4 px-4',
-          className
-        )}
-        onClick={() => handleSelection(option, value)}
-      >
-        {children}
-        {isSelected && (
-          <div className="absolute -right-3 -top-3 flex h-8 w-8 items-center justify-center rounded-full bg-primary">
-            <Check className="h-6 w-6 text-primary-foreground" />
-          </div>
-        )}
-      </Button>
-    );
-  };
-
   return (
     <main className="flex min-h-[100svh] flex-col justify-center bg-[#49416D] p-4">
       <div className="flex w-full flex-col items-center justify-center">
@@ -103,10 +109,10 @@ function ConfiguracoesView({ onStart }: { onStart: () => void }) {
           <div className="flex flex-col items-center gap-2 sm:gap-4">
             <h2 className="mb-1 text-xl font-bold text-white sm:text-2xl md:text-3xl">Posição</h2>
             <div className="flex w-full flex-1 flex-col gap-3 sm:gap-4">
-              <SelectionButton option="posicao" value="em_pe">
+              <SelectionButton option="posicao" value="em_pe" selections={selections} handleSelection={handleSelection}>
                 Em pé
               </SelectionButton>
-              <SelectionButton option="posicao" value="sentado">
+              <SelectionButton option="posicao" value="sentado" selections={selections} handleSelection={handleSelection}>
                 Sentado
               </SelectionButton>
             </div>
@@ -120,6 +126,8 @@ function ConfiguracoesView({ onStart }: { onStart: () => void }) {
                 option="membros"
                 value="superiores"
                 className="flex-wrap"
+                selections={selections} 
+                handleSelection={handleSelection}
               >
                 <SuperioresIconContent />
               </SelectionButton>
@@ -127,6 +135,8 @@ function ConfiguracoesView({ onStart }: { onStart: () => void }) {
                 option="membros"
                 value="inferiores"
                 className="flex-wrap"
+                selections={selections}
+                handleSelection={handleSelection}
               >
                 <InferioresIconContent />
               </SelectionButton>
@@ -137,20 +147,20 @@ function ConfiguracoesView({ onStart }: { onStart: () => void }) {
           <div className="flex flex-col items-center gap-2 sm:gap-4">
             <h2 className="mb-1 text-xl font-bold text-white sm:text-2xl md:text-3xl">Distância</h2>
             <div className="flex w-full flex-1 flex-col gap-3 sm:gap-4">
-              <SelectionButton option="distancia" value="nivel_1">
+              <SelectionButton option="distancia" value="nivel_1" selections={selections} handleSelection={handleSelection}>
                 Nível 1
               </SelectionButton>
-              <SelectionButton option="distancia" value="nivel_2">
+              <SelectionButton option="distancia" value="nivel_2" selections={selections} handleSelection={handleSelection}>
                 Nível 2
               </SelectionButton>
-              <SelectionButton option="distancia" value="nivel_3">
+              <SelectionButton option="distancia" value="nivel_3" selections={selections} handleSelection={handleSelection}>
                 Nível 3
               </SelectionButton>
             </div>
           </div>
         </div>
       </div>
-      <div className="mt-4 flex justify-center pb-2 pt-2">
+      <div className="mt-8 flex justify-center pb-2 pt-2">
         <Button
           size="lg"
           className="h-16 w-full max-w-md rounded-2xl bg-primary text-xl font-extrabold text-primary-foreground shadow-lg transition-all hover:bg-primary/90 disabled:bg-gray-400 disabled:opacity-50 sm:h-20 sm:text-2xl"
@@ -397,7 +407,7 @@ function JogoView({
                 fill
                 className="object-contain"
               />
-              <p className="font-headline absolute font-extrabold leading-none text-white text-5xl sm:text-6xl md:text-7xl lg:text-8xl">
+              <p className="font-headline absolute font-extrabold leading-none text-white text-7xl sm:text-8xl md:text-9xl">
                 {countdown}
               </p>
             </div>
