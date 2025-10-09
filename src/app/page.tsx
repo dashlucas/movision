@@ -374,7 +374,7 @@ function JogoView({
 
 
   return (
-    <div className="relative h-[140svh] w-screen overflow-hidden bg-black">
+    <div className="relative h-[130svh] w-screen overflow-hidden bg-black">
        <video
         ref={videoRef}
         autoPlay
