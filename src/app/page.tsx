@@ -337,10 +337,16 @@ function JogoView({
 
                   circleRef.current.visible = false;
                   setScore((prevScore) => prevScore + 1);
-                  needsToSpawnCircle.current = true;
+
                    if (sphereTimeoutRef.current) {
                     clearTimeout(sphereTimeoutRef.current);
                   }
+
+                  // Wait for explosion to finish before spawning next circle
+                  setTimeout(() => {
+                    needsToSpawnCircle.current = true;
+                  }, 300);
+
                   break; 
                 }
               }
