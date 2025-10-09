@@ -292,7 +292,7 @@ function JogoView({
             delegate: 'GPU',
           },
           runningMode: 'VIDEO',
-          numPoses: 1,
+          numPoses: 3,
         });
         predictWebcam();
       } catch (e) {
