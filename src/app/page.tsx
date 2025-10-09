@@ -19,7 +19,6 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 type View = 'home' | 'configuracoes' | 'jogo';
 type Option = 'posicao' | 'membros' | 'distancia';
 
-// Memoized content for the buttons with icons to prevent re-rendering on state change
 const SuperioresIconContent = memo(function SuperioresIconContent() {
   return (
     <>
@@ -44,7 +43,6 @@ const InferioresIconContent = memo(function InferioresIconContent() {
   );
 });
 
-// Moved outside ConfiguracoesView to prevent re-definition on re-render
 const SelectionButton = ({
   option,
   value,
@@ -102,7 +100,7 @@ function ConfiguracoesView({ onStart }: { onStart: () => void }) {
     selections.distancia !== '';
 
   return (
-    <main className="flex min-h-[100svh] flex-col justify-center bg-[#49416D] p-4">
+    <main className="flex min-h-[100svh] flex-col justify-center bg-[#49416D] p-4 pb-2">
       <div className="flex w-full flex-col items-center justify-center">
         <div className="grid w-full max-w-6xl grid-cols-1 gap-2 sm:grid-cols-3 md:gap-2">
           {/* Posição */}
@@ -160,7 +158,7 @@ function ConfiguracoesView({ onStart }: { onStart: () => void }) {
           </div>
         </div>
       </div>
-      <div className="mt-8 flex justify-center pb-2 pt-2">
+      <div className="mt-8 flex justify-center pt-2">
         <Button
           size="lg"
           className="h-16 w-full max-w-md rounded-2xl bg-primary text-xl font-extrabold text-primary-foreground shadow-lg transition-all hover:bg-primary/90 disabled:bg-gray-400 disabled:opacity-50 sm:h-20 sm:text-2xl"
