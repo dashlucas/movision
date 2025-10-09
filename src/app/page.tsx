@@ -167,12 +167,14 @@ function JogoView({
   const animationFrameId = useRef<number | null>(null);
   const circleRef = useRef<{ x: number; y: number; radius: number; visible: boolean } | null>(null);
   const [sphereImage, setSphereImage] = useState<HTMLImageElement | null>(null);
+  const [isGameReady, setIsGameReady] = useState(false);
 
   useEffect(() => {
     const img = new window.Image();
     img.src = '/img/sphere.png';
     img.onload = () => {
       setSphereImage(img);
+      setIsGameReady(true);
     };
   }, []);
 
@@ -192,6 +194,8 @@ function JogoView({
   };
   
   useEffect(() => {
+    if (!isGameReady) return;
+
     const video = videoRef.current;
     if (!video || !cameraStream) return;
 
@@ -317,11 +321,11 @@ function JogoView({
       }
       poseLandmarkerRef.current?.close();
     };
-  }, [cameraStream, setScore, sphereImage]);
+  }, [cameraStream, setScore, sphereImage, isGameReady]);
 
 
   useEffect(() => {
-    if (showCountdown) {
+    if (isGameReady && showCountdown) {
       if (countdown > 0) {
         const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
         return () => clearTimeout(timer);
@@ -331,7 +335,7 @@ function JogoView({
         spawnCircle();
       }
     }
-  }, [countdown, showCountdown]);
+  }, [countdown, showCountdown, isGameReady]);
 
 
   return (
