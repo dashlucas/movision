@@ -252,15 +252,6 @@ function JogoView({
         const padding = radius + 10;
         let x: number, y: number;
 
-        // --- TEMPORARY DEBUG SPAWN ---
-        const spawnBandWidth = canvas.width * 0.25;
-        const spawnBandXStart = (canvas.width / 2) - (spawnBandWidth / 2);
-        x = Math.random() * spawnBandWidth + spawnBandXStart;
-        y = Math.random() * (canvas.height - padding * 2) + padding;
-        // --- END TEMPORARY DEBUG SPAWN ---
-
-        /*
-        // Temporarily disabled for debugging
         const collisionRadius = radius * 2.5; // Safety distance from player
         let isColliding = true;
         let attempts = 0;
@@ -287,10 +278,11 @@ function JogoView({
         }
         
         if (isColliding) {
+            // Fallback to random position if a free spot is not found
             x = Math.random() * (canvas.width - padding * 2) + padding;
             y = Math.random() * (canvas.height - padding * 2) + padding;
         }
-        */
+
 
         const sphereType = Math.floor(Math.random() * sphereImages.length);
         const sphereImage = sphereImages[sphereType];
