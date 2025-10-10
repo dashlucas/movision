@@ -540,12 +540,6 @@ function JogoView({
     }
   }, [countdown, showCountdown, sphereImages, explosionImages]);
 
-  const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
-  };
-
   const radius = 50;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (gameTime / initialGameTime) * circumference;
