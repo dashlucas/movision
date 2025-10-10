@@ -200,7 +200,8 @@ function JogoView({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [countdown, setCountdown] = useState(10);
   const [showCountdown, setShowCountdown] = useState(true);
-  const [gameTime, setGameTime] = useState(10);
+  const [initialGameTime] = useState(10);
+  const [gameTime, setGameTime] = useState(initialGameTime);
   
   const poseLandmarkerRef = useRef<PoseLandmarker | null>(null);
   const lastVideoTimeRef = useRef(-1);
@@ -545,6 +546,10 @@ function JogoView({
     return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
   };
 
+  const radius = 50;
+  const circumference = 2 * Math.PI * radius;
+  const strokeDashoffset = circumference - (gameTime / initialGameTime) * circumference;
+
   return (
     <div className={cn(
         "relative w-screen overflow-hidden bg-black",
@@ -598,15 +603,41 @@ function JogoView({
         </div>
       ) : (
         <div className="pointer-events-none absolute inset-0 z-10 p-8">
+           <div className="absolute left-8 top-8 h-32 w-32">
+              <Image src="/img/game_timer.png" alt="Timer" fill className="object-contain" />
+              <svg className="absolute inset-0 h-full w-full" viewBox="0 0 120 120">
+                <circle
+                  cx="60"
+                  cy="60"
+                  r={radius}
+                  fill="none"
+                  stroke="#E6E6E6"
+                  strokeWidth="10"
+                />
+                <circle
+                  cx="60"
+                  cy="60"
+                  r={radius}
+                  fill="none"
+                  stroke="#49416D"
+                  strokeWidth="10"
+                  strokeDasharray={circumference}
+                  strokeDashoffset={strokeDashoffset}
+                  strokeLinecap="round"
+                  transform="rotate(-90 60 60)"
+                  style={{ transition: 'stroke-dashoffset 0.5s linear' }}
+                />
+              </svg>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <p className="font-headline text-3xl font-bold text-[#49416D]">
+                  {gameTime}
+                </p>
+              </div>
+            </div>
            <div className="absolute right-8 top-8 flex flex-col gap-4">
             <div className="rounded-2xl bg-[#49416D] px-6 py-3 text-center shadow-lg">
               <p className="font-headline text-2xl font-bold text-white md:text-3xl">
                 Pontos: {score}
-              </p>
-            </div>
-            <div className="rounded-2xl bg-[#49416D] px-6 py-3 text-center shadow-lg">
-              <p className="font-headline text-2xl font-bold text-white md:text-3xl">
-                Tempo: {formatTime(gameTime)}
               </p>
             </div>
           </div>
