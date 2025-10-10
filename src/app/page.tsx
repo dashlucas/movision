@@ -244,7 +244,7 @@ function JogoView({
 
     video.srcObject = cameraStream;
     
-    const spawnCircle = (landmarks: any[]) => {
+    const spawnCircle = (landmarks?: any[]) => {
         const canvas = canvasRef.current;
         if (!canvas || canvas.width === 0 || canvas.height === 0) return;
     
@@ -252,36 +252,45 @@ function JogoView({
         const padding = radius + 10;
         let x: number, y: number;
 
+        // --- TEMPORARY DEBUG SPAWN ---
+        const spawnBandWidth = canvas.width * 0.1;
+        const spawnBandXStart = (canvas.width / 2) - (spawnBandWidth / 2);
+        x = Math.random() * spawnBandWidth + spawnBandXStart;
+        y = Math.random() * (canvas.height - padding * 2) + padding;
+        // --- END TEMPORARY DEBUG SPAWN ---
+
+        /*
         // Temporarily disabled for debugging
-        // const collisionRadius = radius * 2.5; // Safety distance from player
-        // let isColliding = true;
-        // let attempts = 0;
+        const collisionRadius = radius * 2.5; // Safety distance from player
+        let isColliding = true;
+        let attempts = 0;
     
-        // while (isColliding && attempts < 10) {
-        //     isColliding = false;
-        //     x = Math.random() * (canvas.width - padding * 2) + padding;
-        //     y = Math.random() * (canvas.height - padding * 2) + padding;
-    
-        //     if (landmarks) {
-        //         for (const landmark of landmarks) {
-        //             for (const point of landmark) {
-        //                 const dx = point.x * canvas.width - x;
-        //                 const dy = point.y * canvas.height - y;
-        //                 if (Math.sqrt(dx * dx + dy * dy) < collisionRadius) {
-        //                     isColliding = true;
-        //                     break;
-        //                 }
-        //             }
-        //             if (isColliding) break;
-        //         }
-        //     }
-        //     attempts++;
-        // }
-        
-        // if (isColliding) {
+        while (isColliding && attempts < 10) {
+            isColliding = false;
             x = Math.random() * (canvas.width - padding * 2) + padding;
             y = Math.random() * (canvas.height - padding * 2) + padding;
-        // }
+    
+            if (landmarks) {
+                for (const landmark of landmarks) {
+                    for (const point of landmark) {
+                        const dx = point.x * canvas.width - x;
+                        const dy = point.y * canvas.height - y;
+                        if (Math.sqrt(dx * dx + dy * dy) < collisionRadius) {
+                            isColliding = true;
+                            break;
+                        }
+                    }
+                    if (isColliding) break;
+                }
+            }
+            attempts++;
+        }
+        
+        if (isColliding) {
+            x = Math.random() * (canvas.width - padding * 2) + padding;
+            y = Math.random() * (canvas.height - padding * 2) + padding;
+        }
+        */
 
         const sphereType = Math.floor(Math.random() * sphereImages.length);
         const sphereImage = sphereImages[sphereType];
