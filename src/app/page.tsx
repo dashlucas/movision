@@ -265,16 +265,16 @@ function JogoView({
         let spawnRangePercentage;
         switch (gameConfig.distancia) {
           case 'nivel_1':
-            spawnRangePercentage = 0.2;
+            spawnRangePercentage = 0.25;
             break;
           case 'nivel_2':
-            spawnRangePercentage = 0.4;
+            spawnRangePercentage = 0.50;
             break;
           case 'nivel_3':
-            spawnRangePercentage = 0.6;
+            spawnRangePercentage = 0.75;
             break;
           default:
-            spawnRangePercentage = 0.2;
+            spawnRangePercentage = 0.25;
         }
         
         let spawnRangeHeight, spawnRangeYStart;
@@ -420,7 +420,7 @@ function JogoView({
             
             if (circleRef.current && circleRef.current.visible) {
               const handsLandmarks = [15, 16, 17, 18, 19, 20, 21, 22];
-              const feetLandmarks = [27, 28, 29, 30, 31, 32];
+              const feetLandmarks = [27, 28, 31, 32];
               
               let landmarksToCheck: number[] = [];
 
