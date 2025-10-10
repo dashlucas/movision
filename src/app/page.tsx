@@ -305,7 +305,6 @@ function JogoView({
         }
         
         if (isColliding) {
-            // Fallback to a random position within the range if a free spot is not found
             const spawnRangeWidth = canvas.width * spawnRangePercentage;
             const spawnRangeStart = (canvas.width - spawnRangeWidth) / 2;
             x = Math.random() * spawnRangeWidth + spawnRangeStart;
@@ -414,18 +413,15 @@ function JogoView({
             );
             
             if (circleRef.current && circleRef.current.visible) {
-              const upperBodyLandmarks = [15, 16, 17, 18, 19, 20];
-              const lowerBodyLandmarks = [27, 28, 29, 30, 31, 32];
+              const handsLandmarks = [15, 16, 17, 18, 19, 20, 21, 22];
+              const feetAndKneesLandmarks = [25, 26, 27, 28, 29, 30, 31, 32];
               
               let landmarksToCheck: number[] = [];
 
               if (gameConfig.membros === 'superiores') {
-                landmarksToCheck = upperBodyLandmarks;
+                landmarksToCheck = handsLandmarks;
               } else if (gameConfig.membros === 'inferiores') {
-                landmarksToCheck = lowerBodyLandmarks;
-              } else {
-                 // Fallback to all landmarks if not specified
-                landmarksToCheck = Array.from(Array(landmark.length).keys());
+                landmarksToCheck = feetAndKneesLandmarks;
               }
 
               for (const index of landmarksToCheck) {
