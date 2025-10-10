@@ -557,7 +557,7 @@ function JogoView({
             </div>
              <div className="relative h-screen w-1/3">
               <Image
-                src="/img/icon_position.png"
+                src={gameConfig.posicao === 'sentado' ? '/img/position_sentado.png' : '/img/icon_position.png'}
                 alt="Posicionamento de exemplo"
                 fill
                 className="object-contain"
