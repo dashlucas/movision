@@ -601,13 +601,9 @@ function JogoView({
                 className="absolute inset-0 h-full w-full rounded-full"
                 style={{
                   background: `conic-gradient(#49416D ${angle}deg, #4ade80 ${angle}deg)`,
-                  maskImage: 'url(/img/game_timer.png)',
-                  maskSize: 'contain',
-                  maskRepeat: 'no-repeat',
-                  maskPosition: 'center',
                 }}
               />
-              <Image src="/img/game_timer.png" alt="Timer" fill className="object-contain opacity-50" />
+              <Image src="/img/game_timer.png" alt="Timer" fill className="object-contain" />
             </div>
            <div className="absolute right-8 top-8 flex flex-col gap-4">
             <div className="rounded-2xl bg-[#49416D] px-6 py-3 text-center shadow-lg">
