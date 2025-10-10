@@ -268,13 +268,33 @@ function JogoView({
     const spawnCircle = (landmarks?: any[]) => {
         const canvas = canvasRef.current;
         if (!canvas || canvas.width === 0 || canvas.height === 0) return;
-    
+
         const radius = Math.min(canvas.width, canvas.height) * 0.12;
         let x: number, y: number;
 
         const collisionRadius = radius * 2.5; // Safety distance from player
         let isColliding = true;
         let attempts = 0;
+        
+        // Define UI exclusion zones (rem values converted approximately)
+        const rem = 16; // Assuming 1rem = 16px
+        const timerSize = 8 * rem; // h-32 w-32 -> 8rem
+        const padding = 2 * rem; // p-8 -> 2rem
+        const scoreBoxWidth = 10 * rem; // approx width
+        const scoreBoxHeight = 5 * rem; // approx height
+
+        const timerZone = {
+          x1: padding,
+          y1: padding,
+          x2: padding + timerSize,
+          y2: padding + timerSize,
+        };
+        const scoreZone = {
+          x1: canvas.width - padding - scoreBoxWidth,
+          y1: padding,
+          x2: canvas.width - padding,
+          y2: padding + scoreBoxHeight,
+        };
     
         let spawnRangePercentage;
         switch (gameConfig.distancia) {
@@ -301,14 +321,22 @@ function JogoView({
             spawnRangeYStart = (canvas.height - spawnRangeHeight) / 2;
         }
 
-        while (isColliding && attempts < 10) {
+        while (isColliding && attempts < 20) {
             isColliding = false;
+            attempts++;
             
             const spawnRangeWidth = canvas.width * spawnRangePercentage;
             const spawnRangeStart = (canvas.width - spawnRangeWidth) / 2;
             x = Math.random() * spawnRangeWidth + spawnRangeStart;
 
             y = Math.random() * spawnRangeHeight + spawnRangeYStart;
+
+            // Check collision with UI zones
+            if ((x > timerZone.x1 && x < timerZone.x2 && y > timerZone.y1 && y < timerZone.y2) ||
+                (x > scoreZone.x1 && x < scoreZone.x2 && y > scoreZone.y1 && y < scoreZone.y2)) {
+                isColliding = true;
+                continue; // Try a new position
+            }
     
             if (landmarks) {
                 for (const landmark of landmarks) {
@@ -323,14 +351,12 @@ function JogoView({
                     if (isColliding) break;
                 }
             }
-            attempts++;
         }
         
-        if (isColliding) {
+        if (isColliding) { // Fallback if too many attempts
             const spawnRangeWidth = canvas.width * spawnRangePercentage;
             const spawnRangeStart = (canvas.width - spawnRangeWidth) / 2;
             x = Math.random() * spawnRangeWidth + spawnRangeStart;
-            
             y = Math.random() * spawnRangeHeight + spawnRangeYStart;
         }
 
