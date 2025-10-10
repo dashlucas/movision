@@ -284,7 +284,7 @@ function JogoView({
             const spawnRangeStart = (canvas.width - spawnRangeWidth) / 2;
             x = Math.random() * spawnRangeWidth + spawnRangeStart;
 
-            const spawnRangeHeight = canvas.height * 0.8;
+            const spawnRangeHeight = canvas.height * 0.6;
             const spawnRangeYStart = (canvas.height - spawnRangeHeight) / 2;
             y = Math.random() * spawnRangeHeight + spawnRangeYStart;
     
@@ -310,7 +310,7 @@ function JogoView({
             const spawnRangeStart = (canvas.width - spawnRangeWidth) / 2;
             x = Math.random() * spawnRangeWidth + spawnRangeStart;
             
-            const spawnRangeHeight = canvas.height * 0.8;
+            const spawnRangeHeight = canvas.height * 0.6;
             const spawnRangeYStart = (canvas.height - spawnRangeHeight) / 2;
             y = Math.random() * spawnRangeHeight + spawnRangeYStart;
         }
