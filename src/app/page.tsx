@@ -597,13 +597,13 @@ function JogoView({
       ) : (
         <div className="pointer-events-none absolute inset-0 z-10 p-8">
            <div className="absolute left-8 top-8 h-32 w-32">
-             <Image src="/img/game_timer.png" alt="Timer" fill className="object-contain" />
              <div
                 className="absolute left-1/2 top-1/2 h-[89%] w-[89%] -translate-x-1/2 -translate-y-[45%] rounded-full"
                 style={{
                   background: `conic-gradient(hsl(var(--primary)) ${angle}deg, transparent ${angle}deg)`,
                 }}
               />
+              <Image src="/img/game_timer.png" alt="Timer" fill className="object-contain" />
             </div>
            <div className="absolute right-8 top-8 flex flex-col gap-4">
             <div className="rounded-2xl bg-[#49416D] px-6 py-3 text-center shadow-lg">
