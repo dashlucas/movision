@@ -15,7 +15,7 @@ import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
-type View = 'home' | 'configuracoes' | 'jogo';
+type View = 'home' | 'configuracoes' | 'jogo' | 'final';
 type Option = 'posicao' | 'membros' | 'distancia';
 type Selections = {
   posicao: string;
@@ -187,17 +187,20 @@ function JogoView({
   setScore,
   isIos,
   gameConfig,
+  onGameEnd,
 }: { 
   cameraStream: MediaStream | null;
   score: number;
   setScore: React.Dispatch<React.SetStateAction<number>>;
   isIos: boolean;
   gameConfig: Selections;
+  onGameEnd: () => void;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [countdown, setCountdown] = useState(10);
   const [showCountdown, setShowCountdown] = useState(true);
+  const [gameTime, setGameTime] = useState(180);
   
   const poseLandmarkerRef = useRef<PoseLandmarker | null>(null);
   const lastVideoTimeRef = useRef(-1);
@@ -210,6 +213,18 @@ function JogoView({
   const explosionRef = useRef<{ x: number; y: number; radius: number, timestamp: number; image: HTMLImageElement; } | null>(null);
   const needsToSpawnCircle = useRef(false);
   const sphereTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    if (!showCountdown && gameTime > 0) {
+      const timer = setInterval(() => {
+        setGameTime((prevTime) => prevTime - 1);
+      }, 1000);
+      return () => clearInterval(timer);
+    } else if (gameTime === 0) {
+      onGameEnd();
+    }
+  }, [showCountdown, gameTime, onGameEnd]);
+
 
   useEffect(() => {
     const spherePaths = ['/img/sphere.png', '/img/sphere-v2.png', '/img/sphere-v3.png'];
@@ -420,7 +435,7 @@ function JogoView({
             
             if (circleRef.current && circleRef.current.visible) {
               const handsLandmarks = [15, 16, 17, 18, 19, 20, 21, 22];
-              const feetLandmarks = [27, 28, 31, 32];
+              const feetLandmarks = [27, 28, 29, 30, 31, 32];
               
               let landmarksToCheck: number[] = [];
 
@@ -524,6 +539,11 @@ function JogoView({
     }
   }, [countdown, showCountdown, sphereImages, explosionImages]);
 
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+  };
 
   return (
     <div className={cn(
@@ -578,10 +598,17 @@ function JogoView({
         </div>
       ) : (
         <div className="pointer-events-none absolute inset-0 z-10 p-8">
-           <div className="absolute right-8 top-8 rounded-2xl bg-[#49416D] px-6 py-3 shadow-lg">
-            <p className="font-headline text-2xl font-bold text-white md:text-3xl">
-              Pontos: {score}
-            </p>
+           <div className="absolute right-8 top-8 flex flex-col gap-4">
+            <div className="rounded-2xl bg-[#49416D] px-6 py-3 text-center shadow-lg">
+              <p className="font-headline text-2xl font-bold text-white md:text-3xl">
+                Pontos: {score}
+              </p>
+            </div>
+            <div className="rounded-2xl bg-[#49416D] px-6 py-3 text-center shadow-lg">
+              <p className="font-headline text-2xl font-bold text-white md:text-3xl">
+                Tempo: {formatTime(gameTime)}
+              </p>
+            </div>
           </div>
         </div>
       )}
@@ -652,6 +679,41 @@ function HomeView({ onStart, hasCameraPermission }: { onStart: () => void, hasCa
   );
 }
 
+function FinalView({ score, onPlayAgain, onExit }: { score: number; onPlayAgain: () => void; onExit: () => void; }) {
+  return (
+    <main className="flex h-[100svh] w-full flex-col items-center justify-center bg-[#49416D] p-4 text-white">
+      <div className="flex flex-col items-center justify-center gap-8 rounded-2xl bg-card p-8 text-[#49416D] shadow-2xl md:p-12">
+        <h1 className="text-center font-headline text-4xl font-extrabold md:text-6xl">
+          Fim de Jogo!
+        </h1>
+        <div className="text-center">
+          <p className="text-xl md:text-2xl">Sua pontuação final foi:</p>
+          <p className="font-headline text-6xl font-black text-primary md:text-8xl">
+            {score}
+          </p>
+        </div>
+        <div className="mt-4 flex w-full flex-col gap-4 sm:flex-row sm:justify-center">
+          <Button
+            onClick={onPlayAgain}
+            size="lg"
+            className="h-16 w-full rounded-2xl bg-primary text-xl font-extrabold text-primary-foreground shadow-lg transition-all hover:bg-primary/90 sm:w-64"
+          >
+            Jogar Novamente
+          </Button>
+          <Button
+            onClick={onExit}
+            size="lg"
+            variant="outline"
+            className="h-16 w-full rounded-2xl border-4 border-primary bg-card text-xl font-bold text-[#49416D] shadow-lg hover:bg-primary hover:text-primary-foreground sm:w-64"
+          >
+            Sair
+          </Button>
+        </div>
+      </div>
+    </main>
+  );
+}
+
 export default function Page() {
   const [currentView, setCurrentView] = useState<View>('home');
   const { toast } = useToast();
@@ -674,6 +736,18 @@ export default function Page() {
     setGameConfig(selections);
     setScore(0); // Reseta a pontuação
     setCurrentView('jogo');
+  };
+
+  const handleGameEnd = () => {
+    setCurrentView('final');
+  };
+
+  const handlePlayAgain = () => {
+    setCurrentView('configuracoes');
+  };
+
+  const handleExit = () => {
+    setCurrentView('home');
   };
 
   // Solicita permissão da câmera ao carregar o app
@@ -711,7 +785,9 @@ export default function Page() {
       case 'configuracoes':
         return <ConfiguracoesView onStart={handleStartGame} />;
       case 'jogo':
-        return <JogoView cameraStream={cameraStream} score={score} setScore={setScore} isIos={isIos} gameConfig={gameConfig} />;
+        return <JogoView cameraStream={cameraStream} score={score} setScore={setScore} isIos={isIos} gameConfig={gameConfig} onGameEnd={handleGameEnd} />;
+      case 'final':
+        return <FinalView score={score} onPlayAgain={handlePlayAgain} onExit={handleExit} />;
       default:
         return <HomeView onStart={() => setCurrentView('configuracoes')} hasCameraPermission={hasCameraPermission}/>;
     }
