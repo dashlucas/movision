@@ -17,6 +17,11 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 type View = 'home' | 'configuracoes' | 'jogo';
 type Option = 'posicao' | 'membros' | 'distancia';
+type Selections = {
+  posicao: string;
+  membros: string;
+  distancia: string;
+};
 
 const SuperioresIconContent = memo(function SuperioresIconContent() {
   return (
@@ -57,7 +62,7 @@ const SelectionButton = memo(({
   value: string;
   children: React.ReactNode;
   className?: string;
-  selections: { posicao: string; membros: string; distancia: string };
+  selections: Selections;
   handleSelection: (option: Option, value: string) => void;
 }) => {
   const isSelected = selections[option] === value;
@@ -86,8 +91,8 @@ const SelectionButton = memo(({
 SelectionButton.displayName = 'SelectionButton';
 
 
-function ConfiguracoesView({ onStart }: { onStart: () => void }) {
-  const [selections, setSelections] = useState({
+function ConfiguracoesView({ onStart }: { onStart: (selections: Selections) => void }) {
+  const [selections, setSelections] = useState<Selections>({
     posicao: '',
     membros: '',
     distancia: '',
@@ -166,7 +171,7 @@ function ConfiguracoesView({ onStart }: { onStart: () => void }) {
           size="lg"
           className="h-16 w-full max-w-md rounded-2xl bg-primary text-xl font-extrabold text-primary-foreground shadow-lg transition-all hover:bg-primary/90 disabled:bg-gray-400 disabled:opacity-50 sm:h-20 sm:text-2xl"
           disabled={!isComplete}
-          onClick={onStart}
+          onClick={() => onStart(selections)}
         >
           Iniciar
         </Button>
@@ -181,11 +186,13 @@ function JogoView({
   score,
   setScore,
   isIos,
+  gameConfig,
 }: { 
   cameraStream: MediaStream | null;
   score: number;
   setScore: React.Dispatch<React.SetStateAction<number>>;
   isIos: boolean;
+  gameConfig: Selections;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -255,10 +262,25 @@ function JogoView({
         let isColliding = true;
         let attempts = 0;
     
+        let spawnRangePercentage;
+        switch (gameConfig.distancia) {
+          case 'nivel_1':
+            spawnRangePercentage = 0.3;
+            break;
+          case 'nivel_2':
+            spawnRangePercentage = 0.6;
+            break;
+          case 'nivel_3':
+            spawnRangePercentage = 0.8;
+            break;
+          default:
+            spawnRangePercentage = 0.3;
+        }
+
         while (isColliding && attempts < 10) {
             isColliding = false;
             
-            const spawnRangeWidth = canvas.width * 0.30;
+            const spawnRangeWidth = canvas.width * spawnRangePercentage;
             const spawnRangeStart = (canvas.width - spawnRangeWidth) / 2;
             x = Math.random() * spawnRangeWidth + spawnRangeStart;
             y = Math.random() * (canvas.height - radius * 2) + radius;
@@ -281,7 +303,7 @@ function JogoView({
         
         if (isColliding) {
             // Fallback to a random position within the range if a free spot is not found
-            const spawnRangeWidth = canvas.width * 0.30;
+            const spawnRangeWidth = canvas.width * spawnRangePercentage;
             const spawnRangeStart = (canvas.width - spawnRangeWidth) / 2;
             x = Math.random() * spawnRangeWidth + spawnRangeStart;
             y = Math.random() * (canvas.height - radius * 2) + radius;
@@ -464,7 +486,7 @@ function JogoView({
       }
       poseLandmarkerRef.current?.close();
     };
-  }, [cameraStream, setScore, sphereImages, explosionImages]);
+  }, [cameraStream, setScore, sphereImages, explosionImages, gameConfig]);
 
 
   useEffect(() => {
@@ -614,13 +636,19 @@ export default function Page() {
   const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
   const [score, setScore] = useState(0);
   const [isIos, setIsIos] = useState(false);
+  const [gameConfig, setGameConfig] = useState<Selections>({
+    posicao: '',
+    membros: '',
+    distancia: '',
+  });
 
   useEffect(() => {
     // This check runs only on the client, where navigator is available.
     setIsIos(/iPad|iPhone|iPod/.test(navigator.userAgent));
   }, []);
 
-  const handleStartGame = () => {
+  const handleStartGame = (selections: Selections) => {
+    setGameConfig(selections);
     setScore(0); // Reseta a pontuação
     setCurrentView('jogo');
   };
@@ -660,7 +688,7 @@ export default function Page() {
       case 'configuracoes':
         return <ConfiguracoesView onStart={handleStartGame} />;
       case 'jogo':
-        return <JogoView cameraStream={cameraStream} score={score} setScore={setScore} isIos={isIos} />;
+        return <JogoView cameraStream={cameraStream} score={score} setScore={setScore} isIos={isIos} gameConfig={gameConfig} />;
       default:
         return <HomeView onStart={() => setCurrentView('configuracoes')} hasCameraPermission={hasCameraPermission}/>;
     }
