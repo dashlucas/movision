@@ -283,7 +283,7 @@ function JogoView({
             const spawnRangeWidth = canvas.width * spawnRangePercentage;
             const spawnRangeStart = (canvas.width - spawnRangeWidth) / 2;
             x = Math.random() * spawnRangeWidth + spawnRangeStart;
-            y = Math.random() * (canvas.height - radius * 2) + radius;
+            y = Math.random() * (canvas.height * 0.8 - radius * 2) + radius;
     
             if (landmarks) {
                 for (const landmark of landmarks) {
@@ -306,7 +306,7 @@ function JogoView({
             const spawnRangeWidth = canvas.width * spawnRangePercentage;
             const spawnRangeStart = (canvas.width - spawnRangeWidth) / 2;
             x = Math.random() * spawnRangeWidth + spawnRangeStart;
-            y = Math.random() * (canvas.height - radius * 2) + radius;
+            y = Math.random() * (canvas.height * 0.8 - radius * 2) + radius;
         }
 
 
