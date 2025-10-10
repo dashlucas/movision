@@ -249,7 +249,6 @@ function JogoView({
         if (!canvas || canvas.width === 0 || canvas.height === 0) return;
     
         const radius = Math.min(canvas.width, canvas.height) * 0.12;
-        const padding = radius + 10;
         let x: number, y: number;
 
         const collisionRadius = radius * 2.5; // Safety distance from player
@@ -258,8 +257,11 @@ function JogoView({
     
         while (isColliding && attempts < 10) {
             isColliding = false;
-            x = Math.random() * (canvas.width - padding * 2) + padding;
-            y = Math.random() * (canvas.height - padding * 2) + padding;
+            
+            const spawnRangeWidth = canvas.width * 0.30;
+            const spawnRangeStart = (canvas.width - spawnRangeWidth) / 2;
+            x = Math.random() * spawnRangeWidth + spawnRangeStart;
+            y = Math.random() * (canvas.height - radius * 2) + radius;
     
             if (landmarks) {
                 for (const landmark of landmarks) {
@@ -278,9 +280,11 @@ function JogoView({
         }
         
         if (isColliding) {
-            // Fallback to random position if a free spot is not found
-            x = Math.random() * (canvas.width - padding * 2) + padding;
-            y = Math.random() * (canvas.height - padding * 2) + padding;
+            // Fallback to a random position within the range if a free spot is not found
+            const spawnRangeWidth = canvas.width * 0.30;
+            const spawnRangeStart = (canvas.width - spawnRangeWidth) / 2;
+            x = Math.random() * spawnRangeWidth + spawnRangeStart;
+            y = Math.random() * (canvas.height - radius * 2) + radius;
         }
 
 
