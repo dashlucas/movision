@@ -253,7 +253,7 @@ function JogoView({
         let x: number, y: number;
 
         // --- TEMPORARY DEBUG SPAWN ---
-        const spawnBandWidth = canvas.width * 0.1;
+        const spawnBandWidth = canvas.width * 0.25;
         const spawnBandXStart = (canvas.width / 2) - (spawnBandWidth / 2);
         x = Math.random() * spawnBandWidth + spawnBandXStart;
         y = Math.random() * (canvas.height - padding * 2) + padding;
