@@ -600,7 +600,7 @@ function JogoView({
              <div
                 className="absolute inset-0 h-full w-full rounded-full"
                 style={{
-                  background: `conic-gradient(#49416D ${angle}deg, #E6E6E6 ${angle}deg)`,
+                  background: `conic-gradient(#49416D ${angle}deg, #4ade80 ${angle}deg)`,
                   maskImage: 'url(/img/game_timer.png)',
                   maskSize: 'contain',
                   maskRepeat: 'no-repeat',
