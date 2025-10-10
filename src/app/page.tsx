@@ -183,18 +183,14 @@ function ConfiguracoesView({ onStart }: { onStart: (selections: Selections) => v
 
 function JogoView({ 
   cameraStream,
-  score,
-  setScore,
   isIos,
   gameConfig,
   onGameEnd,
 }: { 
   cameraStream: MediaStream | null;
-  score: number;
-  setScore: React.Dispatch<React.SetStateAction<number>>;
   isIos: boolean;
   gameConfig: Selections;
-  onGameEnd: () => void;
+  onGameEnd: (finalScore: number) => void;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -202,6 +198,8 @@ function JogoView({
   const [showCountdown, setShowCountdown] = useState(true);
   const [initialGameTime] = useState(10);
   const [gameTime, setGameTime] = useState(initialGameTime);
+  const scoreRef = useRef(0);
+  const scoreDisplayRef = useRef<HTMLParagraphElement>(null);
   
   const poseLandmarkerRef = useRef<PoseLandmarker | null>(null);
   const lastVideoTimeRef = useRef(-1);
@@ -222,7 +220,7 @@ function JogoView({
       }, 1000);
       return () => clearInterval(timer);
     } else if (gameTime === 0) {
-      onGameEnd();
+      onGameEnd(scoreRef.current);
     }
   }, [showCountdown, gameTime, onGameEnd]);
 
@@ -460,7 +458,11 @@ function JogoView({
                   };
 
                   circleRef.current.visible = false;
-                  setScore((prevScore) => prevScore + 1);
+                  scoreRef.current += 1;
+                  if (scoreDisplayRef.current) {
+                    scoreDisplayRef.current.innerText = `Pontos: ${scoreRef.current}`;
+                  }
+
 
                    if (sphereTimeoutRef.current) {
                     clearTimeout(sphereTimeoutRef.current);
@@ -525,7 +527,7 @@ function JogoView({
       }
       poseLandmarkerRef.current?.close();
     };
-  }, [cameraStream, setScore, sphereImages, explosionImages, gameConfig, onGameEnd]);
+  }, [cameraStream, sphereImages, explosionImages, gameConfig, onGameEnd]);
 
 
   useEffect(() => {
@@ -607,8 +609,8 @@ function JogoView({
             </div>
            <div className="absolute right-8 top-8 flex flex-col gap-4">
             <div className="rounded-2xl bg-[#49416D] px-6 py-3 text-center shadow-lg">
-              <p className="font-headline text-2xl font-bold text-white md:text-3xl">
-                Pontos: {score}
+              <p ref={scoreDisplayRef} className="font-headline text-2xl font-bold text-white md:text-3xl">
+                Pontos: 0
               </p>
             </div>
           </div>
@@ -742,11 +744,12 @@ export default function Page() {
 
   const handleStartGame = (selections: Selections) => {
     setGameConfig(selections);
-    setScore(0); // Reseta a pontuação
+    setScore(0);
     setCurrentView('jogo');
   };
 
-  const handleGameEnd = () => {
+  const handleGameEnd = (finalScore: number) => {
+    setScore(finalScore);
     setCurrentView('final');
   };
 
@@ -793,7 +796,7 @@ export default function Page() {
       case 'configuracoes':
         return <ConfiguracoesView onStart={handleStartGame} />;
       case 'jogo':
-        return <JogoView cameraStream={cameraStream} score={score} setScore={setScore} isIos={isIos} gameConfig={gameConfig} onGameEnd={handleGameEnd} />;
+        return <JogoView cameraStream={cameraStream} isIos={isIos} gameConfig={gameConfig} onGameEnd={handleGameEnd} />;
       case 'final':
         return <FinalView score={score} onPlayAgain={handlePlayAgain} onExit={handleExit} />;
       default:
