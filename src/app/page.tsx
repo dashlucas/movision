@@ -250,36 +250,38 @@ function JogoView({
     
         const radius = Math.min(canvas.width, canvas.height) * 0.12;
         const padding = radius + 10;
-        const collisionRadius = radius * 2.5; // Safety distance from player
         let x: number, y: number;
-        let isColliding = true;
-        let attempts = 0;
+
+        // Temporarily disabled for debugging
+        // const collisionRadius = radius * 2.5; // Safety distance from player
+        // let isColliding = true;
+        // let attempts = 0;
     
-        while (isColliding && attempts < 10) {
-            isColliding = false;
-            x = Math.random() * (canvas.width - padding * 2) + padding;
-            y = Math.random() * (canvas.height - padding * 2) + padding;
+        // while (isColliding && attempts < 10) {
+        //     isColliding = false;
+        //     x = Math.random() * (canvas.width - padding * 2) + padding;
+        //     y = Math.random() * (canvas.height - padding * 2) + padding;
     
-            if (landmarks) {
-                for (const landmark of landmarks) {
-                    for (const point of landmark) {
-                        const dx = point.x * canvas.width - x;
-                        const dy = point.y * canvas.height - y;
-                        if (Math.sqrt(dx * dx + dy * dy) < collisionRadius) {
-                            isColliding = true;
-                            break;
-                        }
-                    }
-                    if (isColliding) break;
-                }
-            }
-            attempts++;
-        }
+        //     if (landmarks) {
+        //         for (const landmark of landmarks) {
+        //             for (const point of landmark) {
+        //                 const dx = point.x * canvas.width - x;
+        //                 const dy = point.y * canvas.height - y;
+        //                 if (Math.sqrt(dx * dx + dy * dy) < collisionRadius) {
+        //                     isColliding = true;
+        //                     break;
+        //                 }
+        //             }
+        //             if (isColliding) break;
+        //         }
+        //     }
+        //     attempts++;
+        // }
         
-        if (isColliding) {
+        // if (isColliding) {
             x = Math.random() * (canvas.width - padding * 2) + padding;
             y = Math.random() * (canvas.height - padding * 2) + padding;
-        }
+        // }
 
         const sphereType = Math.floor(Math.random() * sphereImages.length);
         const sphereImage = sphereImages[sphereType];
