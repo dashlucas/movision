@@ -276,6 +276,16 @@ function JogoView({
           default:
             spawnRangePercentage = 0.2;
         }
+        
+        let spawnRangeHeight, spawnRangeYStart;
+
+        if (gameConfig.membros === 'inferiores') {
+            spawnRangeHeight = canvas.height * 0.5;
+            spawnRangeYStart = canvas.height * 0.5;
+        } else {
+            spawnRangeHeight = canvas.height * 0.6;
+            spawnRangeYStart = (canvas.height - spawnRangeHeight) / 2;
+        }
 
         while (isColliding && attempts < 10) {
             isColliding = false;
@@ -284,8 +294,6 @@ function JogoView({
             const spawnRangeStart = (canvas.width - spawnRangeWidth) / 2;
             x = Math.random() * spawnRangeWidth + spawnRangeStart;
 
-            const spawnRangeHeight = canvas.height * 0.6;
-            const spawnRangeYStart = (canvas.height - spawnRangeHeight) / 2;
             y = Math.random() * spawnRangeHeight + spawnRangeYStart;
     
             if (landmarks) {
@@ -309,8 +317,6 @@ function JogoView({
             const spawnRangeStart = (canvas.width - spawnRangeWidth) / 2;
             x = Math.random() * spawnRangeWidth + spawnRangeStart;
             
-            const spawnRangeHeight = canvas.height * 0.6;
-            const spawnRangeYStart = (canvas.height - spawnRangeHeight) / 2;
             y = Math.random() * spawnRangeHeight + spawnRangeYStart;
         }
 
