@@ -436,7 +436,7 @@ function JogoView({
             
             if (circleRef.current && circleRef.current.visible) {
               const handsLandmarks = [15, 16, 17, 18, 19, 20, 21, 22];
-              const feetLandmarks = [27, 28, 31, 32];
+              const feetLandmarks = [27, 28, 29, 30, 31, 32];
               
               let landmarksToCheck: number[] = [];
 
@@ -600,7 +600,7 @@ function JogoView({
              <div
                 className="absolute inset-0 h-full w-full rounded-full"
                 style={{
-                  background: `conic-gradient(#4ade80 ${angle}deg, transparent ${angle}deg)`,
+                  background: `conic-gradient(hsl(var(--primary)) ${angle}deg, transparent ${angle}deg)`,
                 }}
               />
               <Image src="/img/game_timer.png" alt="Timer" fill className="object-contain" />
