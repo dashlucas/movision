@@ -420,14 +420,14 @@ function JogoView({
             
             if (circleRef.current && circleRef.current.visible) {
               const handsLandmarks = [15, 16, 17, 18, 19, 20, 21, 22];
-              const feetAndKneesLandmarks = [25, 26, 27, 28, 29, 30, 31, 32];
+              const feetLandmarks = [27, 28, 29, 30, 31, 32];
               
               let landmarksToCheck: number[] = [];
 
               if (gameConfig.membros === 'superiores') {
                 landmarksToCheck = handsLandmarks;
               } else if (gameConfig.membros === 'inferiores') {
-                landmarksToCheck = feetAndKneesLandmarks;
+                landmarksToCheck = feetLandmarks;
               }
 
               for (const index of landmarksToCheck) {
