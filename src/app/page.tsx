@@ -683,32 +683,38 @@ function HomeView({ onStart, hasCameraPermission }: { onStart: () => void, hasCa
 
 function FinalView({ score, onPlayAgain, onExit }: { score: number; onPlayAgain: () => void; onExit: () => void; }) {
   return (
-    <main className="flex h-[100svh] w-full flex-col items-center justify-center bg-[#49416D] p-4 text-white">
-      <div className="flex flex-col items-center justify-center gap-8 rounded-2xl bg-card p-8 text-[#49416D] shadow-2xl md:p-12">
-        <h1 className="text-center font-headline text-4xl font-extrabold md:text-6xl">
-          Fim de Jogo!
+    <main className="flex h-[100svh] w-full flex-row">
+      {/* Left Panel */}
+      <div className="flex w-1/2 flex-col items-center justify-center gap-4 bg-card p-4 text-center text-[#49416D] md:p-8">
+        <h1 className="font-headline text-5xl font-extrabold md:text-7xl">
+          Parabéns!
         </h1>
         <div className="text-center">
-          <p className="text-xl md:text-2xl">Sua pontuação final foi:</p>
-          <p className="font-headline text-6xl font-black text-primary md:text-8xl">
+          <p className="text-2xl md:text-3xl">Sua pontuação foi:</p>
+          <p className="font-headline text-7xl font-black text-primary md:text-9xl">
             {score}
           </p>
         </div>
-        <div className="mt-4 flex w-full flex-col gap-4 sm:flex-row sm:justify-center">
-          <Button
-            onClick={onPlayAgain}
-            size="lg"
-            className="h-16 w-full rounded-2xl bg-primary text-xl font-extrabold text-primary-foreground shadow-lg transition-all hover:bg-primary/90 sm:w-64"
-          >
-            Jogar Novamente
-          </Button>
-          <Button
+      </div>
+
+      {/* Right Panel */}
+      <div className="flex h-full w-1/2 flex-1 flex-col items-center justify-center bg-panel-right p-4 md:p-8">
+        <div className="flex flex-col items-center gap-4 md:gap-6">
+           <Button
             onClick={onExit}
             size="lg"
             variant="outline"
-            className="h-16 w-full rounded-2xl border-4 border-primary bg-card text-xl font-bold text-[#49416D] shadow-lg hover:bg-primary hover:text-primary-foreground sm:w-64"
+            className="h-14 w-64 rounded-2xl border-4 border-primary bg-card font-bold text-[#49416D] shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background md:h-20 md:w-[300px] md:text-xl"
           >
-            Sair
+            Ir para o menu
+          </Button>
+          <Button
+            onClick={onPlayAgain}
+            size="lg"
+            variant="outline"
+            className="h-14 w-64 rounded-2xl border-4 border-primary bg-card font-bold text-[#49416D] shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background md:h-20 md:w-[300px] md:text-xl"
+          >
+            Jogar novamente
           </Button>
         </div>
       </div>
