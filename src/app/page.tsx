@@ -200,7 +200,7 @@ function JogoView({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [countdown, setCountdown] = useState(10);
   const [showCountdown, setShowCountdown] = useState(true);
-  const [gameTime, setGameTime] = useState(180);
+  const [gameTime, setGameTime] = useState(10);
   
   const poseLandmarkerRef = useRef<PoseLandmarker | null>(null);
   const lastVideoTimeRef = useRef(-1);
@@ -435,7 +435,7 @@ function JogoView({
             
             if (circleRef.current && circleRef.current.visible) {
               const handsLandmarks = [15, 16, 17, 18, 19, 20, 21, 22];
-              const feetLandmarks = [27, 28, 29, 30, 31, 32];
+              const feetLandmarks = [27, 28, 31, 32];
               
               let landmarksToCheck: number[] = [];
 
@@ -524,7 +524,7 @@ function JogoView({
       }
       poseLandmarkerRef.current?.close();
     };
-  }, [cameraStream, setScore, sphereImages, explosionImages, gameConfig]);
+  }, [cameraStream, setScore, sphereImages, explosionImages, gameConfig, onGameEnd]);
 
 
   useEffect(() => {
