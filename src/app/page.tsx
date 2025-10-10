@@ -436,7 +436,7 @@ function JogoView({
             
             if (circleRef.current && circleRef.current.visible) {
               const handsLandmarks = [15, 16, 17, 18, 19, 20, 21, 22];
-              const feetLandmarks = [27, 28, 31, 32];
+              const feetLandmarks = [27, 28, 29, 30, 31, 32];
               
               let landmarksToCheck: number[] = [];
 
@@ -540,9 +540,8 @@ function JogoView({
     }
   }, [countdown, showCountdown, sphereImages, explosionImages]);
 
-  const radius = 50;
-  const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (gameTime / initialGameTime) * circumference;
+  const timePercentage = gameTime / initialGameTime;
+  const angle = timePercentage * 360;
 
   return (
     <div className={cn(
@@ -598,30 +597,17 @@ function JogoView({
       ) : (
         <div className="pointer-events-none absolute inset-0 z-10 p-8">
            <div className="absolute left-8 top-8 h-32 w-32">
-              <Image src="/img/game_timer.png" alt="Timer" fill className="object-contain" />
-              <svg className="absolute inset-0 h-full w-full" viewBox="0 0 120 120">
-                <circle
-                  cx="60"
-                  cy="60"
-                  r={radius}
-                  fill="none"
-                  stroke="#E6E6E6"
-                  strokeWidth="10"
-                />
-                <circle
-                  cx="60"
-                  cy="60"
-                  r={radius}
-                  fill="none"
-                  stroke="#49416D"
-                  strokeWidth="10"
-                  strokeDasharray={circumference}
-                  strokeDashoffset={strokeDashoffset}
-                  strokeLinecap="round"
-                  transform="rotate(-90 60 60)"
-                  style={{ transition: 'stroke-dashoffset 0.5s linear' }}
-                />
-              </svg>
+             <div
+                className="absolute inset-0 h-full w-full rounded-full"
+                style={{
+                  background: `conic-gradient(#49416D ${angle}deg, #E6E6E6 ${angle}deg)`,
+                  maskImage: 'url(/img/game_timer.png)',
+                  maskSize: 'contain',
+                  maskRepeat: 'no-repeat',
+                  maskPosition: 'center',
+                }}
+              />
+              <Image src="/img/game_timer.png" alt="Timer" fill className="object-contain opacity-50" />
             </div>
            <div className="absolute right-8 top-8 flex flex-col gap-4">
             <div className="rounded-2xl bg-[#49416D] px-6 py-3 text-center shadow-lg">
