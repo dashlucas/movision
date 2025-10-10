@@ -265,16 +265,16 @@ function JogoView({
         let spawnRangePercentage;
         switch (gameConfig.distancia) {
           case 'nivel_1':
-            spawnRangePercentage = 0.3;
+            spawnRangePercentage = 0.2;
             break;
           case 'nivel_2':
-            spawnRangePercentage = 0.6;
+            spawnRangePercentage = 0.4;
             break;
           case 'nivel_3':
-            spawnRangePercentage = 0.8;
+            spawnRangePercentage = 0.6;
             break;
           default:
-            spawnRangePercentage = 0.3;
+            spawnRangePercentage = 0.2;
         }
 
         while (isColliding && attempts < 10) {
