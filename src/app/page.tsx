@@ -414,7 +414,22 @@ function JogoView({
             );
             
             if (circleRef.current && circleRef.current.visible) {
-              for (const point of landmark) {
+              const upperBodyLandmarks = [15, 16, 17, 18, 19, 20];
+              const lowerBodyLandmarks = [27, 28, 29, 30, 31, 32];
+              
+              let landmarksToCheck: number[] = [];
+
+              if (gameConfig.membros === 'superiores') {
+                landmarksToCheck = upperBodyLandmarks;
+              } else if (gameConfig.membros === 'inferiores') {
+                landmarksToCheck = lowerBodyLandmarks;
+              } else {
+                 // Fallback to all landmarks if not specified
+                landmarksToCheck = Array.from(Array(landmark.length).keys());
+              }
+
+              for (const index of landmarksToCheck) {
+                const point = landmark[index];
                 if (point && checkCollision(point, circleRef.current)) {
                   const currentCircle = circleRef.current;
                   const explosionImage = explosionImages[currentCircle.type];
