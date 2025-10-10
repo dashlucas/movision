@@ -622,11 +622,6 @@ function JogoView({
                   style={{ transition: 'stroke-dashoffset 0.5s linear' }}
                 />
               </svg>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <p className="font-headline text-3xl font-bold text-[#49416D]">
-                  {gameTime}
-                </p>
-              </div>
             </div>
            <div className="absolute right-8 top-8 flex flex-col gap-4">
             <div className="rounded-2xl bg-[#49416D] px-6 py-3 text-center shadow-lg">
