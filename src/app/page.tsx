@@ -195,29 +195,49 @@ function JogoView({
   const poseLandmarkerRef = useRef<PoseLandmarker | null>(null);
   const lastVideoTimeRef = useRef(-1);
   const animationFrameId = useRef<number | null>(null);
-  const circleRef = useRef<{ id: number; x: number; y: number; radius: number; visible: boolean } | null>(null);
-  const [sphereImage, setSphereImage] = useState<HTMLImageElement | null>(null);
-  const [explosionImage, setExplosionImage] = useState<HTMLImageElement | null>(null);
-  const explosionRef = useRef<{ x: number; y: number; radius: number, timestamp: number } | null>(null);
+  const circleRef = useRef<{ id: number; x: number; y: number; radius: number; visible: boolean; type: number; image: HTMLImageElement; } | null>(null);
+  
+  const [sphereImages, setSphereImages] = useState<HTMLImageElement[]>([]);
+  const [explosionImages, setExplosionImages] = useState<HTMLImageElement[]>([]);
+  
+  const explosionRef = useRef<{ x: number; y: number; radius: number, timestamp: number; image: HTMLImageElement; } | null>(null);
   const needsToSpawnCircle = useRef(false);
   const sphereTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    const sphereImg = new window.Image();
-    sphereImg.src = '/img/sphere.png';
-    sphereImg.onload = () => {
-      setSphereImage(sphereImg);
+    const spherePaths = ['/img/sphere.png', '/img/sphere-v2.png', '/img/sphere-v3.png'];
+    const explosionPaths = ['/img/explode.png', '/img/explode-v2.png', '/img/explode-v3.png'];
+    
+    const loadedSphereImages: HTMLImageElement[] = [];
+    const loadedExplosionImages: HTMLImageElement[] = [];
+
+    let imagesToLoad = spherePaths.length + explosionPaths.length;
+    
+    const onImageLoad = () => {
+      imagesToLoad--;
+      if (imagesToLoad === 0) {
+        setSphereImages(loadedSphereImages);
+        setExplosionImages(loadedExplosionImages);
+      }
     };
 
-    const explodeImg = new window.Image();
-    explodeImg.src = '/img/explode.png';
-    explodeImg.onload = () => {
-        setExplosionImage(explodeImg);
-    };
+    spherePaths.forEach(path => {
+        const img = new window.Image();
+        img.src = path;
+        img.onload = onImageLoad;
+        loadedSphereImages.push(img);
+    });
+
+    explosionPaths.forEach(path => {
+        const img = new window.Image();
+        img.src = path;
+        img.onload = onImageLoad;
+        loadedExplosionImages.push(img);
+    });
   }, []);
   
   useEffect(() => {
-    if (!sphereImage || !explosionImage) return;
+    if (sphereImages.length === 0 || explosionImages.length === 0) return;
 
     const video = videoRef.current;
     if (!video || !cameraStream) return;
@@ -256,14 +276,16 @@ function JogoView({
             attempts++;
         }
         
-        // Fallback to random position if it can't find a free spot
         if (isColliding) {
             x = Math.random() * (canvas.width - padding * 2) + padding;
             y = Math.random() * (canvas.height - padding * 2) + padding;
         }
+
+        const sphereType = Math.floor(Math.random() * sphereImages.length);
+        const sphereImage = sphereImages[sphereType];
     
         const newCircleId = Date.now();
-        circleRef.current = { id: newCircleId, x: x!, y: y!, radius, visible: true };
+        circleRef.current = { id: newCircleId, x: x!, y: y!, radius, visible: true, type: sphereType, image: sphereImage };
         needsToSpawnCircle.current = false;
     
         if (sphereTimeoutRef.current) {
@@ -359,11 +381,14 @@ function JogoView({
             if (circleRef.current && circleRef.current.visible) {
               for (const point of landmark) {
                 if (point && checkCollision(point, circleRef.current)) {
+                  const currentCircle = circleRef.current;
+                  const explosionImage = explosionImages[currentCircle.type];
                   explosionRef.current = {
-                    x: circleRef.current.x,
-                    y: circleRef.current.y,
-                    radius: circleRef.current.radius,
+                    x: currentCircle.x,
+                    y: currentCircle.y,
+                    radius: currentCircle.radius,
                     timestamp: Date.now(),
+                    image: explosionImage,
                   };
 
                   circleRef.current.visible = false;
@@ -373,7 +398,6 @@ function JogoView({
                     clearTimeout(sphereTimeoutRef.current);
                   }
 
-                  // Wait for explosion to finish before spawning next circle
                   setTimeout(() => {
                     needsToSpawnCircle.current = true;
                   }, 300);
@@ -386,10 +410,10 @@ function JogoView({
         });
       }
       
-      if (sphereImage && circleRef.current && circleRef.current.visible) {
+      if (circleRef.current && circleRef.current.visible) {
         const radius = circleRef.current.radius;
         canvasCtx.drawImage(
-          sphereImage,
+          circleRef.current.image,
           circleRef.current.x - radius,
           circleRef.current.y - radius,
           radius * 2,
@@ -397,12 +421,12 @@ function JogoView({
         );
       }
       
-      if (explosionImage && explosionRef.current) {
+      if (explosionRef.current) {
         const now = Date.now();
         if (now - explosionRef.current.timestamp < 300) {
             const radius = explosionRef.current.radius;
             canvasCtx.drawImage(
-              explosionImage,
+              explosionRef.current.image,
               explosionRef.current.x - radius,
               explosionRef.current.y - radius,
               radius * 2,
@@ -433,11 +457,11 @@ function JogoView({
       }
       poseLandmarkerRef.current?.close();
     };
-  }, [cameraStream, setScore, sphereImage, explosionImage]);
+  }, [cameraStream, setScore, sphereImages, explosionImages]);
 
 
   useEffect(() => {
-    if ((sphereImage && explosionImage) && showCountdown) {
+    if ((sphereImages.length > 0 && explosionImages.length > 0) && showCountdown) {
       if (countdown > 0) {
         const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
         return () => clearTimeout(timer);
@@ -446,7 +470,7 @@ function JogoView({
         needsToSpawnCircle.current = true;
       }
     }
-  }, [countdown, showCountdown, sphereImage, explosionImage]);
+  }, [countdown, showCountdown, sphereImages, explosionImages]);
 
 
   return (
