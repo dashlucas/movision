@@ -626,7 +626,7 @@ function JogoView({
         <div className="pointer-events-none absolute inset-0 z-10 p-8">
            <div className="absolute left-8 top-8 h-32 w-32">
              <div
-                className="absolute left-1/2 top-1/2 h-[89%] w-[89%] -translate-x-1/2 -translate-y-[45%] rounded-full"
+                className="absolute left-1/2 top-1/2 h-[89%] w-[89%] -translate-x-1/2 -translate-y-1/2 rounded-full"
                 style={{
                   background: `conic-gradient(hsl(var(--primary)) ${angle}deg, transparent ${angle}deg)`,
                 }}
@@ -667,7 +667,7 @@ function HomeView({ onStart, hasCameraPermission }: { onStart: () => void, hasCa
       </div>
 
       {/* Right Panel */}
-      <div className="flex w-1/2 flex-1 flex-col items-center justify-center bg-panel-right p-4 md:p-8">
+      <div className="flex w-1/2 flex-col items-center justify-center bg-panel-right p-4 md:p-8">
         <div className="flex flex-col items-center gap-4 md:gap-6">
           <Button
             onClick={onStart}
