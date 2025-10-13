@@ -91,7 +91,7 @@ const SelectionButton = memo(({
 SelectionButton.displayName = 'SelectionButton';
 
 
-function ConfiguracoesView({ onStart }: { onStart: (selections: Selections) => void }) {
+function ConfiguracoesView({ onStart, isIos }: { onStart: (selections: Selections) => void; isIos: boolean; }) {
   const [selections, setSelections] = useState<Selections>({
     posicao: '',
     membros: '',
@@ -108,7 +108,10 @@ function ConfiguracoesView({ onStart }: { onStart: (selections: Selections) => v
     selections.distancia !== '';
 
   return (
-    <main className="flex min-h-[100svh] flex-col justify-center bg-[#49416D] p-4 pb-2">
+    <main className={cn(
+        "flex flex-col justify-center bg-[#49416D] p-4 pb-2",
+        isIos ? "min-h-[130svh]" : "min-h-[100svh]"
+      )}>
       <div className="flex w-full flex-col items-center justify-center">
         <div className="grid w-full max-w-6xl grid-cols-1 gap-2 sm:grid-cols-3 md:gap-2">
           {/* Posição */}
@@ -826,7 +829,7 @@ export default function Page() {
       case 'home':
         return <HomeView onStart={() => setCurrentView('configuracoes')} hasCameraPermission={hasCameraPermission} isIos={isIos} />;
       case 'configuracoes':
-        return <ConfiguracoesView onStart={handleStartGame} />;
+        return <ConfiguracoesView onStart={handleStartGame} isIos={isIos} />;
       case 'jogo':
         return <JogoView cameraStream={cameraStream} isIos={isIos} gameConfig={gameConfig} onGameEnd={handleGameEnd} />;
       case 'final':
