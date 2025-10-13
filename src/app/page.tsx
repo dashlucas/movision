@@ -332,8 +332,8 @@ function JogoView({
             y = Math.random() * spawnRangeHeight + spawnRangeYStart;
 
             // Check collision with UI zones
-            if ((x > timerZone.x1 && x < timerZone.x2 && y > timerZone.y1 && y < timerZone.y2) ||
-                (x > scoreZone.x1 && x < scoreZone.x2 && y > scoreZone.y1 && y < scoreZone.y2)) {
+            if ((x > timerZone.x1 - radius && x < timerZone.x2 + radius && y > timerZone.y1 - radius && y < timerZone.y2 + radius) ||
+                (x > scoreZone.x1 - radius && x < scoreZone.x2 + radius && y > scoreZone.y1 - radius && y < scoreZone.y2 + radius)) {
                 isColliding = true;
                 continue; // Try a new position
             }
@@ -660,14 +660,14 @@ function JogoView({
 
 function HomeView({ onStart, hasCameraPermission }: { onStart: () => void, hasCameraPermission: boolean | null }) {
   return (
-    <main className="flex h-[100svh] w-full flex-row pb-2">
+    <main className="flex h-[100svh] w-full flex-row">
       {/* Left Panel */}
       <div className="flex w-1/2 flex-col items-center justify-center bg-card p-4 md:p-8">
         <Logo className="h-64 w-64 md:h-64 md:w-64 lg:h-96 lg:w-96" />
       </div>
 
       {/* Right Panel */}
-      <div className="flex h-full w-1/2 flex-1 flex-col items-center justify-center bg-panel-right p-4 md:p-8">
+      <div className="flex w-1/2 flex-1 flex-col items-center justify-center bg-panel-right p-4 md:p-8">
         <div className="flex flex-col items-center gap-4 md:gap-6">
           <Button
             onClick={onStart}
@@ -729,7 +729,7 @@ function FinalView({ score, onPlayAgain, onExit, isIos }: { score: number; onPla
       </div>
 
       {/* Right Panel */}
-      <div className="flex h-full w-1/2 flex-1 flex-col items-center justify-center bg-panel-right p-4 md:p-8">
+      <div className="flex w-1/2 flex-1 flex-col items-center justify-center bg-panel-right p-4 md:p-8">
         <div className="flex flex-col items-center gap-4 md:gap-6">
            <Button
             onClick={onExit}
