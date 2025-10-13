@@ -317,8 +317,8 @@ function JogoView({
         let spawnRangeHeight, spawnRangeYStart;
 
         if (gameConfig.membros === 'inferiores') {
-            spawnRangeHeight = canvas.height * 0.7; // From 30% to 100% of height
-            spawnRangeYStart = canvas.height * 0.3;
+            spawnRangeHeight = canvas.height * 0.5; // From 50% to 100% of height
+            spawnRangeYStart = canvas.height * 0.5;
         } else {
             spawnRangeHeight = canvas.height * 0.6;
             spawnRangeYStart = (canvas.height - spawnRangeHeight) / 2;
@@ -631,7 +631,7 @@ function JogoView({
              <div
                 className="absolute left-1/2 top-1/2 h-[89%] w-[89%] -translate-x-1/2 -translate-y-1/2 rounded-full"
                 style={{
-                  background: `conic-gradient(hsl(183 29% 52%) ${angle}deg, transparent ${angle}deg)`,
+                  background: `conic-gradient(hsl(var(--primary)) ${angle}deg, transparent ${angle}deg)`,
                 }}
               />
               <Image src="/img/game_timer.png" alt="Timer" fill className="object-contain" />
