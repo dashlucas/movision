@@ -5,7 +5,7 @@ import { Logo } from '@/components/logo';
 import Link from 'next/link';
 import { useState, useEffect, useRef, memo } from 'react';
 import { cn } from '@/lib/utils';
-import { Check } from 'lucide-react';
+import { Check, Smartphone, User } from 'lucide-react';
 import {
   PoseLandmarker,
   FilesetResolver,
@@ -15,7 +15,7 @@ import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
-type View = 'home' | 'configuracoes' | 'jogo' | 'final';
+type View = 'orientacoes' | 'home' | 'configuracoes' | 'jogo' | 'final';
 type Option = 'posicao' | 'membros' | 'distancia';
 type Selections = {
   posicao: string;
@@ -764,8 +764,59 @@ function FinalView({ score, onPlayAgain, onExit, isIos }: { score: number; onPla
   );
 }
 
+function OrientacoesView({ onUnderstood, isIos }: { onUnderstood: () => void; isIos: boolean; }) {
+  return (
+    <main className={cn(
+      "flex flex-col items-center justify-center bg-[#49416D] p-4 text-white",
+      isIos ? "min-h-[130svh]" : "min-h-[100svh]"
+    )}>
+      <h1 className="mb-8 font-headline text-4xl font-bold md:text-5xl">Orientações</h1>
+      <div className="grid w-full max-w-4xl grid-cols-1 gap-6 md:grid-cols-2">
+        {/* Dispositivo Card */}
+        <div className="flex flex-col rounded-2xl border-4 border-primary bg-card p-6 text-card-foreground">
+          <h2 className="mb-4 flex items-center justify-center gap-2 font-headline text-2xl font-bold text-[#49416D]">
+            <Smartphone /> Dispositivo
+          </h2>
+          <div className="flex flex-col items-center gap-4 md:flex-row">
+            <ul className="flex-1 list-disc space-y-2 pl-5 text-lg">
+              <li>Apoie o dispositivo sobre uma superfície firme, mantendo-o inclinado para você.</li>
+              <li>Posicione o celular na orientação horizontal.</li>
+            </ul>
+            <Image
+              src="/img/orientacao_celular.png"
+              alt="Celular em um suporte"
+              width={150}
+              height={150}
+              className="rounded-lg object-cover"
+            />
+          </div>
+        </div>
+
+        {/* Usuário Card */}
+        <div className="flex flex-col rounded-2xl border-4 border-primary bg-card p-6 text-card-foreground">
+          <h2 className="mb-4 flex items-center justify-center gap-2 font-headline text-2xl font-bold text-[#49416D]">
+            <User /> Usuário
+          </h2>
+          <ul className="list-disc space-y-4 pl-5 text-lg">
+            <li>Posicione-se de frente para a câmera, garantindo que todo seu corpo esteja visível na tela.</li>
+            <li>Tenha espaço livre ao redor para se movimentar.</li>
+          </ul>
+        </div>
+      </div>
+      <Button
+        size="lg"
+        onClick={onUnderstood}
+        className="mt-12 h-16 w-full max-w-xs rounded-2xl bg-primary text-xl font-extrabold text-primary-foreground shadow-lg transition-all hover:bg-primary/90"
+      >
+        Entendi!
+      </Button>
+    </main>
+  );
+}
+
+
 export default function Page() {
-  const [currentView, setCurrentView] = useState<View>('home');
+  const [currentView, setCurrentView] = useState<View>('orientacoes');
   const { toast } = useToast();
   const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
   const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
@@ -824,13 +875,17 @@ export default function Page() {
       }
     };
 
-    getCameraPermission();
+    if (currentView !== 'orientacoes') {
+        getCameraPermission();
+    }
     
     // A limpeza do stream agora é tratada no JogoView para evitar que a câmera desligue prematuramente
-  }, [toast, hasCameraPermission]);
+  }, [toast, hasCameraPermission, currentView]);
 
   const renderView = () => {
     switch (currentView) {
+      case 'orientacoes':
+        return <OrientacoesView onUnderstood={() => setCurrentView('home')} isIos={isIos} />;
       case 'home':
         return <HomeView onStart={() => setCurrentView('configuracoes')} hasCameraPermission={hasCameraPermission} isIos={isIos} />;
       case 'configuracoes':
@@ -840,7 +895,7 @@ export default function Page() {
       case 'final':
         return <FinalView score={score} onPlayAgain={handlePlayAgain} onExit={handleExit} isIos={isIos} />;
       default:
-        return <HomeView onStart={() => setCurrentView('configuracoes')} hasCameraPermission={hasCameraPermission} isIos={isIos}/>;
+        return <OrientacoesView onUnderstood={() => setCurrentView('home')} isIos={isIos} />;
     }
   };
 
