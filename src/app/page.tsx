@@ -709,9 +709,12 @@ function HomeView({ onStart, hasCameraPermission }: { onStart: () => void, hasCa
   );
 }
 
-function FinalView({ score, onPlayAgain, onExit }: { score: number; onPlayAgain: () => void; onExit: () => void; }) {
+function FinalView({ score, onPlayAgain, onExit, isIos }: { score: number; onPlayAgain: () => void; onExit: () => void; isIos: boolean; }) {
   return (
-    <main className="flex h-[100svh] w-full flex-row">
+    <main className={cn(
+      "flex w-full flex-row",
+      isIos ? "h-[130svh]" : "h-[100svh]"
+    )}>
       {/* Left Panel */}
       <div className="flex w-1/2 flex-col items-center justify-center gap-4 bg-card p-4 text-center text-[#49416D] md:p-8">
         <h1 className="font-headline text-5xl font-extrabold md:text-7xl">
@@ -824,7 +827,7 @@ export default function Page() {
       case 'jogo':
         return <JogoView cameraStream={cameraStream} isIos={isIos} gameConfig={gameConfig} onGameEnd={handleGameEnd} />;
       case 'final':
-        return <FinalView score={score} onPlayAgain={handlePlayAgain} onExit={handleExit} />;
+        return <FinalView score={score} onPlayAgain={handlePlayAgain} onExit={handleExit} isIos={isIos} />;
       default:
         return <HomeView onStart={() => setCurrentView('configuracoes')} hasCameraPermission={hasCameraPermission}/>;
     }
