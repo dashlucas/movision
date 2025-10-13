@@ -770,35 +770,36 @@ function OrientacoesView({ onUnderstood, isIos }: { onUnderstood: () => void; is
       "flex flex-col items-center justify-center bg-[#49416D] p-4 text-white",
       isIos ? "min-h-[130svh]" : "min-h-[100svh]"
     )}>
-      <h1 className="mb-8 font-headline text-4xl font-bold md:text-5xl">Orientações</h1>
-      <div className="grid w-full max-w-4xl grid-cols-1 gap-6 md:grid-cols-2">
+      <h1 className="mb-4 font-headline text-3xl font-bold md:text-5xl">Orientações</h1>
+      <div className="flex w-full max-w-4xl flex-grow flex-col items-center justify-center gap-4 md:flex-row md:items-stretch">
         {/* Dispositivo Card */}
-        <div className="flex flex-col rounded-2xl border-4 border-primary bg-card p-6 text-card-foreground">
-          <h2 className="mb-4 flex items-center justify-center gap-2 font-headline text-2xl font-bold text-[#49416D]">
+        <div className="flex w-full flex-col rounded-2xl border-4 border-primary bg-card p-4 text-card-foreground">
+          <h2 className="mb-2 flex items-center justify-center gap-2 font-headline text-xl font-bold text-[#49416D] md:text-2xl">
             <Smartphone /> Dispositivo
           </h2>
-          <div className="flex flex-col items-center gap-4 md:flex-row">
-            <ul className="flex-1 list-disc space-y-2 pl-5 text-lg">
-              <li>Apoie o dispositivo sobre uma superfície firme, mantendo-o inclinado para você.</li>
+          <div className="flex flex-1 flex-col items-center justify-between gap-4 md:flex-row">
+            <ul className="flex-1 list-disc space-y-2 pl-5 text-base md:text-lg">
+              <li>Apoie o dispositivo sobre uma superfície firme.</li>
               <li>Posicione o celular na orientação horizontal.</li>
             </ul>
             <Image
               src="/img/suporte.png"
               alt="Celular em um suporte"
-              width={150}
-              height={150}
-              className="rounded-lg object-cover"
+              width={120}
+              height={120}
+              className="rounded-lg object-contain"
             />
           </div>
         </div>
 
         {/* Usuário Card */}
-        <div className="flex flex-col rounded-2xl border-4 border-primary bg-card p-6 text-card-foreground">
-          <h2 className="mb-4 flex items-center justify-center gap-2 font-headline text-2xl font-bold text-[#49416D]">
+        <div className="flex w-full flex-col rounded-2xl border-4 border-primary bg-card p-4 text-card-foreground">
+          <h2 className="mb-2 flex items-center justify-center gap-2 font-headline text-xl font-bold text-[#49416D] md:text-2xl">
             <User /> Usuário
           </h2>
-          <ul className="list-disc space-y-4 pl-5 text-lg">
-            <li>Posicione-se de frente para a câmera, garantindo que todo seu corpo esteja visível na tela.</li>
+          <ul className="flex-1 list-disc space-y-2 pl-5 text-base md:text-lg">
+            <li>Posicione-se de frente para a câmera.</li>
+            <li>Garanta que todo seu corpo esteja visível.</li>
             <li>Tenha espaço livre ao redor para se movimentar.</li>
           </ul>
         </div>
@@ -806,7 +807,7 @@ function OrientacoesView({ onUnderstood, isIos }: { onUnderstood: () => void; is
       <Button
         size="lg"
         onClick={onUnderstood}
-        className="mt-12 h-16 w-full max-w-xs rounded-2xl bg-primary text-xl font-extrabold text-primary-foreground shadow-lg transition-all hover:bg-primary/90"
+        className="mt-8 h-14 w-full max-w-xs rounded-2xl bg-primary text-lg font-extrabold text-primary-foreground shadow-lg transition-all hover:bg-primary/90 md:h-16 md:text-xl"
       >
         Entendi!
       </Button>
