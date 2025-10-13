@@ -770,7 +770,7 @@ function OrientacoesView({ onUnderstood, isIos, hasCameraPermission }: { onUnder
       "flex flex-col items-center justify-center bg-[#49416D] p-4 text-white",
       isIos ? "min-h-[130svh]" : "min-h-[100svh]"
     )}>
-      <h1 className="mb-4 font-headline text-3xl font-bold md:text-5xl">Orientações</h1>
+      <h1 className="mb-4 font-headline text-xl font-bold sm:text-2xl md:text-3xl">Orientações</h1>
       <div className="flex w-full max-w-4xl flex-grow flex-col items-center justify-center gap-4 md:flex-row md:items-stretch">
         {/* Dispositivo Card */}
         <div className="flex w-full flex-col rounded-2xl border-4 border-primary bg-card p-4 text-card-foreground">
@@ -913,3 +913,5 @@ export default function Page() {
     </>
   );
 }
+
+    
