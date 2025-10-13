@@ -764,7 +764,7 @@ function FinalView({ score, onPlayAgain, onExit, isIos }: { score: number; onPla
   );
 }
 
-function OrientacoesView({ onUnderstood, isIos }: { onUnderstood: () => void; isIos: boolean; }) {
+function OrientacoesView({ onUnderstood, isIos, hasCameraPermission }: { onUnderstood: () => void; isIos: boolean; hasCameraPermission: boolean | null; }) {
   return (
     <main className={cn(
       "flex flex-col items-center justify-center bg-[#49416D] p-4 text-white",
@@ -804,10 +804,19 @@ function OrientacoesView({ onUnderstood, isIos }: { onUnderstood: () => void; is
           </ul>
         </div>
       </div>
+        {hasCameraPermission === false && (
+          <Alert variant="destructive" className="mt-4 max-w-2xl">
+            <AlertTitle>Acesso à câmera necessário</AlertTitle>
+            <AlertDescription>
+              Por favor, habilite a permissão da câmera nas configurações do seu navegador e atualize a página para continuar.
+            </AlertDescription>
+          </Alert>
+        )}
       <Button
         size="lg"
         onClick={onUnderstood}
-        className="mt-8 h-14 w-full max-w-xs rounded-2xl bg-primary text-lg font-extrabold text-primary-foreground shadow-lg transition-all hover:bg-primary/90 md:h-16 md:text-xl"
+        disabled={hasCameraPermission !== true}
+        className="mt-8 h-14 w-full max-w-xs rounded-2xl bg-primary text-lg font-extrabold text-primary-foreground shadow-lg transition-all hover:bg-primary/90 disabled:cursor-not-allowed disabled:bg-gray-500 disabled:opacity-70 md:h-16 md:text-xl"
       >
         Entendi!
       </Button>
@@ -856,7 +865,7 @@ export default function Page() {
   // Solicita permissão da câmera ao carregar o app
   useEffect(() => {
     // Evita pedir permissão novamente se já foi definida
-    if (hasCameraPermission !== null) return;
+    if (hasCameraPermission !== null || currentView !== 'orientacoes') return;
     
     const getCameraPermission = async () => {
       try {
@@ -876,9 +885,7 @@ export default function Page() {
       }
     };
 
-    if (currentView !== 'orientacoes') {
-        getCameraPermission();
-    }
+    getCameraPermission();
     
     // A limpeza do stream agora é tratada no JogoView para evitar que a câmera desligue prematuramente
   }, [toast, hasCameraPermission, currentView]);
@@ -886,7 +893,7 @@ export default function Page() {
   const renderView = () => {
     switch (currentView) {
       case 'orientacoes':
-        return <OrientacoesView onUnderstood={() => setCurrentView('home')} isIos={isIos} />;
+        return <OrientacoesView onUnderstood={() => setCurrentView('home')} isIos={isIos} hasCameraPermission={hasCameraPermission} />;
       case 'home':
         return <HomeView onStart={() => setCurrentView('configuracoes')} hasCameraPermission={hasCameraPermission} isIos={isIos} />;
       case 'configuracoes':
@@ -896,7 +903,7 @@ export default function Page() {
       case 'final':
         return <FinalView score={score} onPlayAgain={handlePlayAgain} onExit={handleExit} isIos={isIos} />;
       default:
-        return <OrientacoesView onUnderstood={() => setCurrentView('home')} isIos={isIos} />;
+        return <OrientacoesView onUnderstood={() => setCurrentView('home')} isIos={isIos} hasCameraPermission={hasCameraPermission} />;
     }
   };
 
