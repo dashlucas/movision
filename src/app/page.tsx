@@ -317,8 +317,8 @@ function JogoView({
         let spawnRangeHeight, spawnRangeYStart;
 
         if (gameConfig.membros === 'inferiores') {
-            spawnRangeHeight = canvas.height * 0.5; // From 50% to 100% of height
-            spawnRangeYStart = canvas.height * 0.5;
+            spawnRangeYStart = canvas.height * 0.2;
+            spawnRangeHeight = canvas.height * 0.3;
         } else {
             spawnRangeHeight = canvas.height * 0.6;
             spawnRangeYStart = (canvas.height - spawnRangeHeight) / 2;
@@ -629,7 +629,7 @@ function JogoView({
         <div className="pointer-events-none absolute inset-0 z-10 p-8">
            <div className="absolute left-8 top-8 h-32 w-32">
              <div
-                className="absolute left-1/2 top-1/2 h-[89%] w-[89%] -translate-x-1/2 -translate-y-1/2 rounded-full"
+                className="absolute left-1/2 top-1/2 h-[89%] w-[89%] -translate-x-1/2 -translate-y-[48%] rounded-full"
                 style={{
                   background: `conic-gradient(hsl(var(--primary)) ${angle}deg, transparent ${angle}deg)`,
                 }}
