@@ -783,7 +783,7 @@ function OrientacoesView({ onUnderstood, isIos }: { onUnderstood: () => void; is
               <li>Posicione o celular na orientação horizontal.</li>
             </ul>
             <Image
-              src="/img/orientacao_celular.png"
+              src="/img/suporte.png"
               alt="Celular em um suporte"
               width={150}
               height={150}
