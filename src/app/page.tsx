@@ -317,8 +317,8 @@ function JogoView({
         let spawnRangeHeight, spawnRangeYStart;
 
         if (gameConfig.membros === 'inferiores') {
-            spawnRangeYStart = canvas.height * 0.2;
-            spawnRangeHeight = canvas.height * 0.3;
+            spawnRangeYStart = canvas.height * 0.5;
+            spawnRangeHeight = canvas.height * 0.5;
         } else {
             spawnRangeHeight = canvas.height * 0.6;
             spawnRangeYStart = (canvas.height - spawnRangeHeight) / 2;
