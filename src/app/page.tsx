@@ -115,7 +115,7 @@ function ConfiguracoesView({ onStart }: { onStart: (selections: Selections) => v
         <div className="grid w-full max-w-6xl grid-cols-1 gap-2 sm:grid-cols-3 md:gap-2">
           {/* Posição */}
           <div className="flex flex-col items-center gap-2 sm:gap-4">
-            <h2 className="mb-1 text-xl font-bold text-white sm:text-2xl md:text-3xl">Posição</h2>
+            <h2 className="mb-1 text-xl font-bold text-white sm:text-2xl">Posição</h2>
             <div className="flex w-full flex-1 flex-col gap-3 sm:gap-4">
               <SelectionButton option="posicao" value="em_pe" selections={selections} handleSelection={handleSelection}>
                 Em pé
@@ -128,7 +128,7 @@ function ConfiguracoesView({ onStart }: { onStart: (selections: Selections) => v
 
           {/* Membros */}
           <div className="flex flex-col items-center gap-2 sm:gap-4">
-            <h2 className="mb-1 text-xl font-bold text-white sm:text-2xl md:text-3xl">Membros</h2>
+            <h2 className="mb-1 text-xl font-bold text-white sm:text-2xl">Membros</h2>
             <div className="flex w-full flex-1 flex-col gap-3 sm:gap-4">
               <SelectionButton
                 option="membros"
@@ -153,7 +153,7 @@ function ConfiguracoesView({ onStart }: { onStart: (selections: Selections) => v
 
           {/* Distância */}
           <div className="flex flex-col items-center gap-2 sm:gap-4">
-            <h2 className="mb-1 text-xl font-bold text-white sm:text-2xl md:text-3xl">Distância</h2>
+            <h2 className="mb-1 text-xl font-bold text-white sm:text-2xl">Distância</h2>
             <div className="flex w-full flex-1 flex-col gap-3 sm:gap-4">
               <SelectionButton option="distancia" value="nivel_1" selections={selections} handleSelection={handleSelection}>
                 Nível 1
@@ -673,7 +673,7 @@ function HomeView({ onStart, hasCameraPermission }: { onStart: () => void, hasCa
           <Button
             onClick={onStart}
             size="lg"
-            className="h-14 w-40 rounded-2xl bg-primary text-base font-extrabold text-primary-foreground shadow-lg transition-transform hover:scale-105 hover:bg-primary/90 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-panel-right md:h-24 md:w-[300px] md:text-2xl disabled:cursor-not-allowed disabled:bg-gray-500 disabled:opacity-70"
+            className="h-14 w-40 rounded-2xl bg-primary text-base font-extrabold text-primary-foreground shadow-lg transition-transform hover:scale-105 hover:bg-primary/90 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-panel-right md:h-20 md:w-[300px] md:text-2xl disabled:cursor-not-allowed disabled:bg-gray-500 disabled:opacity-70"
             disabled={hasCameraPermission !== true}
           >
             Iniciar
@@ -715,12 +715,12 @@ function FinalView({ score, onPlayAgain, onExit }: { score: number; onPlayAgain:
     <main className="flex w-full flex-row h-[130svh] lg:h-screen">
       {/* Left Panel */}
       <div className="flex w-1/2 flex-col items-center justify-center gap-4 bg-card p-4 text-center text-[#49416D] md:p-8">
-        <h1 className="font-headline text-5xl font-extrabold md:text-7xl">
+        <h1 className="font-headline text-4xl font-extrabold sm:text-5xl md:text-7xl">
           Parabéns!
         </h1>
         <div className="text-center">
-          <p className="text-2xl md:text-3xl">Sua pontuação foi:</p>
-          <p className="font-headline text-7xl font-black text-primary md:text-9xl">
+          <p className="text-xl sm:text-2xl md:text-3xl">Sua pontuação foi:</p>
+          <p className="font-headline text-6xl font-black text-primary sm:text-7xl md:text-9xl">
             {score}
           </p>
         </div>
@@ -763,7 +763,7 @@ function OrientacoesView({ onUnderstood, hasCameraPermission }: { onUnderstood: 
               <Smartphone /> Dispositivo
             </h2>
             <div className="flex flex-1 flex-col items-center justify-between gap-4 md:flex-row">
-              <ul className="flex-1 list-disc space-y-2 pl-5 text-base md:text-lg">
+              <ul className="flex-1 list-disc space-y-2 pl-5 text-sm md:text-base">
                 <li>Apoie o dispositivo sobre uma superfície firme.</li>
                 <li>Posicione o celular na orientação horizontal.</li>
               </ul>
@@ -782,7 +782,7 @@ function OrientacoesView({ onUnderstood, hasCameraPermission }: { onUnderstood: 
             <h2 className="mb-2 flex items-center justify-center gap-2 font-headline text-xl font-bold text-[#49416D] md:text-2xl">
               <User /> Usuário
             </h2>
-            <ul className="flex-1 list-disc space-y-2 pl-5 text-base md:text-lg">
+            <ul className="flex-1 list-disc space-y-2 pl-5 text-sm md:text-base">
               <li>Posicione-se de frente para a câmera.</li>
               <li>Garanta que todo seu corpo esteja visível.</li>
               <li>Tenha espaço livre ao redor para se movimentar.</li>
