@@ -634,7 +634,7 @@ function JogoView({
                 width: 'calc(8rem - 18px)',
                 height: 'calc(8rem - 18px)',
                 left: 'calc(2rem + 9px)',
-                top: 'calc(2rem + 9px)'
+                top: 'calc(2rem + 9px + 10%)'
               }}
             />
           <div className="absolute left-8 top-8 h-32 w-32">
