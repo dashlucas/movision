@@ -132,7 +132,8 @@ function ConfiguracoesView({ onStart }: { onStart: (selections: Selections) => v
 
   return (
     <main className={cn(
-        "flex flex-col justify-center bg-[#49416D] p-4 pb-2 h-[130svh] lg:h-screen"
+        "flex flex-col justify-center bg-[#49416D] p-4 pb-2",
+        "h-[130svh] lg:h-screen"
       )}>
       <div className="flex w-full flex-col items-center justify-center">
         <div className="grid w-full max-w-6xl grid-cols-1 gap-2 sm:grid-cols-3 md:gap-2">
@@ -595,7 +596,10 @@ function JogoView({
   const angle = timePercentage * 360;
 
   return (
-    <div className="relative w-screen h-[130svh] lg:h-screen overflow-hidden bg-black">
+    <div className={cn(
+        "relative w-screen overflow-hidden bg-black",
+        "h-[130svh] lg:h-screen"
+      )}>
        <video
         ref={videoRef}
         autoPlay
@@ -683,7 +687,7 @@ function JogoView({
 
 function HomeViewVertical({ onStart, hasCameraPermission }: { onStart: () => void, hasCameraPermission: boolean | null }) {
   return (
-    <main className="flex h-[130svh] w-full flex-col">
+    <main className="flex h-screen w-full flex-col">
       {/* Top Panel */}
       <div className="flex h-1/2 w-full flex-col items-center justify-center bg-card p-4 sm:p-6 md:p-8">
         <Logo className="h-48 w-48 sm:h-64 sm:w-64" />
@@ -695,7 +699,7 @@ function HomeViewVertical({ onStart, hasCameraPermission }: { onStart: () => voi
           <Button
             onClick={onStart}
             size="lg"
-            className="h-10 w-48 rounded-2xl bg-primary text-sm font-extrabold text-primary-foreground shadow-lg transition-transform hover:scale-105 hover:bg-primary/90 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-panel-right sm:h-12 sm:w-52 sm:text-lg md:h-20 md:w-[300px] md:text-2xl disabled:cursor-not-allowed disabled:bg-gray-500 disabled:opacity-70"
+            className="h-16 w-64 rounded-2xl bg-primary text-xl font-extrabold text-primary-foreground shadow-lg transition-transform hover:scale-105 hover:bg-primary/90 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-panel-right sm:h-20 sm:w-80 sm:text-2xl disabled:cursor-not-allowed disabled:bg-gray-500 disabled:opacity-70"
             disabled={hasCameraPermission !== true}
           >
             Iniciar
@@ -704,7 +708,7 @@ function HomeViewVertical({ onStart, hasCameraPermission }: { onStart: () => voi
             asChild
             size="lg"
             variant="outline"
-            className="h-10 w-48 rounded-2xl border-4 border-primary bg-card font-bold text-[#49416D] shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background sm:h-12 sm:w-52 sm:text-base md:h-14 md:w-[300px] md:text-xl"
+            className="h-14 w-64 rounded-2xl border-4 border-primary bg-card font-bold text-[#49416D] shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background sm:h-16 sm:w-80 sm:text-lg"
           >
             <Link href="#">Tutorial</Link>
           </Button>
@@ -712,7 +716,7 @@ function HomeViewVertical({ onStart, hasCameraPermission }: { onStart: () => voi
             asChild
             size="lg"
             variant="outline"
-            className="h-10 w-48 rounded-2xl border-4 border-primary bg-card font-bold text-[#49416D] shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background sm:h-12 sm:w-52 sm:text-base md:h-14 md:w-[300px] md:text-xl"
+            className="h-14 w-64 rounded-2xl border-4 border-primary bg-card font-bold text-[#49416D] shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background sm:h-16 sm:w-80 sm:text-lg"
           >
             <Link href="#">Recomendações</Link>
           </Button>
@@ -798,7 +802,10 @@ function HomeView(props: { onStart: () => void, hasCameraPermission: boolean | n
 
 function FinalView({ score, onPlayAgain, onExit }: { score: number; onPlayAgain: () => void; onExit: () => void; }) {
   return (
-    <main className="flex flex-col w-full h-[130svh] lg:h-screen lg:flex-row">
+    <main className={cn(
+        "flex flex-col w-full",
+        "h-[130svh] lg:h-screen lg:flex-row"
+      )}>
       {/* Left Panel */}
       <div className="flex w-full lg:w-1/2 h-1/2 lg:h-full flex-col items-center justify-center gap-4 bg-card p-4 text-center text-[#49416D] md:p-8">
         <h1 className="font-headline text-3xl font-extrabold sm:text-5xl md:text-7xl">
@@ -839,7 +846,10 @@ function FinalView({ score, onPlayAgain, onExit }: { score: number; onPlayAgain:
 
 function OrientacoesView({ onUnderstood, hasCameraPermission }: { onUnderstood: () => void; hasCameraPermission: boolean | null; }) {
   return (
-    <main className="flex flex-col items-center justify-center bg-[#49416D] p-4 text-white h-[130svh] lg:h-screen">
+    <main className={cn(
+        "flex flex-col items-center justify-center bg-[#49416D] p-4 text-white",
+        "h-[130svh] lg:h-screen"
+      )}>
       <div className="flex w-full flex-1 flex-col items-center justify-center md:max-w-4xl">
         <h1 className="mb-4 font-headline text-lg font-bold sm:text-2xl md:text-3xl">Orientações</h1>
         <div className="flex w-full flex-col items-stretch justify-center gap-4 md:flex-row">
