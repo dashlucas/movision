@@ -628,14 +628,13 @@ function JogoView({
       ) : (
         <div className="pointer-events-none absolute inset-0 z-10 p-8">
            <div
-              className="absolute left-8 top-8 rounded-full"
+              className="absolute rounded-full"
               style={{
                 background: `conic-gradient(hsl(var(--primary)) ${angle}deg, transparent ${angle}deg)`,
-                transform: 'translateY(4px)',
-                width: 'calc(8rem - 8px)',
-                height: 'calc(8rem - 8px)',
-                left: 'calc(2rem + 4px)',
-                top: 'calc(2rem + 4px)'
+                width: 'calc(8rem - 18px)',
+                height: 'calc(8rem - 18px)',
+                left: 'calc(2rem + 9px)',
+                top: 'calc(2rem + 9px)'
               }}
             />
           <div className="absolute left-8 top-8 h-32 w-32">
