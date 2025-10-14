@@ -628,7 +628,7 @@ function JogoView({
       ) : (
         <div className="pointer-events-none absolute inset-0 z-10 p-8">
            <div
-              className="absolute left-8 top-8 h-32 w-32 rounded-full"
+              className="absolute left-8 top-8 rounded-full"
               style={{
                 background: `conic-gradient(hsl(var(--primary)) ${angle}deg, transparent ${angle}deg)`,
                 transform: 'translateY(4px)',
@@ -770,7 +770,7 @@ function OrientacoesView({ onUnderstood, isIos, hasCameraPermission }: { onUnder
       "flex flex-col items-center justify-center bg-[#49416D] p-4 text-white",
       isIos ? "min-h-[130svh]" : "min-h-[100svh]"
     )}>
-      <div className="flex w-full flex-col items-center justify-center md:max-w-4xl">
+      <div className="flex w-full flex-1 flex-col items-center justify-center md:max-w-4xl">
         <h1 className="mb-4 font-headline text-xl font-bold sm:text-2xl md:text-3xl">Orientações</h1>
         <div className="flex w-full flex-col items-stretch justify-center gap-4 md:flex-row">
           {/* Dispositivo Card */}
