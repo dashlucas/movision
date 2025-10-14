@@ -109,7 +109,7 @@ function ConfiguracoesView({ onStart }: { onStart: (selections: Selections) => v
 
   return (
     <main className={cn(
-        "flex flex-col justify-center bg-[#49416D] p-4 pb-2 min-h-[130svh] lg:min-h-screen"
+        "flex flex-col justify-center bg-[#49416D] p-4 pb-2 h-[130svh] lg:h-screen"
       )}>
       <div className="flex w-full flex-col items-center justify-center">
         <div className="grid w-full max-w-6xl grid-cols-1 gap-2 sm:grid-cols-3 md:gap-2">
@@ -661,19 +661,19 @@ function JogoView({
 
 function HomeView({ onStart, hasCameraPermission }: { onStart: () => void, hasCameraPermission: boolean | null }) {
   return (
-    <main className="flex w-full flex-row h-[130svh] lg:h-screen">
+    <main className="flex w-full flex-col h-[130svh] lg:h-screen lg:flex-row">
       {/* Left Panel */}
-      <div className="flex w-1/2 flex-col items-center justify-center bg-card p-4 md:p-8">
-        <Logo className="h-64 w-64 md:h-64 md:w-64 lg:h-96 lg:w-96" />
+      <div className="flex h-1/2 w-full flex-col items-center justify-center bg-card p-4 sm:p-6 md:p-8 lg:h-full lg:w-1/2">
+        <Logo className="h-48 w-48 sm:h-64 sm:w-64 lg:h-96 lg:w-96" />
       </div>
 
       {/* Right Panel */}
-      <div className="flex w-1/2 flex-col items-center justify-center bg-panel-right p-4 md:p-8">
+      <div className="flex h-1/2 w-full flex-col items-center justify-center bg-panel-right p-4 sm:p-6 md:p-8 lg:h-full lg:w-1/2">
         <div className="flex flex-col items-center gap-4 md:gap-6">
           <Button
             onClick={onStart}
             size="lg"
-            className="h-14 w-40 rounded-2xl bg-primary text-base font-extrabold text-primary-foreground shadow-lg transition-transform hover:scale-105 hover:bg-primary/90 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-panel-right md:h-20 md:w-[300px] md:text-2xl disabled:cursor-not-allowed disabled:bg-gray-500 disabled:opacity-70"
+            className="h-12 w-48 rounded-2xl bg-primary text-base font-extrabold text-primary-foreground shadow-lg transition-transform hover:scale-105 hover:bg-primary/90 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-panel-right sm:h-14 sm:w-52 sm:text-lg md:h-20 md:w-[300px] md:text-2xl disabled:cursor-not-allowed disabled:bg-gray-500 disabled:opacity-70"
             disabled={hasCameraPermission !== true}
           >
             Iniciar
@@ -682,7 +682,7 @@ function HomeView({ onStart, hasCameraPermission }: { onStart: () => void, hasCa
             asChild
             size="lg"
             variant="outline"
-            className="h-10 w-40 rounded-2xl border-4 border-primary bg-card font-bold text-[#49416D] shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background md:h-14 md:w-[300px] md:text-xl"
+            className="h-10 w-48 rounded-2xl border-4 border-primary bg-card font-bold text-[#49416D] shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background sm:h-12 sm:w-52 sm:text-base md:h-14 md:w-[300px] md:text-xl"
           >
             <Link href="#">Tutorial</Link>
           </Button>
@@ -690,7 +690,7 @@ function HomeView({ onStart, hasCameraPermission }: { onStart: () => void, hasCa
             asChild
             size="lg"
             variant="outline"
-            className="h-10 w-40 rounded-2xl border-4 border-primary bg-card font-bold text-[#49416D] shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background md:h-14 md:w-[300px] md:text-xl"
+            className="h-10 w-48 rounded-2xl border-4 border-primary bg-card font-bold text-[#49416D] shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background sm:h-12 sm:w-52 sm:text-base md:h-14 md:w-[300px] md:text-xl"
           >
             <Link href="#">Recomendações</Link>
           </Button>
@@ -712,9 +712,9 @@ function HomeView({ onStart, hasCameraPermission }: { onStart: () => void, hasCa
 
 function FinalView({ score, onPlayAgain, onExit }: { score: number; onPlayAgain: () => void; onExit: () => void; }) {
   return (
-    <main className="flex w-full flex-row h-[130svh] lg:h-screen">
+    <main className="flex w-full flex-col h-[130svh] lg:h-screen lg:flex-row">
       {/* Left Panel */}
-      <div className="flex w-1/2 flex-col items-center justify-center gap-4 bg-card p-4 text-center text-[#49416D] md:p-8">
+      <div className="flex w-full h-1/2 flex-col items-center justify-center gap-4 bg-card p-4 text-center text-[#49416D] md:p-8 lg:h-full lg:w-1/2">
         <h1 className="font-headline text-4xl font-extrabold sm:text-5xl md:text-7xl">
           Parabéns!
         </h1>
@@ -727,7 +727,7 @@ function FinalView({ score, onPlayAgain, onExit }: { score: number; onPlayAgain:
       </div>
 
       {/* Right Panel */}
-      <div className="flex w-1/2 flex-1 flex-col items-center justify-center bg-panel-right p-4 md:p-8">
+      <div className="flex w-full h-1/2 flex-1 flex-col items-center justify-center bg-panel-right p-4 md:p-8 lg:h-full lg:w-1/2">
         <div className="flex flex-col items-center gap-4 md:gap-6">
            <Button
             onClick={onExit}
@@ -753,7 +753,7 @@ function FinalView({ score, onPlayAgain, onExit }: { score: number; onPlayAgain:
 
 function OrientacoesView({ onUnderstood, hasCameraPermission }: { onUnderstood: () => void; hasCameraPermission: boolean | null; }) {
   return (
-    <main className="flex flex-col items-center justify-center bg-[#49416D] p-4 text-white min-h-[130svh] lg:min-h-screen">
+    <main className="flex flex-col items-center justify-center bg-[#49416D] p-4 text-white h-[130svh] lg:h-screen">
       <div className="flex w-full flex-1 flex-col items-center justify-center md:max-w-4xl">
         <h1 className="mb-4 font-headline text-xl font-bold sm:text-2xl md:text-3xl">Orientações</h1>
         <div className="flex w-full flex-col items-stretch justify-center gap-4 md:flex-row">
