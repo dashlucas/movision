@@ -633,8 +633,8 @@ function JogoView({
                 background: `conic-gradient(hsl(var(--primary)) ${angle}deg, transparent ${angle}deg)`,
                 width: 'calc(8rem - 18px)',
                 height: 'calc(8rem - 18px)',
-                left: 'calc(2rem + 10px)',
-                top: 'calc(2rem + 10px)'
+                left: 'calc(2rem + 9px)',
+                top: 'calc(2rem + 9px)'
               }}
             />
           <div className="absolute left-8 top-8 h-32 w-32">
