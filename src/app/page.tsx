@@ -23,6 +23,29 @@ type Selections = {
   distancia: string;
 };
 
+const useWindowSize = () => {
+  const [windowSize, setWindowSize] = useState<{ width: number | undefined; height: number | undefined }>({
+    width: undefined,
+    height: undefined,
+  });
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    }
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return windowSize;
+}
+
 const SuperioresIconContent = memo(function SuperioresIconContent() {
   return (
     <>
@@ -133,7 +156,7 @@ function ConfiguracoesView({ onStart }: { onStart: (selections: Selections) => v
               <SelectionButton
                 option="membros"
                 value="superiores"
-                className="flex-wrap"
+                className="flex-wrap text-sm"
                 selections={selections} 
                 handleSelection={handleSelection}
               >
@@ -142,7 +165,7 @@ function ConfiguracoesView({ onStart }: { onStart: (selections: Selections) => v
               <SelectionButton
                 option="membros"
                 value="inferiores"
-                className="flex-wrap"
+                className="flex-wrap text-sm"
                 selections={selections}
                 handleSelection={handleSelection}
               >
@@ -658,17 +681,16 @@ function JogoView({
   );
 }
 
-
-function HomeView({ onStart, hasCameraPermission }: { onStart: () => void, hasCameraPermission: boolean | null }) {
+function HomeViewVertical({ onStart, hasCameraPermission }: { onStart: () => void, hasCameraPermission: boolean | null }) {
   return (
-    <main className="flex h-[130svh] w-full flex-col lg:h-screen lg:flex-row">
-      {/* Left Panel */}
-      <div className="flex flex-1 flex-col items-center justify-center bg-card p-4 sm:p-6 md:p-8">
-        <Logo className="h-48 w-48 sm:h-64 sm:w-64 lg:h-96 lg:w-96" />
+    <main className="flex h-[130svh] w-full flex-col">
+      {/* Top Panel */}
+      <div className="flex h-1/2 w-full flex-col items-center justify-center bg-card p-4 sm:p-6 md:p-8">
+        <Logo className="h-48 w-48 sm:h-64 sm:w-64" />
       </div>
 
-      {/* Right Panel */}
-      <div className="flex flex-1 flex-col items-center justify-center bg-panel-right p-4 sm:p-6 md:p-8">
+      {/* Bottom Panel */}
+      <div className="flex h-1/2 w-full flex-col items-center justify-center bg-panel-right p-4 sm:p-6 md:p-8">
         <div className="flex flex-col items-center gap-4 md:gap-6">
           <Button
             onClick={onStart}
@@ -696,25 +718,89 @@ function HomeView({ onStart, hasCameraPermission }: { onStart: () => void, hasCa
           </Button>
         </div>
       </div>
-       {hasCameraPermission === false && (
-          <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/50">
-            <Alert variant="destructive" className="max-w-md">
-                <AlertTitle>Acesso à câmera necessário</AlertTitle>
-                <AlertDescription>
-                  Para continuar, por favor, habilite a permissão da câmera nas configurações do seu navegador e atualize a página.
-                </AlertDescription>
-              </Alert>
-          </div>
-        )}
+      {hasCameraPermission === false && (
+        <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/50">
+          <Alert variant="destructive" className="max-w-md">
+            <AlertTitle>Acesso à câmera necessário</AlertTitle>
+            <AlertDescription>
+              Para continuar, por favor, habilite a permissão da câmera nas configurações do seu navegador e atualize a página.
+            </AlertDescription>
+          </Alert>
+        </div>
+      )}
     </main>
   );
 }
+
+function HomeViewHorizontal({ onStart, hasCameraPermission }: { onStart: () => void, hasCameraPermission: boolean | null }) {
+  return (
+    <main className="flex h-screen w-full flex-row">
+      {/* Left Panel */}
+      <div className="flex w-1/2 flex-col items-center justify-center bg-card p-4 sm:p-6 md:p-8">
+        <Logo className="h-48 w-48 sm:h-64 sm:w-64 lg:h-96 lg:w-96" />
+      </div>
+
+      {/* Right Panel */}
+      <div className="flex w-1/2 flex-col items-center justify-center bg-panel-right p-4 sm:p-6 md:p-8">
+        <div className="flex flex-col items-center gap-4 md:gap-6">
+          <Button
+            onClick={onStart}
+            size="lg"
+            className="h-10 w-48 rounded-2xl bg-primary text-sm font-extrabold text-primary-foreground shadow-lg transition-transform hover:scale-105 hover:bg-primary/90 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-panel-right sm:h-12 sm:w-52 sm:text-lg md:h-20 md:w-[300px] md:text-2xl disabled:cursor-not-allowed disabled:bg-gray-500 disabled:opacity-70"
+            disabled={hasCameraPermission !== true}
+          >
+            Iniciar
+          </Button>
+          <Button
+            asChild
+            size="lg"
+            variant="outline"
+            className="h-10 w-48 rounded-2xl border-4 border-primary bg-card font-bold text-[#49416D] shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background sm:h-12 sm:w-52 sm:text-base md:h-14 md:w-[300px] md:text-xl"
+          >
+            <Link href="#">Tutorial</Link>
+          </Button>
+          <Button
+            asChild
+            size="lg"
+            variant="outline"
+            className="h-10 w-48 rounded-2xl border-4 border-primary bg-card font-bold text-[#49416D] shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background sm:h-12 sm:w-52 sm:text-base md:h-14 md:w-[300px] md:text-xl"
+          >
+            <Link href="#">Recomendações</Link>
+          </Button>
+        </div>
+      </div>
+      {hasCameraPermission === false && (
+        <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/50">
+          <Alert variant="destructive" className="max-w-md">
+            <AlertTitle>Acesso à câmera necessário</AlertTitle>
+            <AlertDescription>
+              Para continuar, por favor, habilite a permissão da câmera nas configurações do seu navegador e atualize a página.
+            </AlertDescription>
+          </Alert>
+        </div>
+      )}
+    </main>
+  );
+}
+
+
+function HomeView(props: { onStart: () => void, hasCameraPermission: boolean | null }) {
+  const { width = 0, height = 0 } = useWindowSize();
+  const isVertical = width < height;
+
+  if (width === 0) {
+    return null; // ou um loader
+  }
+
+  return isVertical ? <HomeViewVertical {...props} /> : <HomeViewHorizontal {...props} />;
+}
+
 
 function FinalView({ score, onPlayAgain, onExit }: { score: number; onPlayAgain: () => void; onExit: () => void; }) {
   return (
     <main className="flex flex-col w-full h-[130svh] lg:h-screen lg:flex-row">
       {/* Left Panel */}
-      <div className="flex w-full h-1/2 flex-col items-center justify-center gap-4 bg-card p-4 text-center text-[#49416D] md:p-8 lg:h-full lg:w-1/2">
+      <div className="flex w-full lg:w-1/2 h-1/2 lg:h-full flex-col items-center justify-center gap-4 bg-card p-4 text-center text-[#49416D] md:p-8">
         <h1 className="font-headline text-3xl font-extrabold sm:text-5xl md:text-7xl">
           Parabéns!
         </h1>
@@ -727,7 +813,7 @@ function FinalView({ score, onPlayAgain, onExit }: { score: number; onPlayAgain:
       </div>
 
       {/* Right Panel */}
-      <div className="flex w-full h-1/2 flex-1 flex-col items-center justify-center bg-panel-right p-4 md:p-8 lg:h-full lg:w-1/2">
+      <div className="flex w-full lg:w-1/2 h-1/2 lg:h-full flex-1 flex-col items-center justify-center bg-panel-right p-4 md:p-8">
         <div className="flex flex-col items-center gap-4 md:gap-6">
            <Button
             onClick={onExit}
