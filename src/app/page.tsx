@@ -109,7 +109,7 @@ function ConfiguracoesView({ onStart }: { onStart: (selections: Selections) => v
 
   return (
     <main className={cn(
-        "flex flex-col justify-center bg-[#49416D] p-4 pb-2 min-h-[130svh]"
+        "flex flex-col justify-center bg-[#49416D] p-4 pb-2 min-h-[130svh] lg:min-h-screen"
       )}>
       <div className="flex w-full flex-col items-center justify-center">
         <div className="grid w-full max-w-6xl grid-cols-1 gap-2 sm:grid-cols-3 md:gap-2">
@@ -572,7 +572,7 @@ function JogoView({
   const angle = timePercentage * 360;
 
   return (
-    <div className="relative w-screen h-[130svh] overflow-hidden bg-black">
+    <div className="relative w-screen h-[130svh] lg:h-screen overflow-hidden bg-black">
        <video
         ref={videoRef}
         autoPlay
@@ -661,7 +661,7 @@ function JogoView({
 
 function HomeView({ onStart, hasCameraPermission }: { onStart: () => void, hasCameraPermission: boolean | null }) {
   return (
-    <main className="flex w-full flex-row h-[130svh]">
+    <main className="flex w-full flex-row h-[130svh] lg:h-screen">
       {/* Left Panel */}
       <div className="flex w-1/2 flex-col items-center justify-center bg-card p-4 md:p-8">
         <Logo className="h-64 w-64 md:h-64 md:w-64 lg:h-96 lg:w-96" />
@@ -712,7 +712,7 @@ function HomeView({ onStart, hasCameraPermission }: { onStart: () => void, hasCa
 
 function FinalView({ score, onPlayAgain, onExit }: { score: number; onPlayAgain: () => void; onExit: () => void; }) {
   return (
-    <main className="flex w-full flex-row h-[130svh]">
+    <main className="flex w-full flex-row h-[130svh] lg:h-screen">
       {/* Left Panel */}
       <div className="flex w-1/2 flex-col items-center justify-center gap-4 bg-card p-4 text-center text-[#49416D] md:p-8">
         <h1 className="font-headline text-5xl font-extrabold md:text-7xl">
@@ -753,7 +753,7 @@ function FinalView({ score, onPlayAgain, onExit }: { score: number; onPlayAgain:
 
 function OrientacoesView({ onUnderstood, hasCameraPermission }: { onUnderstood: () => void; hasCameraPermission: boolean | null; }) {
   return (
-    <main className="flex flex-col items-center justify-center bg-[#49416D] p-4 text-white min-h-[130svh]">
+    <main className="flex flex-col items-center justify-center bg-[#49416D] p-4 text-white min-h-[130svh] lg:min-h-screen">
       <div className="flex w-full flex-1 flex-col items-center justify-center md:max-w-4xl">
         <h1 className="mb-4 font-headline text-xl font-bold sm:text-2xl md:text-3xl">Orientações</h1>
         <div className="flex w-full flex-col items-stretch justify-center gap-4 md:flex-row">
@@ -883,7 +883,7 @@ export default function Page() {
       case 'final':
         return <FinalView score={score} onPlayAgain={handlePlayAgain} onExit={handleExit} />;
       default:
-        return <OrientacoesView onUnderstood={() => setCurrentView('home')} hasCameraisIos={isIos} hasCameraPermission={hasCameraPermission} />;
+        return <OrientacoesView onUnderstood={() => setCurrentView('home')} hasCameraPermission={hasCameraPermission} />;
     }
   };
 
