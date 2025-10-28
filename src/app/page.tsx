@@ -300,12 +300,11 @@ function JogoView({
         let isColliding = true;
         let attempts = 0;
         
-        // Define UI exclusion zones (rem values converted approximately)
-        const rem = 16; // Assuming 1rem = 16px
-        const timerSize = 8 * rem; // h-32 w-32 -> 8rem
-        const padding = 2 * rem; // p-8 -> 2rem
-        const scoreBoxWidth = 10 * rem; // approx width
-        const scoreBoxHeight = 5 * rem; // approx height
+        const rem = 16;
+        const timerSize = 8 * rem;
+        const padding = 2 * rem;
+        const scoreBoxWidth = 10 * rem;
+        const scoreBoxHeight = 5 * rem;
 
         const timerZone = {
           x1: padding,
@@ -338,8 +337,8 @@ function JogoView({
         let spawnRangeHeight, spawnRangeYStart;
 
         if (gameConfig.membros === 'inferiores') {
-            spawnRangeYStart = canvas.height * 0.5; // Start from halfway down
-            spawnRangeHeight = canvas.height * 0.3; // Span 30% of the height
+            spawnRangeYStart = canvas.height * 0.5; 
+            spawnRangeHeight = canvas.height * 0.3;
         } else {
             spawnRangeHeight = canvas.height * 0.6;
             spawnRangeYStart = (canvas.height - spawnRangeHeight) / 2;
@@ -350,21 +349,21 @@ function JogoView({
             attempts++;
             
             const spawnSide = Math.random() < 0.5 ? 'left' : 'right';
+            const horizontalPadding = canvas.width * 0.1;
             const sideWidth = (canvas.width / 2) * spawnRangePercentage;
-            
+
             if (spawnSide === 'left') {
-                x = Math.random() * sideWidth;
+                x = Math.random() * (sideWidth - horizontalPadding) + horizontalPadding;
             } else {
-                x = canvas.width - (Math.random() * sideWidth);
+                x = canvas.width - (Math.random() * (sideWidth - horizontalPadding) + horizontalPadding);
             }
 
             y = Math.random() * spawnRangeHeight + spawnRangeYStart;
 
-            // Check collision with UI zones
             if ((x > timerZone.x1 - radius && x < timerZone.x2 + radius && y > timerZone.y1 - radius && y < timerZone.y2 + radius) ||
                 (x > scoreZone.x1 - radius && x < scoreZone.x2 + radius && y > scoreZone.y1 - radius && y < scoreZone.y2 + radius)) {
                 isColliding = true;
-                continue; // Try a new position
+                continue;
             }
     
             if (landmarks) {
@@ -382,14 +381,15 @@ function JogoView({
             }
         }
         
-        if (isColliding) { // Fallback if too many attempts
+        if (isColliding) { 
             const spawnSide = Math.random() < 0.5 ? 'left' : 'right';
+            const horizontalPadding = canvas.width * 0.1;
             const sideWidth = (canvas.width / 2) * spawnRangePercentage;
             
             if (spawnSide === 'left') {
-                x = Math.random() * sideWidth;
+                x = Math.random() * (sideWidth - horizontalPadding) + horizontalPadding;
             } else {
-                x = canvas.width - (Math.random() * sideWidth);
+                x = canvas.width - (Math.random() * (sideWidth - horizontalPadding) + horizontalPadding);
             }
             y = Math.random() * spawnRangeHeight + spawnRangeYStart;
         }
