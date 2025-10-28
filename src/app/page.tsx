@@ -133,7 +133,7 @@ function ConfiguracoesView({ onStart }: { onStart: (selections: Selections) => v
   return (
     <main className={cn(
         "flex flex-col justify-center bg-[#49416D] p-4 pb-2",
-        "h-[130svh] lg:h-screen"
+        "min-h-[130svh] lg:min-h-screen"
       )}>
       <div className="flex w-full flex-col items-center justify-center">
         <div className="grid w-full max-w-6xl grid-cols-1 gap-2 sm:grid-cols-3 md:gap-2">
@@ -629,7 +629,7 @@ function JogoView({
   return (
     <div className={cn(
         "relative w-screen overflow-hidden bg-black",
-        "h-[130svh] lg:h-screen"
+        "min-h-[130svh] lg:min-h-screen"
       )}>
        <video
         ref={videoRef}
@@ -718,7 +718,7 @@ function JogoView({
 
 function HomeViewVertical({ onStart, hasCameraPermission }: { onStart: () => void, hasCameraPermission: boolean | null }) {
   return (
-    <main className="flex h-screen w-full flex-col">
+    <main className="flex min-h-screen w-full flex-col">
       {/* Top Panel */}
       <div className="flex h-1/2 w-full flex-col items-center justify-center bg-card p-4 sm:p-6 md:p-8">
         <Logo className="h-48 w-48 sm:h-64 sm:w-64" />
@@ -769,7 +769,7 @@ function HomeViewVertical({ onStart, hasCameraPermission }: { onStart: () => voi
 
 function HomeViewHorizontal({ onStart, hasCameraPermission }: { onStart: () => void, hasCameraPermission: boolean | null }) {
   return (
-    <main className="flex h-screen w-full flex-row">
+    <main className="flex min-h-screen w-full flex-row">
       {/* Left Panel */}
       <div className="flex w-1/2 flex-col items-center justify-center bg-card p-4 sm:p-6 md:p-8">
         <Logo className="h-48 w-48 sm:h-64 sm:w-64 lg:h-96 lg:w-96" />
@@ -835,10 +835,10 @@ function FinalView({ score, onPlayAgain, onExit }: { score: number; onPlayAgain:
   return (
     <main className={cn(
         "flex flex-col w-full",
-        "h-[130svh] lg:h-screen lg:flex-row"
+        "min-h-[130svh] lg:min-h-screen lg:flex-row"
       )}>
       {/* Left Panel */}
-      <div className="flex w-full lg:w-1/2 h-1/2 lg:h-full flex-col items-center justify-center gap-4 bg-card p-4 text-center text-[#49416D] md:p-8">
+      <div className="flex w-full lg:w-1/2 min-h-[50svh] lg:min-h-full flex-col items-center justify-center gap-4 bg-card p-4 text-center text-[#49416D] md:p-8">
         <h1 className="font-headline text-3xl font-extrabold sm:text-5xl md:text-7xl">
           Parabéns!
         </h1>
@@ -851,7 +851,7 @@ function FinalView({ score, onPlayAgain, onExit }: { score: number; onPlayAgain:
       </div>
 
       {/* Right Panel */}
-      <div className="flex w-full lg:w-1/2 h-1/2 lg:h-full flex-1 flex-col items-center justify-center bg-panel-right p-4 md:p-8">
+      <div className="flex w-full lg:w-1/2 min-h-[50svh] lg:min-h-full flex-1 flex-col items-center justify-center bg-panel-right p-4 md:p-8">
         <div className="flex flex-col items-center gap-4 md:gap-6">
            <Button
             onClick={onExit}
@@ -879,7 +879,7 @@ function OrientacoesView({ onUnderstood, hasCameraPermission }: { onUnderstood: 
   return (
     <main className={cn(
         "flex flex-col items-center justify-center bg-[#49416D] p-4 text-white",
-        "h-[130svh] lg:h-screen"
+        "min-h-[130svh] lg:min-h-screen"
       )}>
       <div className="flex w-full flex-1 flex-col items-center justify-center md:max-w-4xl">
         <h1 className="mb-4 font-headline text-lg font-bold sm:text-2xl md:text-3xl">Orientações</h1>
@@ -1020,3 +1020,4 @@ export default function Page() {
     </>
   );
 }
+
