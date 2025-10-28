@@ -350,17 +350,17 @@ function JogoView({
             
             const spawnSide = Math.random() < 0.5 ? 'left' : 'right';
             const horizontalPadding = canvas.width * 0.1;
-            const sideWidth = (canvas.width / 2) * spawnRangePercentage;
 
             if (gameConfig.distancia === 'nivel_1') {
-                const innerEdge = sideWidth; 
-                const smallVariation = (Math.random() - 0.5) * (horizontalPadding * 0.5);
+                const centerOffset = canvas.width * 0.20; // 20% from the center
+                const smallVariation = (Math.random() - 0.5) * (canvas.width * 0.1);
                 if (spawnSide === 'left') {
-                    x = innerEdge + smallVariation;
+                    x = canvas.width / 2 - centerOffset + smallVariation;
                 } else {
-                    x = canvas.width - (innerEdge + smallVariation);
+                    x = canvas.width / 2 + centerOffset + smallVariation;
                 }
             } else {
+                const sideWidth = (canvas.width / 2) * spawnRangePercentage;
                 if (spawnSide === 'left') {
                     x = Math.random() * (sideWidth - horizontalPadding) + horizontalPadding;
                 } else {
@@ -395,13 +395,23 @@ function JogoView({
         if (isColliding) { 
             const spawnSide = Math.random() < 0.5 ? 'left' : 'right';
             const horizontalPadding = canvas.width * 0.1;
-            const sideWidth = (canvas.width / 2) * spawnRangePercentage;
-            
-            if (spawnSide === 'left') {
-                x = Math.random() * (sideWidth - horizontalPadding) + horizontalPadding;
+             if (gameConfig.distancia === 'nivel_1') {
+                const centerOffset = canvas.width * 0.20;
+                const smallVariation = (Math.random() - 0.5) * (canvas.width * 0.1);
+                if (spawnSide === 'left') {
+                    x = canvas.width / 2 - centerOffset + smallVariation;
+                } else {
+                    x = canvas.width / 2 + centerOffset + smallVariation;
+                }
             } else {
-                x = canvas.width - (Math.random() * (sideWidth - horizontalPadding) + horizontalPadding);
+                const sideWidth = (canvas.width / 2) * spawnRangePercentage;
+                 if (spawnSide === 'left') {
+                    x = Math.random() * (sideWidth - horizontalPadding) + horizontalPadding;
+                } else {
+                    x = canvas.width - (Math.random() * (sideWidth - horizontalPadding) + horizontalPadding);
+                }
             }
+
             y = Math.random() * spawnRangeHeight + spawnRangeYStart;
         }
 
