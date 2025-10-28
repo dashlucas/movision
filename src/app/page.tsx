@@ -293,7 +293,7 @@ function JogoView({
         const canvas = canvasRef.current;
         if (!canvas || canvas.width === 0 || canvas.height === 0) return;
 
-        const radius = Math.min(canvas.width, canvas.height) * 0.12;
+        const radius = Math.min(canvas.width, canvas.height) * 0.06;
         let x: number, y: number;
 
         const collisionRadius = radius * 2.5; // Safety distance from player
