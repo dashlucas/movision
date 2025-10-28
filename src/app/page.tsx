@@ -352,11 +352,22 @@ function JogoView({
             const horizontalPadding = canvas.width * 0.1;
             const sideWidth = (canvas.width / 2) * spawnRangePercentage;
 
-            if (spawnSide === 'left') {
-                x = Math.random() * (sideWidth - horizontalPadding) + horizontalPadding;
+            if (gameConfig.distancia === 'nivel_1') {
+                const innerEdge = sideWidth; 
+                const smallVariation = (Math.random() - 0.5) * (horizontalPadding * 0.5);
+                if (spawnSide === 'left') {
+                    x = innerEdge + smallVariation;
+                } else {
+                    x = canvas.width - (innerEdge + smallVariation);
+                }
             } else {
-                x = canvas.width - (Math.random() * (sideWidth - horizontalPadding) + horizontalPadding);
+                if (spawnSide === 'left') {
+                    x = Math.random() * (sideWidth - horizontalPadding) + horizontalPadding;
+                } else {
+                    x = canvas.width - (Math.random() * (sideWidth - horizontalPadding) + horizontalPadding);
+                }
             }
+            
 
             y = Math.random() * spawnRangeHeight + spawnRangeYStart;
 
