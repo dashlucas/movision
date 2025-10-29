@@ -93,10 +93,10 @@ const SelectionButton = memo(({
     <Button
       variant="outline"
       className={cn(
-        'relative w-full flex-1 justify-center rounded-xl border-4 border-transparent bg-card text-lg font-bold text-[#49416D] shadow-lg hover:bg-card/80 sm:text-xl',
+        'relative w-full flex-1 justify-center rounded-xl border-4  bg-card text-lg font-bold text-[#49416D] shadow-lg hover:bg-card/80 sm:text-xl',
         'whitespace-normal break-words py-2',
         'h-full',
-        isSelected && 'border-primary ring-4 ring-primary/50',
+        isSelected && 'border-primary ring-4 ring-primary/100',
         'flex items-center gap-4 px-4',
         className
       )}
@@ -180,13 +180,13 @@ function ConfiguracoesView({ onStart }: { onStart: (selections: Selections) => v
             <h2 className="mb-1 text-base font-bold text-white sm:text-2xl">Distância</h2>
             <div className="flex w-full flex-1 flex-col gap-3 sm:gap-4">
               <SelectionButton option="distancia" value="nivel_1" selections={selections} handleSelection={handleSelection}>
-                Nível 1
+                Curta
               </SelectionButton>
               <SelectionButton option="distancia" value="nivel_2" selections={selections} handleSelection={handleSelection}>
-                Nível 2
+                Média
               </SelectionButton>
               <SelectionButton option="distancia" value="nivel_3" selections={selections} handleSelection={handleSelection}>
-                Nível 3
+                Longa
               </SelectionButton>
             </div>
           </div>
