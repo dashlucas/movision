@@ -93,6 +93,36 @@ const IconLonga = () => (
     </svg>
 );
 
+const CurtaContent = memo(function CurtaContent() {
+  return (
+    <>
+      <IconCurta />
+      <span>Curta</span>
+    </>
+  );
+});
+CurtaContent.displayName = 'CurtaContent';
+
+const MediaContent = memo(function MediaContent() {
+  return (
+    <>
+      <IconMedia />
+      <span>Média</span>
+    </>
+  );
+});
+MediaContent.displayName = 'MediaContent';
+
+const LongaContent = memo(function LongaContent() {
+  return (
+    <>
+      <IconLonga />
+      <span>Longa</span>
+    </>
+  );
+});
+LongaContent.displayName = 'LongaContent';
+
 const SelectionButton = memo(({
   option,
   value,
@@ -200,16 +230,13 @@ function ConfiguracoesView({ onStart }: { onStart: (selections: Selections) => v
             <h2 className="mb-1 text-base font-bold text-white sm:text-2xl">Distância</h2>
             <div className="flex w-full flex-1 flex-col gap-3 sm:gap-4">
               <SelectionButton option="distancia" value="nivel_1" selections={selections} handleSelection={handleSelection}>
-                <IconCurta />
-                <span>Curta</span>
+                <CurtaContent />
               </SelectionButton>
               <SelectionButton option="distancia" value="nivel_2" selections={selections} handleSelection={handleSelection}>
-                <IconMedia />
-                <span>Média</span>
+                <MediaContent />
               </SelectionButton>
               <SelectionButton option="distancia" value="nivel_3" selections={selections} handleSelection={handleSelection}>
-                <IconLonga />
-                <span>Longa</span>
+                <LongaContent />
               </SelectionButton>
             </div>
           </div>
