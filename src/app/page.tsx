@@ -133,7 +133,7 @@ function ConfiguracoesView({ onStart }: { onStart: (selections: Selections) => v
   return (
     <main className={cn(
         "flex flex-col justify-center bg-[#49416D] p-4 pb-2",
-        "min-h-[130svh] lg:min-h-screen"
+        "h-[130svh] lg:h-screen"
       )}>
       <div className="flex w-full flex-col items-center justify-center">
         <div className="grid w-full max-w-6xl grid-cols-1 gap-2 sm:grid-cols-3 md:gap-2">
@@ -325,7 +325,7 @@ function JogoView({
             spawnRangePercentage = 0.25;
             break;
           case 'nivel_2':
-            spawnRangePercentage = 0.50;
+            spawnRangePercentage = 0.65;
             break;
           case 'nivel_3':
             spawnRangePercentage = 0.75;
@@ -396,7 +396,7 @@ function JogoView({
             const spawnSide = Math.random() < 0.5 ? 'left' : 'right';
             const horizontalPadding = canvas.width * 0.1;
              if (gameConfig.distancia === 'nivel_1') {
-                const centerOffset = canvas.width * 0.20;
+                const centerOffset = canvas.width * 0.20; // 20% from the center
                 const smallVariation = (Math.random() - 0.5) * (canvas.width * 0.1);
                 if (spawnSide === 'left') {
                     x = canvas.width / 2 - centerOffset + smallVariation;
@@ -629,7 +629,7 @@ function JogoView({
   return (
     <div className={cn(
         "relative w-screen overflow-hidden bg-black",
-        "min-h-[130svh] lg:min-h-screen"
+        "h-[130svh] lg:h-screen"
       )}>
        <video
         ref={videoRef}
@@ -718,7 +718,7 @@ function JogoView({
 
 function HomeViewVertical({ onStart, hasCameraPermission }: { onStart: () => void, hasCameraPermission: boolean | null }) {
   return (
-    <main className="flex min-h-screen w-full flex-col">
+    <main className="flex h-full w-full flex-col">
       {/* Top Panel */}
       <div className="flex h-1/2 w-full flex-col items-center justify-center bg-card p-4 sm:p-6 md:p-8">
         <Logo className="h-48 w-48 sm:h-64 sm:w-64" />
@@ -769,7 +769,7 @@ function HomeViewVertical({ onStart, hasCameraPermission }: { onStart: () => voi
 
 function HomeViewHorizontal({ onStart, hasCameraPermission }: { onStart: () => void, hasCameraPermission: boolean | null }) {
   return (
-    <main className="flex min-h-screen w-full flex-row">
+    <main className="flex h-full w-full flex-row">
       {/* Left Panel */}
       <div className="flex w-1/2 flex-col items-center justify-center bg-card p-4 sm:p-6 md:p-8">
         <Logo className="h-48 w-48 sm:h-64 sm:w-64 lg:h-96 lg:w-96" />
@@ -826,8 +826,14 @@ function HomeView(props: { onStart: () => void, hasCameraPermission: boolean | n
   if (width === 0) {
     return null; // ou um loader
   }
+  
+  const Component = isVertical ? HomeViewVertical : HomeViewHorizontal;
 
-  return isVertical ? <HomeViewVertical {...props} /> : <HomeViewHorizontal {...props} />;
+  return (
+    <div className="h-[130svh] lg:h-screen w-full">
+      <Component {...props} />
+    </div>
+  );
 }
 
 
@@ -835,7 +841,7 @@ function FinalView({ score, onPlayAgain, onExit }: { score: number; onPlayAgain:
   return (
     <main className={cn(
         "flex flex-col w-full",
-        "min-h-[130svh] lg:min-h-screen lg:flex-row"
+        "h-[130svh] lg:h-screen lg:flex-row"
       )}>
       {/* Left Panel */}
       <div className="flex w-full lg:w-1/2 min-h-[50svh] lg:min-h-full flex-col items-center justify-center gap-4 bg-card p-4 text-center text-[#49416D] md:p-8">
@@ -879,7 +885,7 @@ function OrientacoesView({ onUnderstood, hasCameraPermission }: { onUnderstood: 
   return (
     <main className={cn(
         "flex flex-col items-center justify-center bg-[#49416D] p-4 text-white",
-        "min-h-[130svh] lg:min-h-screen"
+        "h-[130svh] lg:h-screen"
       )}>
       <div className="flex w-full flex-1 flex-col items-center justify-center md:max-w-4xl">
         <h1 className="mb-4 font-headline text-lg font-bold sm:text-2xl md:text-3xl">Orientações</h1>
@@ -1020,4 +1026,3 @@ export default function Page() {
     </>
   );
 }
-
