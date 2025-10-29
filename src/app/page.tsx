@@ -59,6 +59,17 @@ const SuperioresIconContent = memo(function SuperioresIconContent() {
 });
 SuperioresIconContent.displayName = 'SuperioresIconContent';
 
+const CurtaIconContent = memo(function CurtaIconContent() {
+  return (
+    <>
+      <div className="flex flex-col items-center text-center">
+        Curta
+      </div>
+      <Image src="/img/IconCurta.svg" alt="CurtaDist" width={40} height={40} className="object-contain" />
+    </>
+  );
+});
+CurtaIconContent.displayName = 'CurtaIconContent';
 
 const InferioresIconContent = memo(function InferioresIconContent() {
   return (
@@ -180,7 +191,7 @@ function ConfiguracoesView({ onStart }: { onStart: (selections: Selections) => v
             <h2 className="mb-1 text-base font-bold text-white sm:text-2xl">Distância</h2>
             <div className="flex w-full flex-1 flex-col gap-3 sm:gap-4">
               <SelectionButton option="distancia" value="nivel_1" selections={selections} handleSelection={handleSelection}>
-                Curta
+                 <CurtaIconContent />
               </SelectionButton>
               <SelectionButton option="distancia" value="nivel_2" selections={selections} handleSelection={handleSelection}>
                 Média
