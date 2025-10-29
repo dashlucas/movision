@@ -221,7 +221,7 @@ function ConfiguracoesView({ onStart }: { onStart: (selections: Selections) => v
                  <MediaIconContent />
               </SelectionButton>
               <SelectionButton option="distancia" value="nivel_3" selections={selections} handleSelection={handleSelection}>
-                 <MediaIconContent />
+                 <LongaIconContent />
               </SelectionButton>
             </div>
           </div>
