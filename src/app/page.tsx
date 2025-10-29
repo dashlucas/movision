@@ -71,6 +71,30 @@ const CurtaIconContent = memo(function CurtaIconContent() {
 });
 CurtaIconContent.displayName = 'CurtaIconContent';
 
+const MediaIconContent = memo(function MediaIconContent() {
+  return (
+    <>
+      <div className="flex flex-col items-center text-center">
+        Média
+      </div>
+      <Image src="/img/IconMedia.svg" alt="MediaDist" width={40} height={40} className="object-contain" />
+    </>
+  );
+});
+MediaIconContent.displayName = 'MediaIconContent';
+
+const LongaIconContent = memo(function LongaIconContent() {
+  return (
+    <>
+      <div className="flex flex-col items-center text-center">
+        Longa
+      </div>
+      <Image src="/img/IconLonga.svg" alt="LongaDist" width={40} height={40} className="object-contain" />
+    </>
+  );
+});
+LongaIconContent.displayName = 'LongaIconContent';
+
 const InferioresIconContent = memo(function InferioresIconContent() {
   return (
     <>
@@ -194,10 +218,10 @@ function ConfiguracoesView({ onStart }: { onStart: (selections: Selections) => v
                  <CurtaIconContent />
               </SelectionButton>
               <SelectionButton option="distancia" value="nivel_2" selections={selections} handleSelection={handleSelection}>
-                Média
+                 <MediaIconContent />
               </SelectionButton>
               <SelectionButton option="distancia" value="nivel_3" selections={selections} handleSelection={handleSelection}>
-                Longa
+                 <MediaIconContent />
               </SelectionButton>
             </div>
           </div>
@@ -304,7 +328,7 @@ function JogoView({
         const canvas = canvasRef.current;
         if (!canvas || canvas.width === 0 || canvas.height === 0) return;
 
-        const radius = Math.min(canvas.width, canvas.height) * 0.06;
+        const radius = Math.min(canvas.width, canvas.height) * 0.12;
         let x: number, y: number;
 
         const collisionRadius = radius * 2.5; // Safety distance from player
