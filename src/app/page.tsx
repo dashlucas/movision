@@ -73,26 +73,6 @@ const InferioresIconContent = memo(function InferioresIconContent() {
 });
 InferioresIconContent.displayName = 'InferioresIconContent';
 
-const IconCurta = () => (
-    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M4 12H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M16 12H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
-);
-
-const IconMedia = () => (
-    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M4 12H12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M12 12H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
-);
-
-const IconLonga = () => (
-    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M4 12H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    </svg>
-);
-
 const SelectionButton = memo(({
   option,
   value,
@@ -200,16 +180,13 @@ function ConfiguracoesView({ onStart }: { onStart: (selections: Selections) => v
             <h2 className="mb-1 text-base font-bold text-white sm:text-2xl">Distância</h2>
             <div className="flex w-full flex-1 flex-col gap-3 sm:gap-4">
               <SelectionButton option="distancia" value="nivel_1" selections={selections} handleSelection={handleSelection}>
-                <IconCurta />
-                <span>Curta</span>
+                Curta
               </SelectionButton>
               <SelectionButton option="distancia" value="nivel_2" selections={selections} handleSelection={handleSelection}>
-                <IconMedia />
-                <span>Média</span>
+                Média
               </SelectionButton>
               <SelectionButton option="distancia" value="nivel_3" selections={selections} handleSelection={handleSelection}>
-                <IconLonga />
-                <span>Longa</span>
+                Longa
               </SelectionButton>
             </div>
           </div>
