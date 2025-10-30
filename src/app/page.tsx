@@ -927,12 +927,12 @@ function OrientacoesView({ onUnderstood, hasCameraPermission }: { onUnderstood: 
         <div className="flex w-full flex-col items-stretch justify-center gap-4 md:flex-row">
           {/* Dispositivo Card */}
           <div className="flex w-full flex-col rounded-2xl border-4 border-primary bg-card p-4 text-card-foreground md:w-1/2">
-            <h2 className="mb-2 flex items-center justify-center gap-2 font-headline text-lg font-bold text-[#49416D] md:text-2xl">
-              <Smartphone /> Dispositivo
+            <h2 className="mb-2 flex items-center justify-center gap-2 font-headline text-lg text-[#49416D] md:text-2xl">
+              <Smartphone /> <span className="font-bold">Dispositivo</span>
             </h2>
             <div className="flex flex-1 flex-col items-center justify-between gap-4 md:flex-row">
               <ul className="flex-1 list-disc space-y-2 pl-5 text-xs md:text-base">
-                <li className="font-medium">Apoie o dispositivo sobre uma superfície firme.</li>
+                <li className="font-medium">Apoie o dispositivo sobre uma superfície firme e no chão, mantendo-o inclinado para você.</li>
                 <li className="font-medium">Posicione o celular na orientação horizontal.</li>
               </ul>
               <Image
