@@ -931,9 +931,9 @@ function OrientacoesView({ onUnderstood, hasCameraPermission }: { onUnderstood: 
               <Smartphone /> <span className="font-bold">Dispositivo</span>
             </h2>
             <div className="flex flex-1 flex-col items-center justify-between gap-4 md:flex-row">
-              <ul className="flex-1 list-disc space-y-2 pl-5 text-xs md:text-base">
-                <li className="font-medium">Apoie o dispositivo sobre uma superfície firme e no chão, mantendo-o inclinado para você.</li>
-                <li className="font-medium">Posicione o celular na orientação horizontal.</li>
+              <ul className="flex-1 list-disc space-y-2 pl-5 text-xs md:text-base font-medium">
+                <li>Apoie o dispositivo sobre uma superfície firme e no chão, mantendo-o inclinado para você.</li>
+                <li>Posicione o celular na orientação horizontal.</li>
               </ul>
               <Image
                 src="/img/suporte.png"
@@ -950,9 +950,8 @@ function OrientacoesView({ onUnderstood, hasCameraPermission }: { onUnderstood: 
             <h2 className="mb-2 flex items-center justify-center gap-2 font-headline text-lg font-bold text-[#49416D] md:text-2xl">
               <User /> Usuário
             </h2>
-            <ul className="flex-1 list-disc space-y-2 pl-5 text-xs md:text-base">
-              <li>Posicione-se de frente para a câmera.</li>
-              <li>Garanta que todo seu corpo esteja visível.</li>
+            <ul className="flex-1 list-disc space-y-2 pl-5 text-xs md:text-base font-medium">
+              <li>Posicione-se de frente para a câmera, garantindo que todo seu corpo esteja visível na tela.</li>
               <li>Tenha espaço livre ao redor para se movimentar.</li>
             </ul>
           </div>
