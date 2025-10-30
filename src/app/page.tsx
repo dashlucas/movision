@@ -943,7 +943,7 @@ function OrientacoesView({ onUnderstood, hasCameraPermission }: { onUnderstood: 
         <div className="flex w-full flex-col items-stretch justify-center gap-4 md:flex-row">
           {/* Dispositivo Card */}
           <div className="flex w-full flex-col rounded-2xl border-4 border-primary bg-card p-4 text-card-foreground md:w-1/2">
-            <h2 className="mb-2 flex items-center justify-center gap-2 font-headline text-lg text-primary md:text-2xl">
+            <h2 className="mb-4 flex items-center justify-center gap-2 font-headline text-lg text-primary md:text-2xl">
               <Smartphone /> <span className="font-bold">Dispositivo</span>
             </h2>
             <div className="flex flex-1 flex-col items-center justify-between gap-4 md:flex-row">
