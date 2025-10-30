@@ -128,7 +128,7 @@ const SelectionButton = memo(({
     <Button
       variant="outline"
       className={cn(
-        'relative w-full flex-1 justify-center rounded-xl border-1  bg-card text-lg font-bold text-[#49416D] shadow-lg hover:bg-card/80 sm:text-xl',
+        'relative w-full flex-1 justify-center rounded-xl border-1  bg-card text-lg font-bold text-foreground shadow-lg hover:bg-card/80 sm:text-xl',
         'whitespace-normal break-words py-2',
         'h-full',
         isSelected && 'border-primary ring-4 ring-primary/100',
@@ -774,7 +774,7 @@ function HomeViewVertical({ onStart, hasCameraPermission }: { onStart: () => voi
             asChild
             size="lg"
             variant="outline"
-            className="h-14 w-64 rounded-2xl border-4 border-primary bg-card font-bold text-[#49416D] shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background sm:h-16 sm:w-80 sm:text-lg"
+            className="h-14 w-64 rounded-2xl border-4 border-primary bg-card font-bold text-foreground shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background sm:h-16 sm:w-80 sm:text-lg"
           >
             <Link href="#">Tutorial</Link>
           </Button>
@@ -782,7 +782,7 @@ function HomeViewVertical({ onStart, hasCameraPermission }: { onStart: () => voi
             asChild
             size="lg"
             variant="outline"
-            className="h-14 w-64 rounded-2xl border-4 border-primary bg-card font-bold text-[#49416D] shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background sm:h-16 sm:w-80 sm:text-lg"
+            className="h-14 w-64 rounded-2xl border-4 border-primary bg-card font-bold text-foreground shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background sm:h-16 sm:w-80 sm:text-lg"
           >
             <Link href="#">Recomendações</Link>
           </Button>
@@ -825,7 +825,7 @@ function HomeViewHorizontal({ onStart, hasCameraPermission }: { onStart: () => v
             asChild
             size="lg"
             variant="outline"
-            className="h-10 w-48 rounded-2xl border-4 border-primary bg-card font-bold text-[#49416D] shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background sm:h-12 sm:w-52 sm:text-base md:h-14 md:w-[300px] md:text-xl"
+            className="h-10 w-48 rounded-2xl border-4 border-primary bg-card font-bold text-foreground shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background sm:h-12 sm:w-52 sm:text-base md:h-14 md:w-[300px] md:text-xl"
           >
             <Link href="#">Tutorial</Link>
           </Button>
@@ -833,7 +833,7 @@ function HomeViewHorizontal({ onStart, hasCameraPermission }: { onStart: () => v
             asChild
             size="lg"
             variant="outline"
-            className="h-10 w-48 rounded-2xl border-4 border-primary bg-card font-bold text-[#49416D] shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background sm:h-12 sm:w-52 sm:text-base md:h-14 md:w-[300px] md:text-xl"
+            className="h-10 w-48 rounded-2xl border-4 border-primary bg-card font-bold text-foreground shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background sm:h-12 sm:w-52 sm:text-base md:h-14 md:w-[300px] md:text-xl"
           >
             <Link href="#">Recomendações</Link>
           </Button>
@@ -879,7 +879,7 @@ function FinalView({ score, onPlayAgain, onExit }: { score: number; onPlayAgain:
         "h-[130svh] lg:h-screen lg:flex-row"
       )}>
       {/* Left Panel */}
-      <div className="flex w-full lg:w-1/2 min-h-[50svh] lg:min-h-full flex-col items-center justify-center gap-4 bg-card p-4 text-center text-[#49416D] md:p-8">
+      <div className="flex w-full lg:w-1/2 min-h-[50svh] lg:min-h-full flex-col items-center justify-center gap-4 bg-card p-4 text-center text-foreground md:p-8">
         <h1 className="font-headline text-3xl font-extrabold sm:text-5xl md:text-7xl">
           Parabéns!
         </h1>
@@ -898,7 +898,7 @@ function FinalView({ score, onPlayAgain, onExit }: { score: number; onPlayAgain:
             onClick={onExit}
             size="lg"
             variant="outline"
-            className="h-14 w-64 rounded-2xl border-4 border-primary bg-card font-bold text-[#49416D] shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background md:h-20 md:w-[300px] md:text-xl"
+            className="h-14 w-64 rounded-2xl border-4 border-primary bg-card font-bold text-foreground shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background md:h-20 md:w-[300px] md:text-xl"
           >
             Ir para o menu
           </Button>
@@ -906,7 +906,7 @@ function FinalView({ score, onPlayAgain, onExit }: { score: number; onPlayAgain:
             onClick={onPlayAgain}
             size="lg"
             variant="outline"
-            className="h-14 w-64 rounded-2xl border-4 border-primary bg-card font-bold text-[#49416D] shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background md:h-20 md:w-[300px] md:text-xl"
+            className="h-14 w-64 rounded-2xl border-4 border-primary bg-card font-bold text-foreground shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background md:h-20 md:w-[300px] md:text-xl"
           >
             Jogar novamente
           </Button>
@@ -927,8 +927,8 @@ function OrientacoesView({ onUnderstood, hasCameraPermission }: { onUnderstood: 
         <div className="flex w-full flex-col items-stretch justify-center gap-4 md:flex-row">
           {/* Dispositivo Card */}
           <div className="flex w-full flex-col rounded-2xl border-4 border-primary bg-card p-4 text-card-foreground md:w-1/2">
-            <h2 className="mb-2 flex items-center justify-center gap-2 font-headline text-lg font-bold text-[#49416D] md:text-2xl">
-              <Smartphone /> Dispositivo
+            <h2 className="mb-2 flex items-center justify-center gap-2 font-headline text-lg text-foreground md:text-2xl">
+              <Smartphone /> <span className="font-bold">Dispositivo</span>
             </h2>
             <div className="flex flex-1 flex-col items-center justify-between gap-4 md:flex-row">
               <ul className="flex-1 list-disc space-y-2 pl-5 text-xs md:text-base">
@@ -947,7 +947,7 @@ function OrientacoesView({ onUnderstood, hasCameraPermission }: { onUnderstood: 
 
           {/* Usuário Card */}
           <div className="flex w-full flex-col rounded-2xl border-4 border-primary bg-card p-4 text-card-foreground md:w-1/2">
-            <h2 className="mb-2 flex items-center justify-center gap-2 font-headline text-lg font-bold text-[#49416D] md:text-2xl">
+            <h2 className="mb-2 flex items-center justify-center gap-2 font-headline text-lg font-bold text-foreground md:text-2xl">
               <User /> Usuário
             </h2>
             <ul className="flex-1 list-disc space-y-2 pl-5 text-xs md:text-base">

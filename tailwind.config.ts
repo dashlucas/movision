@@ -17,7 +17,7 @@ export default {
       colors: {
         'panel-right': 'hsl(var(--background))',
         tutorial: {
-          DEFAULT: '#49416D',
+          DEFAULT: 'hsl(var(--background))',
         },
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
