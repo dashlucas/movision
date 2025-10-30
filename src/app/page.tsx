@@ -539,13 +539,13 @@ function JogoView({
           for (const landmark of result.landmarks) {
             const drawingUtils = new DrawingUtils(canvasCtx);
             drawingUtils.drawLandmarks(landmark, {
-              color: '#FFFFFF',
+              color: '#00000000',
               radius: (data) => DrawingUtils.lerp(data.from!.z!, -0.15, 0.1, 5, 1),
             });
             drawingUtils.drawConnectors(
                 landmark,
                 PoseLandmarker.POSE_CONNECTIONS,
-                { color: '#FFFFFF' }
+                { color: '#00000000' }
             );
             
             if (circleRef.current && circleRef.current.visible) {
