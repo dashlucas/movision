@@ -171,7 +171,7 @@ function ConfiguracoesView({ onStart }: { onStart: (selections: Selections) => v
         "h-[130svh] lg:h-screen"
       )}>
       <div className="flex w-full flex-col items-center justify-center">
-        <div className="grid w-full max-w-6xl grid-cols-1 gap-2 sm:grid-cols-3 md:gap-2">
+        <div className="grid w-full max-w-6xl grid-cols-1 gap-2 sm:grid-cols-3 md:gap-5">
           {/* Posição */}
           <div className="flex flex-col items-center gap-2 sm:gap-4">
             <h2 className="mb-1 text-base font-bold text-white sm:text-2xl">Posição</h2>
