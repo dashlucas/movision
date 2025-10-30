@@ -128,7 +128,7 @@ const SelectionButton = memo(({
     <Button
       variant="outline"
       className={cn(
-        'relative w-full flex-1 justify-center rounded-xl border-4  bg-card text-lg font-bold text-[#49416D] shadow-lg hover:bg-card/80 sm:text-xl',
+        'relative w-full flex-1 justify-center rounded-xl border-1  bg-card text-lg font-bold text-[#49416D] shadow-lg hover:bg-card/80 sm:text-xl',
         'whitespace-normal break-words py-2',
         'h-full',
         isSelected && 'border-primary ring-4 ring-primary/100',
@@ -685,7 +685,7 @@ function JogoView({
           <div className="flex w-full items-center justify-around gap-8 px-4">
             <div className="relative h-52 w-1/3 lg:h-64 xl:h-72 2xl:h-96">
               <Image
-                src="/img/aviso_posicionamento.png"
+                src="/img/SVG_Frase.svg"
                 alt="Aviso de posicionamento"
                 fill
                 className="object-contain"
@@ -701,10 +701,10 @@ function JogoView({
             </div>
             <div className="relative flex h-52 w-1/3 items-center justify-center lg:h-64 xl:h-72 2xl:h-96">
               <Image
-                src="/img/T_timer.png"
+                src="/img/T_SVGTimer.svg"
                 alt="Timer"
                 fill
-                className="object-contain"
+                className="object-contain saturate-150 constrast-125"
               />
               <p className="font-headline absolute font-extrabold leading-none text-white text-6xl sm:text-7xl md:text-8xl">
                 {countdown}
