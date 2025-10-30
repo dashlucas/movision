@@ -265,8 +265,8 @@ function JogoView({
   const animationFrameId = useRef<number | null>(null);
   const circleRef = useRef<{ id: number; x: number; y: number; radius: number; visible: boolean; type: number; image: HTMLImageElement; } | null>(null);
   
-  const [sphereImages, setSphereImages] = useState<HTMLImageElement[]>([]);
-  const [explosionImages, setExplosionImages] = useState<HTMLImageElement[]>([]);
+  const [sphereImages, setSphereImages] = useState<HTMLImageElement[]>([ ]);
+  const [explosionImages, setExplosionImages] = useState<HTMLImageElement[]>([ ]);
   
   const explosionRef = useRef<{ x: number; y: number; radius: number, timestamp: number; image: HTMLImageElement; } | null>(null);
   const needsToSpawnCircle = useRef(false);
@@ -751,7 +751,15 @@ function JogoView({
   );
 }
 
-function HomeViewVertical({ onStart, hasCameraPermission }: { onStart: () => void, hasCameraPermission: boolean | null }) {
+function HomeViewVertical({ 
+  onStart, 
+  onRecommendationsClick, 
+  hasCameraPermission 
+}: { 
+  onStart: () => void; 
+  onRecommendationsClick: () => void;
+  hasCameraPermission: boolean | null 
+}) {
   return (
     <main className="flex h-full w-full flex-col">
       {/* Top Panel */}
@@ -779,12 +787,12 @@ function HomeViewVertical({ onStart, hasCameraPermission }: { onStart: () => voi
             <Link href="#">Tutorial</Link>
           </Button>
           <Button
-            asChild
+            onClick={onRecommendationsClick}
             size="lg"
             variant="outline"
             className="h-14 w-64 rounded-2xl border-4 border-primary bg-card font-bold text-[#49416D] shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background sm:h-16 sm:w-80 sm:text-lg"
           >
-            <Link href="#">Recomendações</Link>
+            Recomendações
           </Button>
         </div>
       </div>
@@ -802,7 +810,15 @@ function HomeViewVertical({ onStart, hasCameraPermission }: { onStart: () => voi
   );
 }
 
-function HomeViewHorizontal({ onStart, hasCameraPermission }: { onStart: () => void, hasCameraPermission: boolean | null }) {
+function HomeViewHorizontal({ 
+  onStart, 
+  onRecommendationsClick, 
+  hasCameraPermission 
+}: { 
+  onStart: () => void; 
+  onRecommendationsClick: () => void;
+  hasCameraPermission: boolean | null 
+}) {
   return (
     <main className="flex h-full w-full flex-row">
       {/* Left Panel */}
@@ -830,12 +846,12 @@ function HomeViewHorizontal({ onStart, hasCameraPermission }: { onStart: () => v
             <Link href="#">Tutorial</Link>
           </Button>
           <Button
-            asChild
+            onClick={onRecommendationsClick}
             size="lg"
             variant="outline"
             className="h-10 w-48 rounded-2xl border-4 border-primary bg-card font-bold text-[#49416D] shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background sm:h-12 sm:w-52 sm:text-base md:h-14 md:w-[300px] md:text-xl"
           >
-            <Link href="#">Recomendações</Link>
+            Recomendações
           </Button>
         </div>
       </div>
@@ -854,7 +870,7 @@ function HomeViewHorizontal({ onStart, hasCameraPermission }: { onStart: () => v
 }
 
 
-function HomeView(props: { onStart: () => void, hasCameraPermission: boolean | null }) {
+function HomeView(props: { onStart: () => void; onRecommendationsClick: () => void; hasCameraPermission: boolean | null }) {
   const { width = 0, height = 0 } = useWindowSize();
   const isVertical = width < height;
 
@@ -931,9 +947,9 @@ function OrientacoesView({ onUnderstood, hasCameraPermission }: { onUnderstood: 
               <Smartphone /> <span className="font-bold">Dispositivo</span>
             </h2>
             <div className="flex flex-1 flex-col items-center justify-between gap-4 md:flex-row">
-              <ul className="flex-1 list-disc space-y-2 pl-5 text-xs md:text-base font-medium">
-                <li>Apoie o dispositivo sobre uma superfície firme e no chão, mantendo-o inclinado para você.</li>
-                <li>Posicione o celular na orientação horizontal.</li>
+              <ul className="flex-1 list-disc space-y-2 pl-5 text-xs md:text-base">
+                <li className="font-medium">Apoie o dispositivo sobre uma superfície firme e no chão, mantendo-o inclinado para você.</li>
+                <li className="font-medium">Posicione o celular na orientação horizontal.</li>
               </ul>
               <Image
                 src="/img/suporte.png"
@@ -1008,6 +1024,10 @@ export default function Page() {
   const handleExit = () => {
     setCurrentView('home');
   };
+  
+  const handleRecommendationsClick = () => {
+    setCurrentView('orientacoes');
+  };
 
   // Solicita permissão da câmera ao carregar o app
   useEffect(() => {
@@ -1042,7 +1062,7 @@ export default function Page() {
       case 'orientacoes':
         return <OrientacoesView onUnderstood={() => setCurrentView('home')} hasCameraPermission={hasCameraPermission} />;
       case 'home':
-        return <HomeView onStart={() => setCurrentView('configuracoes')} hasCameraPermission={hasCameraPermission} />;
+        return <HomeView onStart={() => setCurrentView('configuracoes')} onRecommendationsClick={handleRecommendationsClick} hasCameraPermission={hasCameraPermission} />;
       case 'configuracoes':
         return <ConfiguracoesView onStart={handleStartGame} />;
       case 'jogo':
