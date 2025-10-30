@@ -466,7 +466,7 @@ function JogoView({
             if (circleRef.current && circleRef.current.id === newCircleId) {
                 needsToSpawnCircle.current = true;
             }
-        }, 4000);
+        }, 10000);
     };
     
     const startMediaPipe = async () => {
@@ -932,8 +932,8 @@ function OrientacoesView({ onUnderstood, hasCameraPermission }: { onUnderstood: 
             </h2>
             <div className="flex flex-1 flex-col items-center justify-between gap-4 md:flex-row">
               <ul className="flex-1 list-disc space-y-2 pl-5 text-xs md:text-base">
-                <li>Apoie o dispositivo sobre uma superfície firme.</li>
-                <li>Posicione o celular na orientação horizontal.</li>
+                <li className="font-medium">Apoie o dispositivo sobre uma superfície firme.</li>
+                <li className="font-medium">Posicione o celular na orientação horizontal.</li>
               </ul>
               <Image
                 src="/img/suporte.png"
