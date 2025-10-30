@@ -167,7 +167,7 @@ function ConfiguracoesView({ onStart }: { onStart: (selections: Selections) => v
 
   return (
     <main className={cn(
-        "flex flex-col justify-center bg-[#49416D] p-4 pb-2",
+        "flex flex-col justify-center bg-background p-4 pb-2",
         "h-[130svh] lg:h-screen"
       )}>
       <div className="flex w-full flex-col items-center justify-center">
@@ -728,7 +728,7 @@ function JogoView({
             <Image src="/img/game_timer.png" alt="Timer" fill className="object-contain" />
           </div>
            <div className="absolute right-8 top-8 flex flex-col gap-4">
-            <div className="rounded-2xl bg-[#49416D] px-6 py-3 text-center shadow-lg">
+            <div className="rounded-2xl bg-panel-right px-6 py-3 text-center shadow-lg">
               <p ref={scoreDisplayRef} className="font-headline text-2xl font-bold text-white md:text-3xl">
                 Pontos: 0
               </p>
@@ -919,7 +919,7 @@ function FinalView({ score, onPlayAgain, onExit }: { score: number; onPlayAgain:
 function OrientacoesView({ onUnderstood, hasCameraPermission }: { onUnderstood: () => void; hasCameraPermission: boolean | null; }) {
   return (
     <main className={cn(
-        "flex flex-col items-center justify-center bg-[#49416D] p-4 text-white",
+        "flex flex-col items-center justify-center bg-background p-4 text-white",
         "h-[130svh] lg:h-screen"
       )}>
       <div className="flex w-full flex-1 flex-col items-center justify-center md:max-w-4xl">
