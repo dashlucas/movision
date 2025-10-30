@@ -336,7 +336,7 @@ function JogoView({
         let attempts = 0;
         
         const rem = 16;
-        const timerSize = 6 * rem;
+        const timerSize = 5 * rem; // 5rem = h-20/w-20
         const padding = 2 * rem;
         const scoreBoxWidth = 10 * rem;
         const scoreBoxHeight = 5 * rem;
@@ -718,13 +718,13 @@ function JogoView({
               className="absolute rounded-full"
               style={{
                 background: `conic-gradient(hsl(var(--primary)) ${angle}deg, transparent ${angle}deg)`,
-                width: 'calc(6rem - 18px)',
-                height: 'calc(6rem - 18px)',
+                width: 'calc(5rem - 18px)',
+                height: 'calc(5rem - 18px)',
                 left: 'calc(2rem + 9px)',
                 top: 'calc(2rem + 9px + 1%)',
               }}
             />
-          <div className="absolute left-8 top-8 h-24 w-24">
+          <div className="absolute left-8 top-8 h-20 w-20">
             <Image src="/img/game_timer.png" alt="Timer" fill className="object-contain" />
           </div>
            <div className="absolute right-8 top-8 flex flex-col gap-4">
