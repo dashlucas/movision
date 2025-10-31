@@ -23,32 +23,6 @@ type Selections = {
   distancia: string;
 };
 
-const useWindowSize = () => {
-  const [windowSize, setWindowSize] = useState<{
-    width: number | undefined;
-    height: number | undefined;
-  }>({
-    width: undefined,
-    height: undefined,
-  });
-
-  useEffect(() => {
-    function handleResize() {
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-    }
-
-    window.addEventListener('resize', handleResize);
-    handleResize();
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  return windowSize;
-};
-
 const SuperioresIconContent = memo(function SuperioresIconContent() {
   return (
     <>
@@ -841,7 +815,7 @@ function JogoView({
                 src="/img/T_SVGTimer.svg"
                 alt="Timer"
                 fill
-                className="object-contain saturate-100 constrast-100"
+                className="object-contain saturate-100 contrast-100"
               />
               <p className="font-headline absolute text-6xl font-extrabold leading-none text-white sm:text-7xl md:text-8xl">
                 {countdown}
@@ -897,7 +871,7 @@ function JogoView({
   );
 }
 
-function HomeViewVertical({
+function HomeView({
   onStart,
   onRecommendationsClick,
   hasCameraPermission,
@@ -907,67 +881,7 @@ function HomeViewVertical({
   hasCameraPermission: boolean | null;
 }) {
   return (
-    <main className="flex h-full w-full flex-col">
-      {/* Top Panel */}
-      <div className="flex h-1/2 w-full flex-col items-center justify-center bg-card p-4 sm:p-6 md:p-8">
-        <Logo className="h-48 w-48 sm:h-64 sm:w-64" />
-      </div>
-
-      {/* Bottom Panel */}
-      <div className="flex h-1/2 w-full flex-col items-center justify-center bg-panel-right p-4 sm:p-6 md:p-8">
-        <div className="flex flex-col items-center gap-4 md:gap-6">
-          <Button
-            onClick={onStart}
-            size="lg"
-            className="h-16 w-64 rounded-2xl bg-primary text-xl font-extrabold text-primary-foreground shadow-lg transition-transform hover:scale-105 hover:bg-primary/90 focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-panel-right sm:h-20 sm:w-80 sm:text-2xl disabled:cursor-not-allowed disabled:bg-gray-500 disabled:opacity-70"
-            disabled={hasCameraPermission !== true}
-          >
-            Iniciar
-          </Button>
-          <Button
-            asChild
-            size="lg"
-            variant="outline"
-            className="h-14 w-64 rounded-2xl border-4 border-primary bg-card font-bold text-primary shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background sm:h-16 sm:w-80 sm:text-lg"
-          >
-            <Link href="#">Tutorial</Link>
-          </Button>
-          <Button
-            onClick={onRecommendationsClick}
-            size="lg"
-            variant="outline"
-            className="h-14 w-64 rounded-2xl border-4 border-primary bg-card font-bold text-primary shadow-lg transition-transform hover:scale-105 hover:bg-primary hover:text-primary-foreground focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background sm:h-16 sm:w-80 sm:text-lg"
-          >
-            Recomendações
-          </Button>
-        </div>
-      </div>
-      {hasCameraPermission === false && (
-        <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/50">
-          <Alert variant="destructive" className="max-w-md">
-            <AlertTitle>Acesso à câmera necessário</AlertTitle>
-            <AlertDescription>
-              Para continuar, por favor, habilite a permissão da câmera nas
-              configurações do seu navegador e atualize a página.
-            </AlertDescription>
-          </Alert>
-        </div>
-      )}
-    </main>
-  );
-}
-
-function HomeViewHorizontal({
-  onStart,
-  onRecommendationsClick,
-  hasCameraPermission,
-}: {
-  onStart: () => void;
-  onRecommendationsClick: () => void;
-  hasCameraPermission: boolean | null;
-}) {
-  return (
-    <main className="flex h-full w-full flex-row">
+    <main className="flex h-screen w-full flex-row">
       {/* Left Panel */}
       <div className="flex w-1/2 flex-col items-center justify-center bg-card p-4 sm:p-6 md:p-8">
         <Logo className="h-48 w-48 sm:h-64 sm:w-64 lg:h-96 lg:w-96" />
@@ -1014,27 +928,6 @@ function HomeViewHorizontal({
         </div>
       )}
     </main>
-  );
-}
-
-function HomeView(props: {
-  onStart: () => void;
-  onRecommendationsClick: () => void;
-  hasCameraPermission: boolean | null;
-}) {
-  const { width = 0, height = 0 } = useWindowSize();
-  const isVertical = width < height;
-
-  if (width === 0) {
-    return null; // ou um loader
-  }
-
-  const Component = isVertical ? HomeViewVertical : HomeViewHorizontal;
-
-  return (
-    <div className="h-[130svh] w-full lg:h-screen">
-      <Component {...props} />
-    </div>
   );
 }
 

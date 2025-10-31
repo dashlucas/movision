@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
+import { OrientationLock } from '@/components/OrientationLock';
 
 export const metadata: Metadata = {
   title: 'Movision',
@@ -40,7 +41,7 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased">
-        {children}
+        <OrientationLock>{children}</OrientationLock>
         <Toaster />
       </body>
     </html>
