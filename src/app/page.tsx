@@ -375,8 +375,8 @@ function JogoView({
             spawnRangeYStart = canvas.height * 0.5; 
             spawnRangeHeight = canvas.height * 0.3;
         } else if (gameConfig.posicao === 'sentado') {
-            spawnRangeHeight = canvas.height * 0.5; // Top 50% of the screen
-            spawnRangeYStart = canvas.height * 0.1; // Starting from 10% from the top
+            spawnRangeYStart = canvas.height * 0.4;
+            spawnRangeHeight = canvas.height * 0.5;
         }
         else {
             spawnRangeHeight = canvas.height * 0.6;
