@@ -471,7 +471,7 @@ function JogoView({
             if (circleRef.current && circleRef.current.id === newCircleId) {
                 needsToSpawnCircle.current = true;
             }
-        }, 10);
+        }, 10000);
     };
     
     const startMediaPipe = async () => {
