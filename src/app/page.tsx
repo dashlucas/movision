@@ -442,9 +442,10 @@ function JogoView({
         spawnRangeHeight = canvas.height * 0.6;
         spawnRangeYStart = (canvas.height - spawnRangeHeight) / 2;
       }
-
+      
       // Ensure the sphere doesn't spawn off-screen at the bottom
       spawnRangeHeight = Math.max(0, spawnRangeHeight - radius);
+
 
       while (isColliding && attempts < 20) {
         isColliding = false;
@@ -789,11 +790,13 @@ function JogoView({
       {showCountdown ? (
         <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
           <div className="flex w-full items-center justify-around gap-8 px-4">
-            <div className="flex h-52 w-1/3 flex-col items-center justify-center rounded-2xl border-4 border-primary bg-card p-4 text-center text-card-foreground lg:h-64 xl:h-72 2xl:h-96">
-              <p className="text-sm font-medium leading-tight md:text-base lg:text-lg">
-                Posicione-se de frente para a câmera, garantindo que todo seu
-                corpo esteja visível na tela.
-              </p>
+            <div className="relative h-52 w-1/3 lg:h-64 xl:h-72 2xl:h-96">
+              <Image
+                src="/img/SVG_Frase.svg"
+                alt="Aviso de posicionamento"
+                fill
+                className="object-contain"
+              />
             </div>
             <div className="relative h-screen w-1/3">
               <Image
