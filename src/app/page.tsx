@@ -374,7 +374,11 @@ function JogoView({
         if (gameConfig.membros === 'inferiores') {
             spawnRangeYStart = canvas.height * 0.5; 
             spawnRangeHeight = canvas.height * 0.3;
-        } else {
+        } else if (gameConfig.posicao === 'sentado') {
+            spawnRangeHeight = canvas.height * 0.5; // Top 50% of the screen
+            spawnRangeYStart = canvas.height * 0.1; // Starting from 10% from the top
+        }
+        else {
             spawnRangeHeight = canvas.height * 0.6;
             spawnRangeYStart = (canvas.height - spawnRangeHeight) / 2;
         }
@@ -719,8 +723,8 @@ function JogoView({
               className="absolute rounded-full"
               style={{
                 background: `conic-gradient(hsl(var(--primary)) ${angle}deg, transparent ${angle}deg)`,
-                width: 'calc(5.2rem - 18px)',
-                height: 'calc(5.2rem - 18px)',
+                width: 'calc(5rem - 18px)',
+                height: 'calc(5rem - 18px)',
                 left: '9px',
                 top: '13px',
               }}
