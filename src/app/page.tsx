@@ -719,10 +719,10 @@ function JogoView({
               className="absolute rounded-full"
               style={{
                 background: `conic-gradient(hsl(var(--primary)) ${angle}deg, transparent ${angle}deg)`,
-                width: 'calc(5rem - 18px)',
-                height: 'calc(5rem - 18px)',
+                width: 'calc(5.2rem - 18px)',
+                height: 'calc(5.2rem - 18px)',
                 left: '9px',
-                top: '9px',
+                top: '13px',
               }}
             />
             <Image src="/img/game_timer.png" alt="Timer" fill className="object-contain" />
