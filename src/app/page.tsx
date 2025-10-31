@@ -471,7 +471,7 @@ function JogoView({
             if (circleRef.current && circleRef.current.id === newCircleId) {
                 needsToSpawnCircle.current = true;
             }
-        }, 10000);
+        }, 5000);
     };
     
     const startMediaPipe = async () => {
@@ -591,7 +591,7 @@ function JogoView({
 
                   setTimeout(() => {
                     needsToSpawnCircle.current = true;
-                  }, 300);
+                  }, 5000);
 
                   break; 
                 }
