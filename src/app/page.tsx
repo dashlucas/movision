@@ -950,7 +950,7 @@ function FinalView({
       {/* Left Panel */}
       <div className="flex min-h-[50svh] w-full flex-col items-center justify-center gap-4 bg-card p-4 text-center text-primary md:p-8 lg:min-h-full lg:w-1/2">
         <h1 className="font-headline text-3xl font-extrabold sm:text-5xl md:text-7xl">
-          Parabéns!
+          Parabéns! 
         </h1>
         <div className="text-center">
           <p className="text-lg sm:text-2xl md:text-3xl">Sua pontuação foi:</p>
