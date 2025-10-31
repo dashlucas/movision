@@ -354,16 +354,16 @@ function JogoView({
           y2: padding + scoreBoxHeight,
         };
     
-        let spawnRangePercentage;
+        let spawnRangePercentage; //Distancias spawn
         switch (gameConfig.distancia) {
           case 'nivel_1':
-            spawnRangePercentage = 0.25;
+            spawnRangePercentage = 0.10;
             break;
           case 'nivel_2':
             spawnRangePercentage = 0.65;
             break;
           case 'nivel_3':
-            spawnRangePercentage = 0.75;
+            spawnRangePercentage = 0.90;
             break;
           default:
             spawnRangePercentage = 0.25;
@@ -387,7 +387,7 @@ function JogoView({
             const horizontalPadding = canvas.width * 0.1;
 
             if (gameConfig.distancia === 'nivel_1') {
-                const centerOffset = canvas.width * 0.20; // 20% from the center
+                const centerOffset = canvas.width * 0.10; // 10% from the center
                 const smallVariation = (Math.random() - 0.5) * (canvas.width * 0.1);
                 if (spawnSide === 'left') {
                     x = canvas.width / 2 - centerOffset + smallVariation;
@@ -431,7 +431,7 @@ function JogoView({
             const spawnSide = Math.random() < 0.5 ? 'left' : 'right';
             const horizontalPadding = canvas.width * 0.1;
              if (gameConfig.distancia === 'nivel_1') {
-                const centerOffset = canvas.width * 0.20; // 20% from the center
+                const centerOffset = canvas.width * 0.20; // 10% from the center
                 const smallVariation = (Math.random() - 0.5) * (canvas.width * 0.1);
                 if (spawnSide === 'left') {
                     x = canvas.width / 2 - centerOffset + smallVariation;
@@ -466,7 +466,7 @@ function JogoView({
             if (circleRef.current && circleRef.current.id === newCircleId) {
                 needsToSpawnCircle.current = true;
             }
-        }, 10000);
+        }, 10);
     };
     
     const startMediaPipe = async () => {
