@@ -342,9 +342,9 @@ function JogoView({
         const scoreBoxHeight = 5 * rem;
 
         const timerZone = {
-          x1: padding,
+          x1: canvas.width / 2 - timerSize / 2,
           y1: padding,
-          x2: padding + timerSize,
+          x2: canvas.width / 2 + timerSize / 2,
           y2: padding + timerSize,
         };
         const scoreZone = {
@@ -713,18 +713,18 @@ function JogoView({
           </div>
         </div>
       ) : (
-        <div className="pointer-events-none absolute inset-0 z-10 p-8">
+        <div className="pointer-events-none absolute inset-0 z-10">
            <div
               className="absolute rounded-full"
               style={{
                 background: `conic-gradient(hsl(var(--primary)) ${angle}deg, transparent ${angle}deg)`,
                 width: 'calc(5rem - 18px)',
                 height: 'calc(5rem - 18px)',
-                left: 'calc(2rem + 9px)',
-                top: 'calc(2rem + 9px + 1%)',
+                left: 'calc(50% - (5rem - 18px) / 2)',
+                top: 'calc(2rem + 9px)',
               }}
             />
-          <div className="absolute left-8 top-8 h-20 w-20">
+          <div className="absolute left-1/2 top-8 h-20 w-20 -translate-x-1/2">
             <Image src="/img/game_timer.png" alt="Timer" fill className="object-contain" />
           </div>
            <div className="absolute right-8 top-8 flex flex-col gap-4">
