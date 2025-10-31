@@ -709,7 +709,7 @@ function JogoView({
                 src="/img/T_SVGTimer.svg"
                 alt="Timer"
                 fill
-                className="object-contain saturate-150 constrast-125"
+                className="object-contain saturate-100 constrast-100"
               />
               <p className="font-headline absolute font-extrabold leading-none text-white text-6xl sm:text-7xl md:text-8xl">
                 {countdown}
@@ -730,7 +730,7 @@ function JogoView({
                 top: '13px',
               }}
             />
-            <Image src="/img/game_timer.png" alt="Timer" fill className="object-contain" />
+            <Image src="/img/game_timer.png" alt="Timer" fill className="object-contain saturate-100 contrast-100" />
           </div>
           <div className="flex flex-col gap-4">
             <div className="rounded-2xl bg-panel-right px-6 py-3 text-center shadow-lg">
