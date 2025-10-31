@@ -388,7 +388,8 @@ function JogoView({
             attempts++;
             
             const spawnSide = Math.random() < 0.5 ? 'left' : 'right';
-            const horizontalPadding = canvas.width * 0.1;
+            const horizontalPadding = gameConfig.distancia === 'nivel_2' ? canvas.width * 0.2 : canvas.width * 0.1;
+
 
             if (gameConfig.distancia === 'nivel_1') {
                 const centerOffset = canvas.width * 0.10; // 10% from the center
@@ -433,7 +434,7 @@ function JogoView({
         
         if (isColliding) { 
             const spawnSide = Math.random() < 0.5 ? 'left' : 'right';
-            const horizontalPadding = canvas.width * 0.1;
+            const horizontalPadding = gameConfig.distancia === 'nivel_2' ? canvas.width * 0.2 : canvas.width * 0.1;
              if (gameConfig.distancia === 'nivel_1') {
                 const centerOffset = canvas.width * 0.20; // 10% from the center
                 const smallVariation = (Math.random() - 0.5) * (canvas.width * 0.1);
