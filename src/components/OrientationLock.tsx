@@ -44,7 +44,7 @@ export function OrientationLock({ children }: { children: ReactNode }) {
         <p className="text-center text-xl font-semibold">
           Por favor, gire seu dispositivo
         </p>
-        <p className="text-center text-muted-foreground">
+        <p className="text-center text-muted-foreground font-semibold">
           Este aplicativo foi projetado para ser usado no modo paisagem.
         </p>
       </div>
